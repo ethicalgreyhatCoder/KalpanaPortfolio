@@ -6,6 +6,9 @@ export default {
     ],
     theme: {
         extend: {
+            screens: {
+                'mobile-lg': '900px',
+            },
             colors: {
                 prometheus: {
                     dark: '#0a0a0a',
@@ -14,23 +17,36 @@ export default {
                     orange: '#ff8c00',
                     dim: 'rgba(255, 255, 255, 0.1)',
                 },
-                cream: '#FFFCF9',
-                'cream-dark': '#F5F5F0',
-                'cream-transparent': 'rgba(255, 252, 249, 0.9)',
-                'text-primary': '#333333',
-                'text-secondary': '#666666',
-                accent: '#5A7D7C',
+                // Nude Elegance Palette
+                cream: '#FAF9F6', // Cream White
+                beige: '#F5E6D3', // Soft Beige
+                nude: '#C6A87C', // Warm Nude
+                rosegold: '#B76E79', // Rose Gold
+
+                // Theme Semantic Mapping
+                theme: {
+                    bg: '#FAF9F6', // Cream White
+                    text: '#4A4A4A', // Soft elegant dark gray
+                    'text-accent': '#C6A87C', // Warm Nude
+                    'surface': '#F5E6D3', // Soft Beige
+                    'border': '#E0BFB8', // Rose Gold Light
+                    'highlight': '#B76E79', // Rose Gold
+                },
             },
             fontFamily: {
-                sans: ['Lato', 'sans-serif'],
-                serif: ['"Playfair Display"', 'serif'],
-                oxygen: ['Oxygen', 'sans-serif'],
+                sans: ['Montserrat', 'sans-serif'],
+                serif: ['"Libre Baskerville"', 'serif'],
+            },
+            backgroundImage: {
+                'gradient-nude': 'linear-gradient(135deg, #F5E6D3 0%, #FAF9F6 100%)',
+                'gradient-rosegold': 'linear-gradient(135deg, #B76E79 0%, #C6A87C 100%)',
             },
             animation: {
                 'marquee-left': 'marquee-left 20s linear infinite',
                 'marquee-right': 'marquee-right 20s linear infinite',
                 'fade-in-up': 'fadeInUp 1.2s ease-out forwards',
                 'fade-in-delay-1': 'fadeInUp 1.2s ease-out 0.4s forwards',
+                'pulse-slow': 'pulse 6s cubic-bezier(0.4, 0, 0.6, 1) infinite',
             },
             keyframes: {
                 'marquee-left': {

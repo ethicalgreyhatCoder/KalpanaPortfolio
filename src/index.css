@@ -1,105 +1,32 @@
 @import "tailwindcss";
 
-@import url('https://fonts.googleapis.com/css2?family=Lato:ital,wght@0,100;0,300;0,400;0,700;0,900;1,100;1,300;1,400;1,700;1,900&family=Playfair+Display:ital,wght@0,400;0,500;0,600;0,700;0,800;0,900;1,400;1,500;1,600;1,700;1,800;1,900&family=Oxygen:wght@300;400;700&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Libre+Baskerville:ital,wght@0,400;0,700;1,400&family=Montserrat:wght@300;400;500;600;700&display=swap');
 
 /* Global Styles & Reset */
 :root {
   /* --- Typography --- */
-  font-family: 'Oxygen', sans-serif;
+  font-family: 'Montserrat', sans-serif;
 
-  /* --- Fibonacci Spacing System --- */
-  --space-1: 4px;
-  --space-2: 8px;
-  --space-3: 12px;
-  --space-5: 20px;
-  --space-8: 32px;
-  --space-13: 52px;
-  --space-21: 84px;
-  --space-34: 136px;
-  --space-55: 220px;
+  /* --- Global Theme System (Nude Elegance) --- */
+  --theme-bg: #FAF9F6;
+  /* Cream White */
+  --theme-surface: #F5E6D3;
+  /* Soft Beige */
+  --theme-text: #4A4A4A;
+  /* Soft Dark Gray */
+  --theme-accent: #C6A87C;
+  /* Warm Nude */
+  --theme-highlight: #B76E79;
+  /* Rose Gold */
 
-  /* --- Default Theme (Light) --- */
-  --color-bg: #fdfbf7;
-  --color-surface: #ffffff;
-  --color-surface-rgb: 255, 255, 255;
-  --color-text-main: #1a1a1a;
-  --color-text-secondary: rgba(26, 26, 26, 0.7);
-  --color-text-muted: #6c757d;
-  --color-text-muted-rgb: 108, 117, 125;
-  --color-primary: #E91E63;
-  /* Cherry blossom pink */
-  --color-primary-hover: #C2185B;
-  --color-text-on-primary: #ffffff;
-  --color-secondary: #6c757d;
-  --color-border: #ffe0ed;
-  --color-border-rgb: 255, 224, 237;
-  --shadow-sm: 0 2px 4px rgba(0, 0, 0, 0.05);
-  --shadow-md: 0 4px 6px rgba(0, 0, 0, 0.1);
-  --shadow-lg: 0 10px 15px rgba(0, 0, 0, 0.1);
-}
-
-/* --- Light Theme Explicit --- */
-[data-theme="light"] {
-  --color-bg: #FFF4DC;
-  /* Warm bisque cream */
-  --color-surface: #FFFAF0;
-  /* Floral white cream */
-  --color-surface-rgb: 255, 250, 240;
-  --color-text-main: #E91E63;
-  /* Lighter cherry blossom for text */
-  --color-text-secondary: #D81B60;
-  --color-text-muted: #4a4a4a;
-  --color-text-muted-rgb: 74, 74, 74;
-  --color-border: #ffe0ed;
-  --color-border-rgb: 255, 224, 237;
-  /* Cherry blossom pink */
-  --color-primary: #E91E63;
-  /* Cherry blossom pink */
-  --color-primary-hover: #C2185B;
-  /* Darker cherry blossom */
-  --color-text-on-primary: #ffffff;
-  --color-secondary: #6c757d;
-  --shadow-sm: 0 2px 4px rgba(0, 0, 0, 0.05);
-  --shadow-md: 0 4px 6px rgba(0, 0, 0, 0.1);
-  --shadow-lg: 0 10px 15px rgba(0, 0, 0, 0.1);
-
-  --color-focus-ring: #E91E63;
-  --color-active-indicator: #E91E63;
-  --color-hover-bg: rgba(233, 30, 99, 0.1);
-}
-
-/* --- Dark Theme --- */
-[data-theme="dark"] {
-  --color-bg: #12252c;
-  --color-surface: #044e54;
-  --color-surface-rgb: 4, 78, 84;
-  --color-text-main: #e2f1f0;
-  --color-text-secondary: #9ab8b3;
-  --color-text-muted: #9ab8b3;
-  --color-text-muted-rgb: 154, 184, 179;
-  --color-primary: rgba(30, 58, 138, 0.8);
-  --color-primary-hover: rgb(30, 64, 175);
-  --color-text-on-primary: #e2f1f0;
-  --color-secondary: #4ca977;
-  --color-border: rgba(4, 78, 84, 0.5);
-  --color-border-rgb: 4, 78, 84;
-  --shadow-sm: 0 2px 4px rgba(0, 0, 0, 0.6);
-  --shadow-md: 0 4px 6px rgba(0, 0, 0, 0.7);
-  --shadow-lg: 0 10px 15px rgba(0, 0, 0, 0.8);
-
-  --color-focus-ring: rgba(30, 58, 138, 0.8);
-  --color-active-indicator: #4ca977;
-  --color-hover-bg: rgba(30, 58, 138, 0.15);
-  --color-link: #4ca977;
-  --color-highlight: #f9f871;
-  --color-h1: #f9f871;
-  --color-h2: #9ad373;
-  --color-h3: #4ca977;
+  --theme-container-bg: rgba(250, 249, 246, 0.8);
+  --theme-border: rgba(183, 110, 121, 0.3);
+  /* Rose Gold transparent */
 }
 
 /* Remove Scrollbar Visuals Globally */
 ::-webkit-scrollbar {
-  width: 0px;
+  width: 0;
   background: transparent;
 }
 
@@ -110,23 +37,6 @@
   /* Firefox */
 }
 
-/* Dark Theme Heading Colors */
-[data-theme="dark"] h1 {
-  color: #f9f871 !important;
-}
-
-[data-theme="dark"] h2 {
-  color: #9ad373 !important;
-}
-
-[data-theme="dark"] h3 {
-  color: #4ca977 !important;
-}
-
-[data-theme="dark"] a {
-  color: #4ca977 !important;
-}
-
 /* General Resets */
 *,
 *::before,
@@ -134,20 +44,68 @@
   box-sizing: border-box;
 }
 
-html,
-body {
-  margin: 0;
-  padding: 0;
+html {
   height: 100%;
   width: 100%;
-  /* Ensure Oxygen font is applied globally */
-  font-family: 'Oxygen', sans-serif !important;
 }
 
 body {
-  background-color: transparent !important;
-  /* Ensure body is transparent to show canvas */
-  color: var(--color-text-main);
+  background-color: var(--theme-bg) !important;
+  color: var(--theme-text) !important;
+  font-family: 'Montserrat', sans-serif !important;
+  min-height: 100vh;
+  margin: 0;
+  width: 100%;
+  scroll-snap-type: y mandatory;
+  scroll-behavior: smooth;
+}
+
+h1,
+h2,
+h3,
+h4,
+h5,
+h6 {
+  font-family: 'Libre Baskerville', serif !important;
+}
+
+/* Cherry Blossom Effect */
+.cherry-blossom-container {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  overflow: hidden;
+  pointer-events: none;
+}
+
+.petal {
+  position: absolute;
+  background-color: var(--theme-highlight);
+  border-radius: 150% 0 150% 0;
+  opacity: 0.6;
+  animation: fall linear infinite;
+}
+
+@keyframes fall {
+  0% {
+    opacity: 0;
+    transform: translate(0, -10vh) rotate(0deg);
+  }
+
+  10% {
+    opacity: 0.7;
+  }
+
+  80% {
+    opacity: 0.6;
+  }
+
+  100% {
+    opacity: 0;
+    transform: translate(10vw, 100vh) rotate(360deg);
+  }
 }
 
 /* Smooth transitions */
@@ -159,6 +117,8 @@ body {
 
 /* Helper for glass effects */
 .glass {
+  background: rgba(255, 255, 255, 0.4);
   backdrop-filter: blur(12px);
   -webkit-backdrop-filter: blur(12px);
+  border: 1px solid var(--theme-border);
 }
