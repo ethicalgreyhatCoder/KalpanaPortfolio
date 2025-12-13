@@ -1,67 +1,104 @@
-import React from 'react';
+import React, { useState, useEffect } from 'react';
 import RevealOnScroll from './RevealOnScroll';
+import './About.css';
+import './About-Enhanced.css';
+import './About-Cards-Timeline-Enhanced.css';
 
 const About = () => {
+    const [activeTimelineDots, setActiveTimelineDots] = useState({});
+
+    useEffect(() => {
+        const observer = new IntersectionObserver((entries) => {
+            entries.forEach((entry) => {
+                if (entry.isIntersecting) {
+                    const id = entry.target.getAttribute('data-timeline-id');
+                    setActiveTimelineDots((prev) => ({
+                        ...prev,
+                        [id]: true,
+                    }));
+                }
+            });
+        }, { threshold: 0.5 });
+
+        // Observe timeline dots
+        document.querySelectorAll('[data-timeline-id]').forEach((el) => {
+            observer.observe(el);
+        });
+
+        return () => observer.disconnect();
+    }, []);
+
     return (
-        <section id="about" className="py-24 bg-theme-bg relative transition-all duration-700">
+        <section id="about" className="about-section">
             <div className="container mx-auto px-6 space-y-24">
 
                 {/* 1. Intro Section (Portrait + Bio) */}
                 <RevealOnScroll>
-                    <div className="grid md:grid-cols-2 gap-12 items-center">
+                    <div className="about-intro-wrapper">
                         {/* Portrait */}
-                        <div className="relative group mx-auto w-full max-w-sm md:max-w-md">
-                            <div className="absolute inset-0 bg-theme-accent/20 translate-x-4 translate-y-4 rounded-lg transition-transform duration-500 group-hover:translate-x-2 group-hover:translate-y-2"></div>
-                            <div className="relative aspect-[3/4] bg-theme-surface rounded-lg overflow-hidden border border-theme-border shadow-lg">
-                                <img
-                                    src={`${import.meta.env.BASE_URL}Kalpana-About.png`}
-                                    alt="Kalpana - Professional Makeup Artist"
-                                    className="w-full h-full object-cover"
-                                    style={{ transform: 'scaleX(-1)' }}
-                                />
+                        <div className="about-portrait-container">
+                            <div className="relative group mx-auto w-[75%] max-w-[260px] md:w-full md:max-w-[340px]">
+                                <div className="absolute inset-0 bg-theme-accent/10 translate-x-3 translate-y-3 rounded-2xl transition-transform duration-700 group-hover:translate-x-2 group-hover:translate-y-2"></div>
+                                <div
+                                    className="relative aspect-[4/5] bg-theme-surface rounded-2xl overflow-hidden border border-theme-highlight/20 shadow-lg shadow-theme-highlight/5 transition-all duration-500 group-hover:shadow-theme-highlight/20"
+                                    style={{
+                                        '--tw-shadow': '0 0 10px var(--tw-shadow-color, rgba(255, 0, 38, 0.5))',
+                                        boxShadow: 'var(--tw-inset-shadow), var(--tw-inset-ring-shadow), var(--tw-ring-offset-shadow), var(--tw-ring-shadow), var(--tw-shadow)'
+                                    }}
+                                >
+                                    <img
+                                        src={`${import.meta.env.BASE_URL}Kalpana-About.png`}
+                                        alt="Kalpana - Professional Makeup Artist"
+                                        className="w-full h-full object-cover opacity-95 group-hover:scale-105 transition-transform duration-1000"
+                                        style={{ transform: 'scaleX(-1)' }}
+                                    />
+                                </div>
                             </div>
                         </div>
 
                         {/* Bio Text */}
-                        <div className="space-y-6 text-center md:text-left">
-                            <h3 className="text-theme-accent font-serif italic text-2xl">About Me</h3>
-                            <h2 className="text-4xl md:text-5xl font-bold font-serif text-theme-text leading-tight">
-                                Hi, I’m Kalpana <br />
-                                <span className="text-3xl md:text-4xl font-light block pt-2">Professional Makeup Artist & BBA Student</span>
-                            </h2>
-                            <div className="w-20 h-1 bg-theme-highlight mx-auto md:mx-0"></div>
-                            <p className="text-lg text-theme-text/80 leading-relaxed font-sans">
+                        <div className="about-bio-section">
+                            <div>
+                                <h3 className="about-label">About Me</h3>
+                                <h2 className="about-name">Hi, I'm Kalpana</h2>
+                                <p className="about-role">Professional Makeup Artist & BBA Student</p>
+                            </div>
+                            <div className="about-divider"></div>
+                            <p className="about-intro-paragraph">
                                 I am a funny, outgoing, and philosophical soul who believes in living life to the fullest.
-                                Born in the millennium year, I blend the vibrancy of youth with the discipline of my BBA education
-                                from Manipal University and the artistry honed at Red Fox Academy.
+                                Creating beauty is not just my profession; it's how I connect with the world.
                             </p>
                         </div>
                     </div>
                 </RevealOnScroll>
 
-                {/* 2. Passion & Purpose */}
+                {/* 2. Passion & Purpose (Quote) */}
                 <RevealOnScroll>
-                    <div className="max-w-4xl mx-auto text-center space-y-8 py-12 border-y border-theme-border/30">
-                        <h3 className="text-3xl md:text-4xl font-serif italic text-theme-text leading-relaxed">
-                            "I believe beauty is confidence, expression, and strategy working together."
-                        </h3>
-                        <p className="text-theme-text/80 text-lg leading-relaxed max-w-2xl mx-auto font-sans">
-                            Makeup is not just meaningful; it's a transformation. My philosophy is to unveil the enigmatic
-                            beauty hidden within every face, creating looks that are as bold and independent as the women I work with.
+                    <div className="about-quote-section">
+                        <div className="about-quote-divider"></div>
+                        <div className="relative px-6">
+                            <div className="about-quote-mark">"</div>
+                            <h3 className="about-quote-text">
+                                I believe beauty is confidence, expression, and strategy working together.
+                            </h3>
+                        </div>
+                        <p className="about-philosophy">
+                            Makeup is not just meaningful; it's a transformation. My philosophy is to unveil the enigmatic beauty hidden within every face.
                         </p>
+                        <div className="about-quote-bottom-divider"></div>
                     </div>
                 </RevealOnScroll>
 
-                {/* 3. Dual Identity (Split Cards) */}
+                {/* 3. Dual Identity (Split Cards) - ENHANCED */}
                 <RevealOnScroll>
-                    <div className="grid md:grid-cols-2 gap-8">
+                    <div className="about-cards-container">
                         {/* Artist Card */}
-                        <div className="bg-white/50 backdrop-blur-sm p-8 rounded-xl border border-theme-border/50 hover:shadow-xl hover:border-theme-accent transition-all duration-300 transform hover:-translate-y-2 group">
-                            <div className="w-16 h-16 bg-theme-surface rounded-full flex items-center justify-center mb-6 mx-auto group-hover:bg-theme-accent group-hover:text-white transition-all duration-300">
-                                <span className="text-3xl group-hover:grayscale-0 grayscale transition-all duration-300">🎨</span>
+                        <div className="about-card">
+                            <div className="about-card-icon" style={{ background: 'linear-gradient(135deg, var(--theme-accent) 0%, #f5b547 100%)' }}>
+                                🎨
                             </div>
-                            <h3 className="text-2xl font-serif font-bold text-center mb-4 text-theme-text">The Artist</h3>
-                            <ul className="space-y-3 text-theme-text/80 text-center font-sans">
+                            <h3 className="about-card-title">The Artist</h3>
+                            <ul className="about-card-list">
                                 <li>Red Fox Academy Certified</li>
                                 <li>Bridal & Editorial Makeup</li>
                                 <li>Skin Analysis & Prep</li>
@@ -70,12 +107,12 @@ const About = () => {
                         </div>
 
                         {/* Business Card */}
-                        <div className="bg-white/50 backdrop-blur-sm p-8 rounded-xl border border-theme-border/50 hover:shadow-xl hover:border-theme-highlight transition-all duration-300 transform hover:-translate-y-2 group">
-                            <div className="w-16 h-16 bg-theme-surface rounded-full flex items-center justify-center mb-6 mx-auto group-hover:bg-theme-highlight group-hover:text-white transition-all duration-300">
-                                <span className="text-3xl group-hover:grayscale-0 grayscale transition-all duration-300">💼</span>
+                        <div className="about-card">
+                            <div className="about-card-icon" style={{ background: 'linear-gradient(135deg, var(--theme-highlight) 0%, #f5a8c8 100%)' }}>
+                                💼
                             </div>
-                            <h3 className="text-2xl font-serif font-bold text-center mb-4 text-theme-text">The Strategist</h3>
-                            <ul className="space-y-3 text-theme-text/80 text-center font-sans">
+                            <h3 className="about-card-title">The Strategist</h3>
+                            <ul className="about-card-list">
                                 <li>BBA, Manipal University</li>
                                 <li>Brand Management</li>
                                 <li>Client Relations</li>
@@ -85,79 +122,91 @@ const About = () => {
                     </div>
                 </RevealOnScroll>
 
-                {/* 4. Journey Timeline */}
+                {/* 4. Journey Timeline - ENHANCED */}
+                <div className="timeline-container-enhanced">
+                    <div className="timeline-line-enhanced"></div>
+                    <div className="timeline-wrapper-enhanced">
+                        {[
+                            { year: '2021', title: 'Passion Ignited', quote: 'Discovered the transformative power of makeup.' },
+                            { year: '2022', title: 'Professional Training', quote: 'Honing skills with master artists at Red Fox.' },
+                            { year: '2023', title: 'Freelance Career', quote: 'Building a portfolio of diverse faces and stories.' },
+                            { year: '2024', title: 'BBA & Brand Growth', quote: 'Merging business strategy with creative artistry.' }
+                        ].map((item, index) => (
+                            <RevealOnScroll key={index} className="timeline-item">
+                                {index % 2 === 0 ? (
+                                    // ODD items (0, 2) - Content LEFT, Dot CENTER, Quote RIGHT
+                                    <>
+                                        <div className="timeline-content">
+                                            <h4 className="timeline-year">{item.year}</h4>
+                                            <p className="timeline-subtitle">{item.title}</p>
+                                            <p className="timeline-quote timeline-quote-mobile">"{item.quote}"</p>
+                                        </div>
+                                        <div className={`timeline-dot-enhanced ${activeTimelineDots[index] ? 'scroll-active' : ''}`} data-timeline-id={index}></div>
+                                        <p className="timeline-quote">"{item.quote}"</p>
+                                    </>
+                                ) : (
+                                    // EVEN items (1, 3) - Quote LEFT, Dot CENTER, Content RIGHT
+                                    <>
+                                        <p className="timeline-quote">"{item.quote}"</p>
+                                        <div className={`timeline-dot-enhanced ${activeTimelineDots[index] ? 'scroll-active' : ''}`} data-timeline-id={index}></div>
+                                        <div className="timeline-content">
+                                            <h4 className="timeline-year">{item.year}</h4>
+                                            <p className="timeline-subtitle">{item.title}</p>
+                                            <p className="timeline-quote timeline-quote-mobile">"{item.quote}"</p>
+                                        </div>
+                                    </>
+                                )}
+                            </RevealOnScroll>
+                        ))}
+                    </div>
+                </div>
+
+                {/* Transition Divider to Values */}
                 <RevealOnScroll>
-                    <div className="relative max-w-3xl mx-auto py-12">
-                        <div className="absolute left-1/2 -translate-x-1/2 h-full w-px bg-theme-border"></div>
-
-                        {/* 2021 */}
-                        <div className="relative flex justify-between items-center mb-12 flex-col md:flex-row gap-4">
-                            <div className="w-full md:w-5/12 text-center md:text-right order-2 md:order-1 px-4">
-                                <h4 className="text-xl font-bold text-theme-highlight">2021</h4>
-                                <p className="text-theme-text/80">Discovered passion for makeup artistry.</p>
-                            </div>
-                            <div className="absolute left-1/2 -translate-x-1/2 w-4 h-4 rounded-full bg-theme-highlight border-4 border-white z-10 top-0 md:top-1/2 md:-translate-y-1/2"></div>
-                            <div className="w-full md:w-5/12 order-3 md:order-2"></div>
+                    <div className="about-values-header">
+                        <div className="about-values-divider"></div>
+                        <div className="about-values-icon-wrapper">
+                            <div className="about-values-icon">💎</div>
+                            <span className="about-values-label">Core Values</span>
                         </div>
-
-                        {/* 2022 */}
-                        <div className="relative flex justify-between items-center mb-12 flex-col md:flex-row gap-4">
-                            <div className="w-full md:w-5/12 order-2 md:order-1"></div>
-                            <div className="absolute left-1/2 -translate-x-1/2 w-4 h-4 rounded-full bg-theme-highlight border-4 border-white z-10 top-0 md:top-1/2 md:-translate-y-1/2"></div>
-                            <div className="w-full md:w-5/12 text-center md:text-left order-3 md:order-2 px-4">
-                                <h4 className="text-xl font-bold text-theme-highlight">2022</h4>
-                                <p className="text-theme-text/80">Professional training at Red Fox Academy.</p>
-                            </div>
-                        </div>
-
-                        {/* 2023 */}
-                        <div className="relative flex justify-between items-center mb-12 flex-col md:flex-row gap-4">
-                            <div className="w-full md:w-5/12 text-center md:text-right order-2 md:order-1 px-4">
-                                <h4 className="text-xl font-bold text-theme-highlight">2023</h4>
-                                <p className="text-theme-text/80">Started freelance work & building portfolio.</p>
-                            </div>
-                            <div className="absolute left-1/2 -translate-x-1/2 w-4 h-4 rounded-full bg-theme-highlight border-4 border-white z-10 top-0 md:top-1/2 md:-translate-y-1/2"></div>
-                            <div className="w-full md:w-5/12 order-3 md:order-2"></div>
-                        </div>
-
-                        {/* 2024 */}
-                        <div className="relative flex justify-between items-center mb-12 flex-col md:flex-row gap-4">
-                            <div className="w-full md:w-5/12 order-2 md:order-1"></div>
-                            <div className="absolute left-1/2 -translate-x-1/2 w-4 h-4 rounded-full bg-theme-highlight border-4 border-white z-10 top-0 md:top-1/2 md:-translate-y-1/2"></div>
-                            <div className="w-full md:w-5/12 text-center md:text-left order-3 md:order-2 px-4">
-                                <h4 className="text-xl font-bold text-theme-highlight">2024</h4>
-                                <p className="text-theme-text/80">Pursuing BBA & Expanding Personal Brand.</p>
-                            </div>
-                        </div>
+                        <div className="about-values-divider"></div>
                     </div>
                 </RevealOnScroll>
 
-                {/* 5. Values & Philosophy */}
+                {/* 5. Values & Philosophy - ENHANCED */}
                 <RevealOnScroll>
-                    <div className="grid grid-cols-2 md:grid-cols-4 gap-6 text-center">
+                    <div className="about-values-grid-enhanced">
                         {[
-                            { title: "Authenticity", icon: "✨" },
-                            { title: "Client Focus", icon: "🤝" },
-                            { title: "Hygiene", icon: "🧼" },
-                            { title: "Growth", icon: "📈" }
+                            { title: "Authenticity", icon: "✨", desc: "True to self, honest work" },
+                            { title: "Client Focus", icon: "🤝", desc: "Your vision is my mission" },
+                            { title: "Hygiene", icon: "🧼", desc: "Professional standards always" },
+                            { title: "Growth", icon: "📈", desc: "Learning every single day" }
                         ].map((value, i) => (
-                            <div key={i} className="p-6 bg-white rounded-lg shadow-sm border border-theme-border/50 hover:shadow-md transition-all duration-300 hover:-translate-y-1">
-                                <div className="text-3xl mb-3">{value.icon}</div>
-                                <h4 className="font-serif font-bold text-theme-text">{value.title}</h4>
+                            <div key={i} className="about-value-item-enhanced">
+                                <span className="about-value-icon-item">{value.icon}</span>
+                                <h4 className="about-value-title-enhanced">{value.title}</h4>
+                                <p className="about-value-description">{value.desc}</p>
                             </div>
                         ))}
                     </div>
                 </RevealOnScroll>
 
-                {/* 6. Closing CTA */}
+                {/* 6. Closing CTA - ENHANCED */}
                 <RevealOnScroll>
-                    <div className="text-center py-12 bg-gradient-nude rounded-2xl border border-theme-border">
-                        <h3 className="text-3xl font-serif font-bold text-theme-text mb-8">Ready to create something beautiful?</h3>
-                        <div className="flex flex-col sm:flex-row gap-4 justify-center">
-                            <button onClick={() => document.getElementById('gallery').scrollIntoView({ behavior: 'smooth' })} className="px-8 py-3 bg-theme-highlight text-white font-bold uppercase tracking-widest rounded-full hover:bg-theme-accent transition-all duration-300 shadow-lg">
+                    <div className="about-cta-section-enhanced">
+                        <h3 className="about-cta-title-enhanced">Ready to create something beautiful?</h3>
+                        <p className="about-cta-subtitle-enhanced">Available for bridal, editorial & freelance projects</p>
+                        <div className="about-cta-buttons-enhanced">
+                            <button
+                                onClick={() => document.getElementById('gallery').scrollIntoView({ behavior: 'smooth' })}
+                                className="about-cta-primary-enhanced"
+                            >
                                 View Portfolio
                             </button>
-                            <button onClick={() => document.getElementById('contact').scrollIntoView({ behavior: 'smooth' })} className="px-8 py-3 border-2 border-theme-highlight text-theme-highlight font-bold uppercase tracking-widest rounded-full hover:bg-theme-highlight hover:text-white transition-all duration-300">
+                            <button
+                                onClick={() => document.getElementById('contact').scrollIntoView({ behavior: 'smooth' })}
+                                className="about-cta-secondary-enhanced"
+                            >
                                 Book Session
                             </button>
                         </div>
@@ -170,3 +219,4 @@ const About = () => {
 };
 
 export default About;
+

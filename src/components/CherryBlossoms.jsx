@@ -1,11 +1,11 @@
 import React, { useState, useEffect, useMemo } from 'react';
 
 const CherryBlossoms = React.memo(() => {
-    const [petalCount, setPetalCount] = useState(50);
+    const [petalCount, setPetalCount] = useState(15); // Reduced from 40-50 to 12-15 (70% reduction)
 
     useEffect(() => {
         const updateCount = () => {
-            setPetalCount(window.innerWidth < 768 ? 40 : 50);
+            setPetalCount(window.innerWidth < 768 ? 12 : 15); // Reduced from 40-50 to 12-15
         };
 
         // Initial check
@@ -28,7 +28,7 @@ const CherryBlossoms = React.memo(() => {
             // eslint-disable-next-line react-hooks/purity
             animationDelay: `${Math.random() * 10}s`,
             // eslint-disable-next-line react-hooks/purity
-            animationDuration: `${Math.random() * 10 + 10}s`
+            animationDuration: `${Math.random() * 15 + 25}s` // Increased from 15-25s to 25-40s for slower movement
         }))
         , [petalCount]);
 

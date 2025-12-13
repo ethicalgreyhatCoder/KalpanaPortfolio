@@ -1,0 +1,109 @@
+/* About Component Styles */
+
+/* Timeline Vertical Line - Custom Styling */
+.timeline-line {
+    position: absolute;
+    left: 1.75rem; /* 16px - left-4 */
+    transform: translateX(-50%);
+    top: 0;
+    height: 100%;
+    width: 4px; /* 1rem = 16px, so 4px for w-1 */
+    background: linear-gradient(
+        to bottom,
+        transparent,
+        rgba(183, 110, 121, 0.6),
+        transparent
+    );
+    pointer-events: none;
+    z-index: 0;
+}
+
+/* Desktop Version - Centered */
+@media (min-width: 768px) {
+    .timeline-line {
+        left: 50%;
+        width: 2px; /* md:w-0.5 = 2px */
+    }
+}
+
+/* Timeline Content Wrapper */
+.timeline-wrapper {
+    position: relative;
+    z-index: 10;
+}
+
+/* Timeline Container */
+.timeline-container {
+    position: relative;
+    max-width: 56rem; /* max-w-4xl */
+    margin-left: auto;
+    margin-right: auto;
+    padding-left: 1rem;
+    padding-right: 1rem;
+    margin-bottom: 2rem; /* mb-8 */
+    padding-top: 2rem; /* py-8 */
+    padding-bottom: 2rem;
+}
+
+@media (min-width: 768px) {
+    .timeline-container {
+        padding-top: 3rem; /* md:py-12 */
+        padding-bottom: 3rem;
+    }
+}
+
+/* Timeline Dots - Solid Filled Circles */
+.timeline-dot {
+    position: absolute;
+    left: 0.75rem; /* Adjusted for better mobile alignment */
+    transform: translateX(-50%);
+    width: 1rem; /* 16px */
+    height: 1rem;
+    border-radius: 50%;
+    background-color: #B76E79; /* Rose Gold - theme-highlight */
+    border: none;
+    z-index: 10;
+    top: 0.5rem;
+    pointer-events: auto;
+    transition: all 1s ease-out;
+    box-shadow: 0 0 0 3px #FAF9F6; /* Cream bg ring */
+}
+
+/* Mobile view - line and dot alignment */
+.timeline-dot::before {
+    content: '';
+    position: absolute;
+    width: 100%;
+    height: 100%;
+    border-radius: 50%;
+    background-color: rgba(183, 110, 121, 0.15); /* Light rose gold tint */
+    opacity: 0;
+    transform: scale(1);
+    transition: all 0.3s ease-out;
+}
+
+/* Hover/Active state - Reveal visible state */
+.timeline-dot.active,
+.group- .reveal-visible .timeline-dot {
+    background-color: #B76E79; /* Solid rose gold */
+    box-shadow: 0 0 0 3px #FAF9F6, 0 0 20px rgba(183, 110, 121, 0.5);
+}
+
+.timeline-dot.active::before,
+.group- .reveal-visible .timeline-dot::before {
+    opacity: 1;
+    transform: scale(1.5);
+}
+
+/* Desktop Version - Centered Dots */
+@media (min-width: 768px) {
+    .timeline-dot {
+        left: 50%;
+        width: 1.5rem; /* 24px */
+        height: 1.5rem;
+        top: 50%;
+        transform: translate(-50%, -50%);
+        box-shadow: 0 0 0 4px #FAF9F6; /* Larger ring on desktop */
+    }
+}
+
