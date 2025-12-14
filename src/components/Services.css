@@ -1,0 +1,311 @@
+/* ========================================
+   SERVICES SECTION - ACCORDION
+   Mobile-First, Minimal, Editorial
+   NO SCROLL LOCKS - Clean accordion only
+   ======================================== */
+
+/* Highlight effect for Contact section when navigated from Services */
+.highlight-section {
+    animation: highlightPulse 2s ease-out;
+}
+
+@keyframes highlightPulse {
+    0% {
+        box-shadow: 0 0 0 0 rgba(183, 110, 121, 0.4);
+    }
+    50% {
+        box-shadow: 0 0 30px 10px rgba(183, 110, 121, 0.2);
+    }
+    100% {
+        box-shadow: 0 0 0 0 rgba(183, 110, 121, 0);
+    }
+}
+
+/* Service Item */
+.service-item {
+    position: relative;
+    transition: background-color 0.3s ease;
+}
+
+/* Soft blush background when expanded */
+.service-item:has(.service-content.open) {
+    background-color: rgba(248, 237, 235, 0.3);
+}
+
+/* Optional subtle accent line for expanded state */
+.service-item:has(.service-content.open)::before {
+    content: '';
+    position: absolute;
+    left: 0;
+    top: 0;
+    bottom: 0;
+    width: 2px;
+    background: linear-gradient(
+        to bottom,
+        transparent 0%,
+        rgba(183, 110, 121, 0.2) 10%,
+        rgba(183, 110, 121, 0.2) 90%,
+        transparent 100%
+    );
+}
+
+/* Service Header (Clickable Row) */
+.service-header {
+    width: 100%;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 2.5rem 1.5rem;
+    background: transparent;
+    border: none;
+    cursor: pointer;
+    text-align: left;
+    transition: background-color 0.3s ease;
+}
+
+.service-header:hover {
+    background-color: rgba(183, 110, 121, 0.03);
+}
+
+.service-header:active {
+    background-color: rgba(183, 110, 121, 0.05);
+}
+
+@media (min-width: 768px) {
+    .service-header {
+        padding: 2.5rem 2rem;
+    }
+}
+
+/* Service Title */
+.service-title {
+    font-family: 'Libre Baskerville', serif;
+    font-size: 1.5rem;
+    font-weight: 700;
+    color: var(--theme-text, #2C2C2C);
+    margin: 0;
+    line-height: 1.3;
+    flex: 1;
+    transition: color 0.3s ease;
+}
+
+.service-header:hover .service-title {
+    color: var(--theme-highlight, #B76E79);
+}
+
+@media (min-width: 768px) {
+    .service-title {
+        font-size: 1.75rem;
+    }
+}
+
+/* Chevron Icon */
+.service-chevron {
+    flex-shrink: 0;
+    width: 20px;
+    height: 20px;
+    color: var(--theme-highlight, #B76E79);
+    opacity: 0.5;
+    transition: all 0.3s ease;
+    margin-left: 1rem;
+}
+
+.service-header:hover .service-chevron {
+    opacity: 0.8;
+}
+
+.service-chevron.open {
+    transform: rotate(180deg);
+    opacity: 1;
+}
+
+@media (min-width: 768px) {
+    .service-chevron {
+        width: 24px;
+        height: 24px;
+    }
+}
+
+/* Expandable Content */
+.service-content {
+    max-height: 0;
+    opacity: 0;
+    overflow: hidden;
+    transition: max-height 0.3s ease-in-out, opacity 0.3s ease-in-out;
+}
+
+.service-content.open {
+    max-height: 800px;
+    opacity: 1;
+}
+
+.service-content-inner {
+    padding: 0 1.5rem 2.5rem 1.5rem;
+}
+
+@media (min-width: 768px) {
+    .service-content-inner {
+        padding: 0 2rem 3rem 2rem;
+    }
+}
+
+/* Service Description */
+.service-description {
+    font-family: 'Montserrat', sans-serif;
+    font-size: 0.9375rem;
+    font-style: italic;
+    color: var(--theme-text, #2C2C2C);
+    opacity: 0.75;
+    margin: 0 0 1.5rem 0;
+    line-height: 1.6;
+}
+
+@media (min-width: 768px) {
+    .service-description {
+        font-size: 1rem;
+        max-width: 85%;
+    }
+}
+
+/* Service Points */
+.service-points {
+    list-style: none;
+    padding: 0;
+    margin: 0 0 1.75rem 0;
+    display: flex;
+    flex-direction: column;
+    gap: 0.75rem;
+}
+
+.service-point {
+    display: flex;
+    align-items: flex-start;
+    gap: 0.75rem;
+    font-family: 'Montserrat', sans-serif;
+    font-size: 0.875rem;
+    font-weight: 500;
+    color: var(--theme-text, #2C2C2C);
+    line-height: 1.6;
+}
+
+@media (min-width: 768px) {
+    .service-point {
+        font-size: 0.9375rem;
+    }
+}
+
+.point-bullet {
+    flex-shrink: 0;
+    width: 5px;
+    height: 5px;
+    background: var(--theme-highlight, #B76E79);
+    border-radius: 50%;
+    margin-top: 0.5rem;
+    opacity: 0.7;
+}
+
+/* Service Pricing */
+.service-pricing {
+    margin: 0 0 1.5rem 0;
+    padding-top: 0.5rem;
+}
+
+.service-price {
+    font-family: 'Montserrat', sans-serif;
+    font-size: 0.9375rem;
+    font-weight: 600;
+    color: var(--theme-text, #2C2C2C);
+    margin: 0 0 0.5rem 0;
+    line-height: 1.4;
+}
+
+.price-amount {
+    color: var(--theme-highlight, #B76E79);
+    font-size: 1.0625rem;
+    letter-spacing: 0.02em;
+}
+
+.pricing-note {
+    font-family: 'Montserrat', sans-serif;
+    font-size: 0.75rem;
+    font-style: italic;
+    color: var(--theme-text, #2C2C2C);
+    opacity: 0.6;
+    margin: 0;
+    line-height: 1.5;
+}
+
+@media (min-width: 768px) {
+    .service-price {
+        font-size: 1rem;
+    }
+
+    .price-amount {
+        font-size: 1.125rem;
+    }
+
+    .pricing-note {
+        font-size: 0.8125rem;
+    }
+}
+
+/* Service CTA */
+.service-cta {
+    font-family: 'Montserrat', sans-serif;
+    font-size: 0.875rem;
+    font-weight: 600;
+    letter-spacing: 0.03em;
+    color: var(--theme-highlight, #B76E79);
+    background: transparent;
+    border: 1px solid var(--theme-highlight, #B76E79);
+    border-radius: 0.25rem;
+    padding: 0.625rem 1.5rem;
+    cursor: pointer;
+    transition: all 0.25s ease;
+    text-transform: none;
+}
+
+.service-cta:hover {
+    background: var(--theme-highlight, #B76E79);
+    color: white;
+    transform: translateY(-1px);
+    box-shadow: 0 2px 8px rgba(183, 110, 121, 0.25);
+}
+
+.service-cta:active {
+    transform: translateY(0);
+    box-shadow: 0 1px 4px rgba(183, 110, 121, 0.2);
+}
+
+@media (min-width: 768px) {
+    .service-cta {
+        font-size: 0.9375rem;
+        padding: 0.75rem 1.75rem;
+    }
+}
+
+/* Accessibility */
+@media (prefers-reduced-motion: reduce) {
+    .service-header,
+    .service-chevron,
+    .service-content,
+    .service-cta {
+        transition: none;
+    }
+
+    .service-chevron.open {
+        transform: rotate(180deg);
+    }
+}
+
+/* Focus States */
+.service-header:focus {
+    margin-bottom: 15px;
+    /*outline: 2px solid var(--theme-highlight, #B76E79);*/
+    outline-offset: 2px;
+}
+
+.service-cta:focus {
+    outline: 2px solid var(--theme-highlight, #B76E79);
+    outline-offset: 2px;
+}

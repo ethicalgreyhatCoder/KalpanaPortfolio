@@ -1,0 +1,288 @@
+/* ========================================
+   CONTACT SECTION
+   Single source of truth for bookings & inquiries
+   ======================================== */
+
+.contact-section {
+    background: var(--theme-bg, #FAF9F6);
+    padding: 4rem 0;
+}
+
+@media (min-width: 768px) {
+    .contact-section {
+        padding: 6rem 0;
+    }
+}
+
+.contact-container {
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: 0 1.5rem;
+}
+
+@media (min-width: 768px) {
+    .contact-container {
+        padding: 0 2.5rem;
+    }
+}
+
+/* Header */
+.contact-header {
+    text-align: center;
+    margin-bottom: 2.5rem;
+}
+
+.contact-label {
+    font-family: 'Montserrat', sans-serif;
+    font-size: 0.875rem;
+    font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: 0.1em;
+    color: var(--theme-highlight, #B76E79);
+    margin-bottom: 1rem;
+}
+
+.contact-title {
+    font-family: 'Libre Baskerville', serif;
+    font-size: 2.5rem;
+    font-weight: 700;
+    color: var(--theme-text, #2C2C2C);
+    margin: 0 0 1rem 0;
+    line-height: 1.2;
+}
+
+@media (min-width: 768px) {
+    .contact-title {
+        font-size: 3rem;
+    }
+}
+
+.contact-subtitle {
+    font-family: 'Montserrat', sans-serif;
+    font-size: 1rem;
+    color: var(--theme-text, #2C2C2C);
+    opacity: 0.75;
+    max-width: 600px;
+    margin: 0 auto 1.5rem;
+    line-height: 1.6;
+}
+
+/* Compact Contact Icons Row */
+.contact-icons {
+    display: flex;
+    justify-content: center;
+    gap: 1rem;
+    margin-top: 1.5rem;
+}
+
+.contact-icon-link {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 3rem;
+    height: 3rem;
+    background: white;
+    border-radius: 50%;
+    border: 2px solid rgba(183, 110, 121, 0.15);
+    color: var(--theme-highlight, #B76E79);
+    text-decoration: none;
+    transition: all 0.25s ease;
+}
+
+.contact-icon-link:hover {
+    border-color: var(--theme-highlight, #B76E79);
+    background: rgba(183, 110, 121, 0.05);
+    transform: translateY(-2px);
+    box-shadow: 0 4px 12px rgba(183, 110, 121, 0.15);
+}
+
+.contact-icon-link:active {
+    transform: translateY(0);
+}
+
+.contact-icon-link svg {
+    width: 20px;
+    height: 20px;
+}
+
+/* Content Layout - Form is now main focus */
+.contact-content {
+    display: grid;
+    grid-template-columns: 1fr;
+    gap: 0;
+    margin-bottom: 3rem;
+}
+
+@media (min-width: 768px) {
+    .contact-content {
+        max-width: 600px;
+        margin-left: auto;
+        margin-right: auto;
+    }
+}
+
+/* Booking Summary */
+.booking-summary {
+    background: rgba(248, 237, 235, 0.5);
+    border: 2px solid var(--theme-highlight, #B76E79);
+    border-radius: 0.75rem;
+    padding: 1.5rem;
+    margin-bottom: 1.5rem;
+}
+
+.booking-summary-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 1rem;
+    padding-bottom: 0.75rem;
+    border-bottom: 1px solid rgba(183, 110, 121, 0.2);
+}
+
+.booking-summary-title {
+    font-family: 'Montserrat', sans-serif;
+    font-size: 1rem;
+    font-weight: 700;
+    color: var(--theme-text, #2C2C2C);
+    margin: 0;
+}
+
+.booking-summary-clear {
+    background: none;
+    border: none;
+    color: var(--theme-text, #2C2C2C);
+    opacity: 0.5;
+    cursor: pointer;
+    padding: 0.25rem;
+    transition: opacity 0.2s ease;
+}
+
+.booking-summary-clear:hover {
+    opacity: 1;
+}
+
+.booking-summary-content {
+    display: flex;
+    flex-direction: column;
+    gap: 0.75rem;
+}
+
+.booking-summary-item {
+    display: flex;
+    justify-content: space-between;
+    align-items: baseline;
+    gap: 1rem;
+}
+
+.booking-summary-label {
+    font-family: 'Montserrat', sans-serif;
+    font-size: 0.875rem;
+    font-weight: 600;
+    color: var(--theme-text, #2C2C2C);
+    opacity: 0.7;
+}
+
+.booking-summary-value {
+    font-family: 'Montserrat', sans-serif;
+    font-size: 0.9375rem;
+    font-weight: 600;
+    color: var(--theme-text, #2C2C2C);
+    text-align: right;
+}
+
+/* Form */
+.contact-form {
+    display: flex;
+    flex-direction: column;
+    gap: 1.5rem;
+}
+
+.form-group {
+    display: flex;
+    flex-direction: column;
+    gap: 0.5rem;
+}
+
+.form-label {
+    font-family: 'Montserrat', sans-serif;
+    font-size: 0.875rem;
+    font-weight: 600;
+    color: var(--theme-text, #2C2C2C);
+}
+
+.form-input,
+.form-textarea {
+    font-family: 'Montserrat', sans-serif;
+    font-size: 1rem;
+    padding: 0.875rem 1rem;
+    background: white;
+    border: 2px solid rgba(183, 110, 121, 0.15);
+    border-radius: 0.5rem;
+    color: var(--theme-text, #2C2C2C);
+    transition: border-color 0.25s ease;
+}
+
+.form-input:focus,
+.form-textarea:focus {
+    outline: none;
+    border-color: var(--theme-highlight, #B76E79);
+}
+
+.form-textarea {
+    resize: vertical;
+    min-height: 120px;
+}
+
+.form-submit {
+    font-family: 'Montserrat', sans-serif;
+    font-size: 1rem;
+    font-weight: 600;
+    letter-spacing: 0.02em;
+    color: white;
+    background: var(--theme-highlight, #B76E79);
+    border: none;
+    border-radius: 0.5rem;
+    padding: 1rem 2rem;
+    cursor: pointer;
+    transition: all 0.25s ease;
+}
+
+.form-submit:hover {
+    background: #A55E69;
+    transform: translateY(-1px);
+    box-shadow: 0 4px 12px rgba(183, 110, 121, 0.3);
+}
+
+.form-submit:active {
+    transform: translateY(0);
+}
+
+.form-submit:disabled {
+    background: rgba(183, 110, 121, 0.4);
+    cursor: not-allowed;
+    transform: none;
+}
+
+/* Footer */
+.contact-footer {
+    text-align: center;
+    padding-top: 2rem;
+    border-top: 1px solid rgba(183, 110, 121, 0.15);
+    font-family: 'Montserrat', sans-serif;
+    font-size: 0.875rem;
+    color: var(--theme-text, #2C2C2C);
+    opacity: 0.6;
+}
+
+/* Responsive */
+@media (max-width: 768px) {
+    .booking-summary-item {
+        flex-direction: column;
+        gap: 0.25rem;
+    }
+
+    .booking-summary-value {
+        text-align: left;
+    }
+}
+

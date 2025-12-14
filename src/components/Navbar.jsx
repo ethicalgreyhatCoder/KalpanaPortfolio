@@ -25,6 +25,7 @@ const Navbar = () => {
             <div className="navbar-desktop-menu">
                 <button onClick={() => scrollTo('about')}>About</button>
                 <button onClick={() => scrollTo('gallery')}>Portfolio</button>
+                <button onClick={() => scrollTo('skills')}>Skills</button>
                 <button onClick={() => scrollTo('services')}>Services</button>
                 <button onClick={() => scrollTo('contact')}>Contact</button>
             </div>
@@ -49,6 +50,7 @@ const Navbar = () => {
                 <div className="navbar-mobile-menu">
                     <button onClick={() => scrollTo('about')}>About</button>
                     <button onClick={() => scrollTo('gallery')}>Portfolio</button>
+                    <button onClick={() => scrollTo('skills')}>Skills</button>
                     <button onClick={() => scrollTo('services')}>Services</button>
                     <button onClick={() => scrollTo('contact')}>Contact</button>
                 </div>

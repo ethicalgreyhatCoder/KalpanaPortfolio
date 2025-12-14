@@ -33,10 +33,11 @@ const Gallery = () => {
     const categoryButtonsRef = useRef({});
     const regionButtonRef = useRef(null);
     const modalScrollRef = useRef(null);
+    const modalBottomAnchorRef = useRef(null);
     const [dropdownPosition, setDropdownPosition] = useState({ top: 0, left: 0 });
 
     // Get current category config
-    const currentCategoryConfig = categories.find(cat => cat.id === activeCategory);
+    categories.find(cat => cat.id === activeCategory);
     const currentFilters = getFiltersForCategory(activeCategory);
     const displayData = getFilteredItems(activeCategory, activeFilter, activeRegion);
 
@@ -200,6 +201,17 @@ const Gallery = () => {
             caseStudyOpacity: 0
         });
         document.body.classList.remove('modal-open');
+    };
+
+    // Handle scroll to bottom on arrow click
+    const handleScrollToBottom = () => {
+        if (modalBottomAnchorRef.current && modalScrollRef.current) {
+            modalBottomAnchorRef.current.scrollIntoView({
+                behavior: 'smooth',
+                block: 'end',
+                inline: 'nearest'
+            });
+        }
     };
 
     // Get active region label
@@ -493,17 +505,11 @@ const Gallery = () => {
             {selectedItem && (
                 <div
                     className="modal-overlay"
-                    onClick={(e) => {
-                        console.log('🔴 OVERLAY CLICKED - Will close modal');
-                        handleCloseModal();
-                    }}
+                    onClick={handleCloseModal}
                 >
                     <div
                         className="portfolio-modal-netflix"
-                        onClick={e => {
-                            console.log('⚪ MODAL CONTAINER CLICKED - Stopping propagation');
-                            e.stopPropagation();
-                        }}
+                        onClick={e => e.stopPropagation()}
                         ref={modalScrollRef}
                     >
                         {/* Hero Image Section with Netflix Fade */}
@@ -544,16 +550,19 @@ const Gallery = () => {
                             )}
 
                             {/* Scroll Affordance Arrow */}
-                            <div
+                            <button
                                 className="scroll-affordance-arrow"
+                                onClick={handleScrollToBottom}
+                                aria-label="Scroll to bottom"
                                 style={{
-                                    opacity: scrollPhase.testimonialOpacity > 0.5 ? 1 : 0
+                                    opacity: scrollPhase.testimonialOpacity > 0.5 ? 1 : 0,
+                                    pointerEvents: scrollPhase.testimonialOpacity > 0.5 ? 'auto' : 'none'
                                 }}
                             >
                                 <svg width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round">
                                     <polyline points="6 9 12 15 18 9"></polyline>
                                 </svg>
-                            </div>
+                            </button>
                         </div>
 
                         {/* Floating Instagram Icon at intersection */}
@@ -573,16 +582,8 @@ const Gallery = () => {
 
                         {/* Content Details Section */}
                         <div className="modal-content-netflix">
-                            {/* Consolidated Metadata Header - fades out as one unit */}
-                            <div
-                                className="metadata-header-netflix"
-                                style={{
-                                    opacity: scrollPhase.headerOpacity,
-                                    transform: `translateY(${(1 - scrollPhase.headerOpacity) * -20}px)`,
-                                    pointerEvents: scrollPhase.headerOpacity < 0.1 ? 'none' : 'auto',
-                                    marginBottom: scrollPhase.headerOpacity < 0.1 ? 0 : '1.75rem'
-                                }}
-                            >
+                            {/* Consolidated Metadata Header - STABLE (no fade) */}
+                            <div className="metadata-header-netflix">
                                 <span className="category-badge">{selectedItem.category}</span>
                                 <h2 className="look-title-netflix">{selectedItem.title}</h2>
                                 {selectedItem.modelName && (
@@ -618,8 +619,10 @@ const Gallery = () => {
                                 </details>
                             )}
 
-                            {/* Brush Stroke Color Palette - fades in on scroll */}
-                            {(selectedItem.colorPalette || selectedItem.colorScheme) && (
+                            {/* Conditional Rendering: Color Palette (Makeup/Eyes) OR Tools Used (Hair/Nails) */}
+
+                            {/* Color Palette - FOR Makeup AND Eyes */}
+                            {(activeCategory === 'makeup' || activeCategory === 'eyes') && (selectedItem.colorPalette || selectedItem.colorScheme) && (
                                 <div
                                     className="color-palette-netflix"
                                     style={{
@@ -644,27 +647,83 @@ const Gallery = () => {
                                 </div>
                             )}
 
-                            {/* Tertiary Case Study CTA - fades in at deeper scroll */}
-                            {selectedItem.caseStudy && (
-                                <button
-                                    className="case-study-cta-tertiary"
-                                    onClick={() => {
-                                        console.log('🟢 OPEN CASE STUDY - Clicked');
-                                        setIsCaseStudyOpen(true);
-                                        console.log('🟢 OPEN CASE STUDY - setIsCaseStudyOpen(true) called');
-                                    }}
+                            {/* Tools Used - ONLY for Hair and Nails (NOT Eyes) */}
+                            {(activeCategory === 'hair' || activeCategory === 'nails') && selectedItem.toolsUsed && selectedItem.toolsUsed.length > 0 && (
+                                <div
+                                    className="tools-used-netflix"
                                     style={{
-                                        opacity: scrollPhase.caseStudyOpacity,
-                                        transform: `translateY(${(1 - scrollPhase.caseStudyOpacity) * 20}px)`
+                                        opacity: scrollPhase.productsOpacity,
+                                        transform: `translateY(${(1 - scrollPhase.productsOpacity) * 20}px)`
                                     }}
                                 >
-                                    <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
-                                        <circle cx="12" cy="12" r="10"></circle>
-                                        <path d="M12 16v-4M12 8h.01"></path>
-                                    </svg>
-                                    View Case Study
-                                </button>
+                                    <span className="section-title-netflix">Tools Used</span>
+                                    <div className="tools-grid">
+                                        {selectedItem.toolsUsed.map((tool, idx) => (
+                                            <div key={idx} className="tool-item-card">
+                                                <div className="tool-icon-container">
+                                                    {tool.icon ? (
+                                                        <img
+                                                            src={tool.icon}
+                                                            alt={tool.name}
+                                                            className="tool-icon"
+                                                            onError={(e) => {
+                                                                e.target.style.display = 'none';
+                                                                e.target.nextSibling.style.display = 'block';
+                                                            }}
+                                                        />
+                                                    ) : null}
+                                                    <svg
+                                                        className="tool-icon-placeholder"
+                                                        style={{ display: tool.icon ? 'none' : 'block' }}
+                                                        viewBox="0 0 24 24"
+                                                        fill="none"
+                                                        stroke="currentColor"
+                                                        strokeWidth="2"
+                                                    >
+                                                        <circle cx="12" cy="12" r="10"></circle>
+                                                        <path d="M12 8v8M8 12h8"></path>
+                                                    </svg>
+                                                </div>
+                                                <span className="tool-name">{tool.name}</span>
+                                                {tool.brand && <span className="tool-brand">{tool.brand}</span>}
+                                            </div>
+                                        ))}
+                                    </div>
+                                </div>
                             )}
+
+                            {/* Footer Surface with CTA and End Marker */}
+                            <div className="modal-footer-surface">
+                                {/* Tertiary Case Study CTA - fades in at deeper scroll */}
+                                {selectedItem.caseStudy && (
+                                    <button
+                                        className="case-study-cta-tertiary"
+                                        onClick={() => setIsCaseStudyOpen(true)}
+                                        style={{
+                                            opacity: scrollPhase.caseStudyOpacity,
+                                            transform: `translateY(${(1 - scrollPhase.caseStudyOpacity) * 20}px)`
+                                        }}
+                                    >
+                                        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
+                                            <circle cx="12" cy="12" r="10"></circle>
+                                            <path d="M12 16v-4M12 8h.01"></path>
+                                        </svg>
+                                        View Case Study
+                                    </button>
+                                )}
+
+                                {/* Visual End Marker */}
+                                <div className="modal-end-marker">
+                                    <div className="end-marker-line"></div>
+                                    <svg className="end-marker-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+                                        <circle cx="12" cy="12" r="1"></circle>
+                                    </svg>
+                                    <div className="end-marker-line"></div>
+                                </div>
+                            </div>
+
+                            {/* Bottom Anchor for Smooth Scroll */}
+                            <div ref={modalBottomAnchorRef} style={{ height: '1px', visibility: 'hidden' }}></div>
                         </div>
 
                     </div>
@@ -675,64 +734,43 @@ const Gallery = () => {
             {selectedItem && isCaseStudyOpen && (
                 <div
                     className="case-study-backdrop"
-                    onClick={() => {
-                        console.log('🟡 BACKDROP - Clicked');
-                        handleCloseCaseStudy();
-                    }}
+                    onClick={handleCloseCaseStudy}
                 />
             )}
 
             {/* Bottom Sheet Case Study Modal - Outside modal for proper position:fixed */}
             {selectedItem && (
-                <>
-                    {console.log('🎨 RENDERING CASE STUDY - isCaseStudyOpen:', isCaseStudyOpen, 'Class:', isCaseStudyOpen ? 'open' : 'closed')}
-                    <div
-                        className={`case-study-bottom-sheet ${isCaseStudyOpen ? 'open' : ''}`}
-                        onClick={(e) => {
-                            console.log('🟡 CASE STUDY SHEET - Clicked (stopPropagation)');
-                            console.log('🟡 CASE STUDY SHEET - isCaseStudyOpen:', isCaseStudyOpen);
-                            console.log('🟡 CASE STUDY SHEET - Classes:', e.currentTarget.className);
-                            e.stopPropagation();
-                        }}
-                    >
-                        <div
-                            className="sheet-handle-bar"
-                            onClick={() => {
-                                console.log('🟡 HANDLE BAR - Clicked');
-                                handleCloseCaseStudy();
-                            }}
-                        ></div>
-                        <div className="sheet-scrollable-content">
-                            {selectedItem.caseStudy && (
-                                <>
-                                    <h3 className="case-study-heading">{selectedItem.caseStudy.title}</h3>
-                                    <div className="case-study-body">
-                                        <p className="case-study-text-netflix">{selectedItem.caseStudy.content}</p>
-                                        {selectedItem.skinType && (
-                                            <div className="case-study-detail">
-                                                <strong>Skin Type:</strong> {selectedItem.skinType}
-                                            </div>
-                                        )}
-                                        {selectedItem.occasion && (
-                                            <div className="case-study-detail">
-                                                <strong>Occasion:</strong> {selectedItem.occasion}
-                                            </div>
-                                        )}
-                                    </div>
-                                </>
-                            )}
-                            <button
-                                className="sheet-close-button"
-                                onClick={() => {
-                                    console.log('🟡 CLOSE BUTTON - Clicked');
-                                    handleCloseCaseStudy();
-                                }}
-                            >
-                                Close
-                            </button>
-                        </div>
+                <div
+                    className={`case-study-bottom-sheet ${isCaseStudyOpen ? 'open' : ''}`}
+                    onClick={(e) => e.stopPropagation()}
+                >
+                    <div className="sheet-scrollable-content">
+                        {selectedItem.caseStudy && (
+                            <>
+                                <h3 className="case-study-heading">{selectedItem.caseStudy.title}</h3>
+                                <div className="case-study-body">
+                                    <p className="case-study-text-netflix">{selectedItem.caseStudy.content}</p>
+                                    {selectedItem.skinType && (
+                                        <div className="case-study-detail">
+                                            <strong>Skin Type:</strong> {selectedItem.skinType}
+                                        </div>
+                                    )}
+                                    {selectedItem.occasion && (
+                                        <div className="case-study-detail">
+                                            <strong>Occasion:</strong> {selectedItem.occasion}
+                                        </div>
+                                    )}
+                                </div>
+                            </>
+                        )}
+                        <button
+                            className="sheet-close-button"
+                            onClick={handleCloseCaseStudy}
+                        >
+                            Close
+                        </button>
                     </div>
-                </>
+                </div>
             )}
 
             {/* Region Dropdown Portal - Renders outside scroll container */}

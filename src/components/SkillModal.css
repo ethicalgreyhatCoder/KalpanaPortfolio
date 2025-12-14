@@ -1,0 +1,243 @@
+/* ========================================
+   SKILL MODAL - BOTTOM SHEET
+   Same pattern as Portfolio modal
+   ======================================== */
+
+/* Backdrop */
+.skill-modal-backdrop {
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background: rgba(0, 0, 0, 0.6);
+    backdrop-filter: blur(4px);
+    z-index: 3000;
+    animation: fadeIn 0.3s ease-out;
+}
+
+@keyframes fadeIn {
+    from {
+        opacity: 0;
+    }
+    to {
+        opacity: 1;
+    }
+}
+
+/* Bottom Sheet */
+.skill-modal-sheet {
+    position: fixed;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    max-width: 900px;
+    height: 75vh;
+    margin: 0 auto;
+    background: #FAF9F6;
+    border-radius: 1.5rem 1.5rem 0 0;
+    z-index: 3001;
+    display: flex;
+    flex-direction: column;
+    box-shadow: 0 -10px 40px rgba(0, 0, 0, 0.3);
+    animation: slideUp 0.4s cubic-bezier(0.32, 0.72, 0, 1);
+    overflow: hidden;
+}
+
+@keyframes slideUp {
+    from {
+        transform: translateY(100%);
+    }
+    to {
+        transform: translateY(0);
+    }
+}
+
+@media (min-width: 768px) {
+    .skill-modal-sheet {
+        height: 70vh;
+        max-height: 700px;
+    }
+}
+
+/* Close Button */
+.skill-modal-close {
+    position: absolute;
+    top: 1rem;
+    right: 1rem;
+    z-index: 10;
+    background: rgba(0, 0, 0, 0.5);
+    backdrop-filter: blur(8px);
+    border: none;
+    color: white;
+    width: 2.5rem;
+    height: 2.5rem;
+    border-radius: 50%;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: all 0.2s ease;
+}
+
+.skill-modal-close:hover {
+    background: rgba(0, 0, 0, 0.7);
+    transform: scale(1.05);
+}
+
+.skill-modal-close:active {
+    transform: scale(0.95);
+}
+
+/* Handle Bar (Swipe affordance) */
+.skill-modal-handle {
+    width: 100%;
+    padding: 0.75rem 0 0.5rem;
+    display: flex;
+    justify-content: center;
+    flex-shrink: 0;
+}
+
+.handle-bar {
+    width: 2.5rem;
+    height: 0.25rem;
+    background: rgba(183, 110, 121, 0.3);
+    border-radius: 0.125rem;
+}
+
+/* Scrollable Content */
+.skill-modal-content {
+    flex: 1;
+    overflow-y: auto;
+    overflow-x: hidden;
+    padding: 1rem 1.5rem 2rem;
+    -webkit-overflow-scrolling: touch;
+    scrollbar-width: none;
+}
+
+.skill-modal-content::-webkit-scrollbar {
+    display: none;
+}
+
+@media (min-width: 768px) {
+    .skill-modal-content {
+        padding: 1.5rem 2.5rem 3rem;
+    }
+}
+
+/* Title */
+.skill-modal-title {
+    font-family: 'Libre Baskerville', serif;
+    font-size: 1.75rem;
+    font-weight: 700;
+    color: var(--theme-text, #2C2C2C);
+    margin: 0 0 1rem 0;
+    line-height: 1.3;
+    letter-spacing: -0.01em;
+}
+
+@media (min-width: 768px) {
+    .skill-modal-title {
+        font-size: 2rem;
+    }
+}
+
+/* Tagline */
+.skill-modal-tagline {
+    font-family: 'Montserrat', sans-serif;
+    font-size: 1rem;
+    font-style: italic;
+    color: var(--theme-text, #2C2C2C);
+    opacity: 0.75;
+    margin: 0 0 2rem 0;
+    line-height: 1.6;
+}
+
+@media (min-width: 768px) {
+    .skill-modal-tagline {
+        font-size: 1.0625rem;
+    }
+}
+
+/* Section */
+.skill-modal-section {
+    margin-bottom: 2rem;
+}
+
+.skill-modal-section:last-child {
+    margin-bottom: 0;
+}
+
+/* Section Title */
+.skill-modal-section-title {
+    font-family: 'Montserrat', sans-serif;
+    font-size: 0.875rem;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 0.08em;
+    color: var(--theme-text, #2C2C2C);
+    opacity: 0.6;
+    margin: 0 0 1rem 0;
+}
+
+/* List */
+.skill-modal-list {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+    display: flex;
+    flex-direction: column;
+    gap: 0.875rem;
+}
+
+.skill-modal-list-item {
+    display: flex;
+    align-items: flex-start;
+    gap: 0.75rem;
+    font-family: 'Montserrat', sans-serif;
+    font-size: 0.9375rem;
+    font-weight: 500;
+    color: var(--theme-text, #2C2C2C);
+    line-height: 1.6;
+}
+
+@media (min-width: 768px) {
+    .skill-modal-list-item {
+        font-size: 1rem;
+    }
+}
+
+.list-bullet {
+    flex-shrink: 0;
+    width: 6px;
+    height: 6px;
+    background: var(--theme-highlight, #B76E79);
+    border-radius: 50%;
+    margin-top: 0.5rem;
+}
+
+/* Text Content */
+.skill-modal-text {
+    font-family: 'Montserrat', sans-serif;
+    font-size: 0.9375rem;
+    font-weight: 400;
+    color: var(--theme-text, #2C2C2C);
+    line-height: 1.7;
+    margin: 0;
+}
+
+@media (min-width: 768px) {
+    .skill-modal-text {
+        font-size: 1rem;
+        line-height: 1.75;
+    }
+}
+
+/* Accessibility */
+@media (prefers-reduced-motion: reduce) {
+    .skill-modal-backdrop,
+    .skill-modal-sheet {
+        animation: none;
+    }
+}
+

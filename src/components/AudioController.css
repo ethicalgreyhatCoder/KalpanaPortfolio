@@ -1,0 +1,192 @@
+/* ========================================
+   AUDIO CONTROLLER
+   Floating music control with CSS equalizer
+   ======================================== */
+
+/* Floating Control Button - More Transparent */
+.audio-controller {
+    position: fixed;
+    bottom: 2rem;
+    right: 2rem;
+    z-index: 9999;
+
+    width: 3.5rem;
+    height: 3.5rem;
+
+    /* More transparent background (30% opacity instead of 95%) */
+    background: rgba(248, 237, 235, 0.3);
+    backdrop-filter: blur(4px);
+    border: 1px solid rgba(183, 110, 121, 0.15);
+    border-radius: 50%;
+
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+    cursor: pointer;
+    transition: all 0.3s ease;
+
+    /* Subtle shadow */
+    box-shadow: 0 2px 8px rgba(183, 110, 121, 0.08);
+}
+
+.audio-controller:hover {
+    /* Slightly less transparent on hover (60% opacity) */
+    background: rgba(248, 237, 235, 0.6);
+    border-color: rgba(183, 110, 121, 0.4);
+    transform: translateY(-2px);
+    box-shadow: 0 4px 12px rgba(183, 110, 121, 0.15);
+}
+
+.audio-controller:active {
+    transform: translateY(0);
+}
+
+.audio-controller:focus {
+    outline: 2px solid var(--theme-highlight, #B76E79);
+    outline-offset: 2px;
+}
+
+/* Equalizer Container */
+.equalizer {
+    display: flex;
+    align-items: flex-end;
+    justify-content: center;
+    gap: 0.2rem;
+    height: 1.25rem;
+    width: 1.25rem;
+}
+
+/* Equalizer Bars */
+.bar {
+    width: 0.2rem;
+    background: var(--theme-highlight, #B76E79);
+    border-radius: 0.1rem;
+    transition: height 0.1s ease, opacity 0.3s ease;
+}
+
+/* Paused State - Static bars at different heights */
+.equalizer.paused .bar {
+    opacity: 0.5;
+}
+
+.equalizer.paused .bar-1 {
+    height: 0.4rem;
+}
+
+.equalizer.paused .bar-2 {
+    height: 0.7rem;
+}
+
+.equalizer.paused .bar-3 {
+    height: 0.5rem;
+}
+
+.equalizer.paused .bar-4 {
+    height: 0.8rem;
+}
+
+/* Playing State - Animated bars */
+.equalizer.playing .bar {
+    opacity: 1;
+    animation-timing-function: ease-in-out;
+    animation-iteration-count: infinite;
+    animation-direction: alternate;
+}
+
+.equalizer.playing .bar-1 {
+    animation-name: equalizerBar1;
+    animation-duration: 0.7s;
+}
+
+.equalizer.playing .bar-2 {
+    animation-name: equalizerBar2;
+    animation-duration: 0.9s;
+}
+
+.equalizer.playing .bar-3 {
+    animation-name: equalizerBar3;
+    animation-duration: 0.6s;
+}
+
+.equalizer.playing .bar-4 {
+    animation-name: equalizerBar4;
+    animation-duration: 0.8s;
+}
+
+/* Asymmetric Bar Animations */
+@keyframes equalizerBar1 {
+    0% { height: 0.3rem; }
+    100% { height: 1rem; }
+}
+
+@keyframes equalizerBar2 {
+    0% { height: 0.6rem; }
+    100% { height: 1.2rem; }
+}
+
+@keyframes equalizerBar3 {
+    0% { height: 0.4rem; }
+    100% { height: 0.9rem; }
+}
+
+@keyframes equalizerBar4 {
+    0% { height: 0.7rem; }
+    100% { height: 1.1rem; }
+}
+
+/* Reduced Motion - No animations */
+.equalizer.no-animation .bar {
+    animation: none !important;
+}
+
+.equalizer.no-animation.playing .bar {
+    /* Static higher position when playing */
+    height: 0.9rem;
+    opacity: 1;
+}
+
+/* Mobile adjustments */
+@media (max-width: 768px) {
+    .audio-controller {
+        bottom: 1.5rem;
+        right: 1.5rem;
+        width: 3rem;
+        height: 3rem;
+    }
+
+    .equalizer {
+        height: 1rem;
+        width: 1rem;
+        gap: 0.15rem;
+    }
+
+    .bar {
+        width: 0.18rem;
+    }
+}
+
+/* Smooth entrance animation - triggered when button becomes visible */
+@keyframes fadeInSlideUp {
+    from {
+        opacity: 0;
+        transform: translateY(20px) scale(0.9);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0) scale(1);
+    }
+}
+
+.audio-controller {
+    animation: fadeInSlideUp 0.6s cubic-bezier(0.34, 1.56, 0.64, 1) forwards;
+}
+
+/* Prevent button from blocking content */
+@media (max-height: 600px) {
+    .audio-controller {
+        bottom: 1rem;
+        right: 1rem;
+    }
+}
+
