@@ -1,0 +1,121 @@
+/* ========================================
+   BRUSH STROKE COLOR SWATCHES
+   Organic, handcrafted paint strokes
+   ======================================== */
+
+.brush-stroke-wrapper {
+    position: relative;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 0.5rem;
+    min-width: 100px;
+}
+
+/* Organic circular SVG shape */
+.brush-stroke-svg-organic {
+    width: 60px;
+    height: 60px;
+    transition: all 0.3s ease;
+    opacity: 0;
+    animation: fadeInScale 0.5s cubic-bezier(0.25, 0.46, 0.45, 0.94) forwards;
+    animation-delay: calc(var(--index, 0) * 0.1s);
+}
+
+.brush-stroke-svg-organic:hover {
+    transform: scale(1.08);
+}
+
+.organic-shape {
+    transition: all 0.3s ease;
+}
+
+.inner-highlight {
+    transition: all 0.3s ease;
+}
+
+@keyframes fadeInScale {
+    from {
+        opacity: 0;
+        transform: scale(0.8);
+    }
+    to {
+        opacity: 1;
+        transform: scale(1);
+    }
+}
+
+/* Legacy brush stroke support */
+.brush-stroke-svg {
+    width: 100%;
+    height: 40px;
+    filter: drop-shadow(0 2px 4px rgba(0, 0, 0, 0.1));
+    transition: all 0.3s ease;
+}
+
+.brush-stroke-svg:hover {
+    transform: scale(1.05);
+    filter: drop-shadow(0 3px 6px rgba(0, 0, 0, 0.15));
+}
+
+
+/* Image-based brush stroke (if assets available) */
+.brush-stroke-image-container {
+    position: relative;
+    width: 120px;
+    height: 40px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.brush-stroke-asset {
+    width: 100%;
+    height: 100%;
+    object-fit: contain;
+    filter: saturate(1.2) brightness(1.1);
+    transition: all 0.3s ease;
+}
+
+.brush-stroke-asset:hover {
+    transform: scale(1.05);
+    filter: saturate(1.4) brightness(1.2) drop-shadow(0 3px 6px rgba(0, 0, 0, 0.15));
+}
+
+/* Color name label */
+.brush-color-name {
+    font-family: 'Montserrat', sans-serif;
+    font-size: 0.75rem;
+    font-weight: 500;
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+    color: var(--theme-text);
+    opacity: 0.7;
+    text-align: center;
+    transition: opacity 0.3s ease;
+}
+
+.brush-stroke-wrapper:hover .brush-color-name {
+    opacity: 1;
+}
+
+/* Responsive adjustments */
+@media (max-width: 768px) {
+    .brush-stroke-wrapper {
+        min-width: 80px;
+    }
+
+    .brush-stroke-svg {
+        height: 35px;
+    }
+
+    .brush-stroke-image-container {
+        width: 100px;
+        height: 35px;
+    }
+
+    .brush-color-name {
+        font-size: 0.7rem;
+    }
+}
+
