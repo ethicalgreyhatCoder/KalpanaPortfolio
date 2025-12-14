@@ -213,7 +213,7 @@ body:has(.modal-overlay) {
 .quote-mark {
     width: 24px;
     height: 24px;
-    color: rgba(255, 255, 255, 0.4);
+    color: rgb(183 110 121);
     margin-bottom: 0.5rem;
 }
 

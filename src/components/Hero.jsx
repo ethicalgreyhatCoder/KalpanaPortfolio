@@ -128,16 +128,55 @@ const Hero = () => {
                                 </linearGradient>
 
                                 {/* Reduced glow intensity with less intense bloom */}
-                                <filter id="pinkBloom" x="-50%" y="-50%" width="200%" height="200%">
-                                    <feGaussianBlur in="SourceAlpha" stdDeviation="8" result="blur" />
-                                    <feOffset in="blur" dx="0" dy="0" result="offsetBlur" />
-                                    <feFlood floodColor="#b76e79" floodOpacity="0.15" result="offsetColor" />
-                                    <feComposite in="offsetColor" in2="offsetBlur" operator="in" result="offsetBlur" />
+                                {/*<filter id="pinkBloom" x="-50%" y="-100%" width="200%" height="200%">*/}
+                                {/*    <feGaussianBlur in="SourceAlpha" stdDeviation="1" result="blur" />*/}
+                                {/*    <feOffset in="blur" dx="0" dy="0" result="offsetBlur" />*/}
+                                {/*    <feFlood floodColor="#b76e79" floodOpacity="0.15" result="offsetColor" />*/}
+                                {/*    <feComposite in="offsetColor" in2="offsetBlur" operator="in" result="offsetBlur" />*/}
+                                {/*    <feMerge>*/}
+                                {/*        <feMergeNode in="offsetBlur" />*/}
+                                {/*        <feMergeNode in="SourceGraphic" />*/}
+                                {/*    </feMerge>*/}
+                                {/*</filter>*/}
+
+                                <filter id="neonBloom"
+                                        x="-120%" y="-120%"
+                                        width="340%" height="340%"
+                                        color-interpolation-filters="sRGB">
+
+                                    //  Strong neon blur
+                                    <feGaussianBlur in="SourceGraphic"
+                                                    stdDeviation="6"
+                                                    result="blur1" />
+
+                                    // Outer glow
+                                    <feGaussianBlur in="SourceGraphic"
+                                                    stdDeviation="14"
+                                                    result="blur2" />
+
+                                    <animate attributeName="stdDeviation"
+                                             values="10;18;10"
+                                             dur="3s"
+                                             repeatCount="indefinite" />
+
+                                    // Neon color
+                                    <feFlood floodColor="#ff2fcf"
+                                             floodOpacity="0.9"
+                                             result="color" />
+
+                                    <feComposite in="color"
+                                                 in2="blur2"
+                                                 operator="in"
+                                                 result="glow" />
+
+                                    // Merge glow + shape
                                     <feMerge>
-                                        <feMergeNode in="offsetBlur" />
+                                        <feMergeNode in="glow" />
+                                        <feMergeNode in="blur1" />
                                         <feMergeNode in="SourceGraphic" />
                                     </feMerge>
                                 </filter>
+
 
                                 <clipPath id="popOutClip">
                                     <path transform="translate(100 100) scale(0.95)" d="M42.7,-72.1C55.3,-66.3,65.6,-56.3,73.1,-44.5C80.6,-32.7,85.3,-19.1,84.2,-6.1C83.2,7,76.4,19.4,67.3,30.3C58.2,41.2,46.8,50.6,34.7,58.3C22.6,66,9.8,71.9,-1.9,75.2C-13.6,78.5,-24.3,79.1,-35.3,74.5C-46.3,69.9,-57.7,60.1,-66.3,48.5C-74.9,36.9,-80.7,23.5,-80.3,10.2C-79.9,-3.1,-73.2,-16.3,-64.2,-27.4C-55.2,-38.5,-43.8,-47.5,-32.1,-53.8C-20.4,-60.1,-8.3,-63.7,4.8,-72C18,-80.3,30.1,-93.3,42.7,-72.1Z" />
