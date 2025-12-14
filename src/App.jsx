@@ -1,5 +1,6 @@
 import React from 'react';
 import { BookingProvider } from './contexts/BookingContext';
+import useScrollToTop from './hooks/useScrollToTop';
 import Navbar from './components/Navbar';
 import Hero from './components/Hero';
 import About from './components/About';
@@ -12,6 +13,9 @@ import AudioController from './components/AudioController';
 import './App.css';
 
 function App() {
+  // Use custom hook to ensure page always starts at the top
+  useScrollToTop();
+
   return (
     <BookingProvider>
       <div className="portfolio-container font-sans overflow-x-hidden selection:bg-theme-accent selection:text-white bg-theme-bg text-theme-text transition-colors duration-500">

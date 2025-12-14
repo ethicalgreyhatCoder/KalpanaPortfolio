@@ -127,11 +127,11 @@ const Hero = () => {
                                     <stop offset="100%" stopColor="#FFFFFF" />
                                 </linearGradient>
 
-                                {/* Reduced glow intensity by ~40% */}
+                                {/* Reduced glow intensity with less intense bloom */}
                                 <filter id="pinkBloom" x="-50%" y="-50%" width="200%" height="200%">
-                                    <feGaussianBlur in="SourceAlpha" stdDeviation="10" result="blur" />
+                                    <feGaussianBlur in="SourceAlpha" stdDeviation="8" result="blur" />
                                     <feOffset in="blur" dx="0" dy="0" result="offsetBlur" />
-                                    <feFlood floodColor="#ff0026" floodOpacity="0.3" result="offsetColor" />
+                                    <feFlood floodColor="#b76e79" floodOpacity="0.15" result="offsetColor" />
                                     <feComposite in="offsetColor" in2="offsetBlur" operator="in" result="offsetBlur" />
                                     <feMerge>
                                         <feMergeNode in="offsetBlur" />
