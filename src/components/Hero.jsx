@@ -86,11 +86,11 @@ const Hero = () => {
                     </p>
 
                     <div className="hero-cta-group">
-                        <button onClick={() => scrollTo('contact')} className="hero-cta-button">
-                            Book Now
+                        <button onClick={() => scrollTo('gallery')} className="hero-cta-button">
+                            Explore My Portfolio
                         </button>
 
-                        <div className="social-icons-group">
+                        <div className="social-icons-group hidden-mobile">
                             {/* Instagram */}
                             <a href="https://www.instagram.com/_kalpan.aaaa/" target="_blank" rel="noopener noreferrer" className="social-icon">
                                 <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><rect x="2" y="2" width="20" height="20" rx="5" ry="5"></rect><path d="M16 11.37A4 4 0 1 1 12.63 8 4 4 0 0 1 16 11.37z"></path><line x1="17.5" y1="6.5" x2="17.51" y2="6.5"></line></svg>
@@ -123,45 +123,35 @@ const Hero = () => {
                         <svg viewBox="0 0 200 200" xmlns="http://www.w3.org/2000/svg" className="w-full h-full overflow-visible hero-parallax-image">
                             <defs>
                                 <linearGradient id="blobGradient" x1="0%" y1="0%" x2="100%" y2="100%">
-                                    <stop offset="0%" stopColor="#FFFFFF" />
-                                    <stop offset="100%" stopColor="#FFFFFF" />
+                                    <stop offset="0%" stopColor="#edededc4" />
+                                    <stop offset="100%" stopColor="#edededc4" />
                                 </linearGradient>
 
-                                {/* Reduced glow intensity with less intense bloom */}
-                                {/*<filter id="pinkBloom" x="-50%" y="-100%" width="200%" height="200%">*/}
-                                {/*    <feGaussianBlur in="SourceAlpha" stdDeviation="1" result="blur" />*/}
-                                {/*    <feOffset in="blur" dx="0" dy="0" result="offsetBlur" />*/}
-                                {/*    <feFlood floodColor="#b76e79" floodOpacity="0.15" result="offsetColor" />*/}
-                                {/*    <feComposite in="offsetColor" in2="offsetBlur" operator="in" result="offsetBlur" />*/}
-                                {/*    <feMerge>*/}
-                                {/*        <feMergeNode in="offsetBlur" />*/}
-                                {/*        <feMergeNode in="SourceGraphic" />*/}
-                                {/*    </feMerge>*/}
-                                {/*</filter>*/}
-
+                                {/* Optimized neon bloom - mobile-friendly with reduced spread */}
                                 <filter id="neonBloom"
-                                        x="-120%" y="-120%"
-                                        width="340%" height="340%"
-                                        color-interpolation-filters="sRGB">
+                                        x="-80%" y="-80%"
+                                        width="260%" height="260%"
+                                        colorInterpolationFilters="sRGB">
 
-                                    //  Strong neon blur
+                                    {/* Inner blur for smoothness */}
                                     <feGaussianBlur in="SourceGraphic"
-                                                    stdDeviation="6"
+                                                    stdDeviation="4"
                                                     result="blur1" />
 
-                                    // Outer glow
+                                    {/* Outer glow - reduced for mobile */}
                                     <feGaussianBlur in="SourceGraphic"
-                                                    stdDeviation="14"
+                                                    stdDeviation="8"
                                                     result="blur2" />
 
+                                    {/* Gentle animation */}
                                     <animate attributeName="stdDeviation"
-                                             values="10;18;10"
-                                             dur="3s"
+                                             values="6;12;6"
+                                             dur="4s"
                                              repeatCount="indefinite" />
 
-                                    // Neon color
-                                    <feFlood floodColor="#ff2fcf"
-                                             floodOpacity="0.9"
+                                    {/* Subtle neon color with reduced opacity */}
+                                    <feFlood floodColor="#b76e79"
+                                             floodOpacity="0.25"
                                              result="color" />
 
                                     <feComposite in="color"
@@ -169,7 +159,7 @@ const Hero = () => {
                                                  operator="in"
                                                  result="glow" />
 
-                                    // Merge glow + shape
+                                    {/* Merge glow + shape */}
                                     <feMerge>
                                         <feMergeNode in="glow" />
                                         <feMergeNode in="blur1" />
@@ -185,12 +175,12 @@ const Hero = () => {
                                 </clipPath>
                             </defs>
 
-                            {/* Background Blob with reduced glow */}
+                            {/* Background Blob with optimized glow */}
                             <path
                                 fill="url(#blobGradient)"
-                                stroke="#FFFFFF"
+                                stroke="#edededc4"
                                 strokeWidth="3"
-                                filter="url(#pinkBloom)"
+                                filter="url(#neonBloom)"
                                 d="M42.7,-72.1C55.3,-66.3,65.6,-56.3,73.1,-44.5C80.6,-32.7,85.3,-19.1,84.2,-6.1C83.2,7,76.4,19.4,67.3,30.3C58.2,41.2,46.8,50.6,34.7,58.3C22.6,66,9.8,71.9,-1.9,75.2C-13.6,78.5,-24.3,79.1,-35.3,74.5C-46.3,69.9,-57.7,60.1,-66.3,48.5C-74.9,36.9,-80.7,23.5,-80.3,10.2C-79.9,-3.1,-73.2,-16.3,-64.2,-27.4C-55.2,-38.5,-43.8,-47.5,-32.1,-53.8C-20.4,-60.1,-8.3,-63.7,4.8,-72C18,-80.3,30.1,-93.3,42.7,-72.1Z"
                                 transform="translate(100 100) scale(0.95)"
                             />

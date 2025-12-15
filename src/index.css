@@ -8,8 +8,8 @@
   font-family: 'Montserrat', sans-serif;
 
   /* --- Global Theme System (Nude Elegance) --- */
-  --theme-bg: #FAF9F6;
-  /* Cream White */
+  --theme-bg: #edededc4;
+  /* Soft Gray-Beige */
   --theme-surface: #F5E6D3;
   /* Soft Beige */
   --theme-text: #4A4A4A;
@@ -19,7 +19,7 @@
   --theme-highlight: #B76E79;
   /* Rose Gold */
 
-  --theme-container-bg: rgba(250, 249, 246, 0.8);
+  --theme-container-bg: rgba(237, 237, 212, 0.8);
   --theme-border: rgba(183, 110, 121, 0.3);
   /* Rose Gold transparent */
 }

@@ -403,3 +403,21 @@
     }
 }
 
+/* Mobile Bloom Optimization - Prevent navbar overlap */
+@media (max-width: 576px) {
+    /* Reduce bloom filter intensity on mobile */
+    .hero-parallax-image {
+        filter: drop-shadow(0 0 4px rgba(183, 110, 121, 0.15)) !important;
+    }
+
+    /* Constrain bloom spread to SVG container */
+    .hero-image-wrapper {
+        overflow: hidden;
+        border-radius: 12px;
+    }
+
+    /* Hide social icons on mobile only */
+    .social-icons-group.hidden-mobile {
+        display: none !important;
+    }
+}

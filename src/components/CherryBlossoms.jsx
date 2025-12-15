@@ -1,11 +1,11 @@
 import React, { useState, useEffect, useMemo } from 'react';
 
 const CherryBlossoms = React.memo(() => {
-    const [petalCount, setPetalCount] = useState(15); // Reduced from 40-50 to 12-15 (70% reduction)
+    const [petalCount, setPetalCount] = useState(15); // Mobile: 20 petals, Desktop: 15 petals
 
     useEffect(() => {
         const updateCount = () => {
-            setPetalCount(window.innerWidth < 768 ? 12 : 15); // Reduced from 40-50 to 12-15
+            setPetalCount(window.innerWidth < 768 ? 20 : 15); // Increased mobile from 12 to 20
         };
 
         // Initial check
