@@ -13,8 +13,8 @@ import AudioController from './components/AudioController';
 import './App.css';
 
 function App() {
-  // Use custom hook to ensure page always starts at the top
   useScrollToTop();
+
 
   return (
     <BookingProvider>

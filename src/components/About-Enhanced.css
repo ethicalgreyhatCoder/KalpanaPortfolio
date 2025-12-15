@@ -5,7 +5,20 @@
     padding: 6rem 0;
     background-color: var(--theme-bg);
     position: relative;
+    z-index: 11; /* Increased from 1 to 11 - cherry blossoms at -2 */
     transition: all 0.7s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+/* Section-specific cherry blossoms - contained within About */
+.about-section-blossoms {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    overflow: hidden;
+    pointer-events: none;
+    z-index: -2; /* Behind all About content */
 }
 
 /* Intro Section - Text Hierarchy */
@@ -209,14 +222,14 @@
 /* Quote Text */
 .about-quote-text {
     font-size: 1.25rem;
-    font-weight: 300;
+    font-weight: 400;
     font-family: 'Libre Baskerville', serif;
     font-style: italic;
     color: var(--theme-text);
-    opacity: 0.9;
+    opacity: 1;
     line-height: 1.6;
     position: relative;
-    z-index: 10;
+    z-index: 20; /* Increased from 10 to 20 */
     margin: 0;
 }
 
@@ -306,6 +319,13 @@
     transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
     cursor: pointer;
     transform: scale(1);
+}
+
+/* Prioritize "The Artist" card - first child */
+.about-card:first-child {
+    border: 2.5px solid rgba(183, 110, 121, 0.35);
+    background: linear-gradient(135deg, rgba(245, 230, 211, 0.25) 0%, rgba(250, 249, 246, 0.15) 100%);
+    box-shadow: 0 8px 20px rgba(183, 110, 121, 0.1);
 }
 
 .about-card:active {

@@ -3,51 +3,58 @@
 /* Timeline Vertical Line - Custom Styling */
 .timeline-line {
     position: absolute;
-    left: 1.75rem; /* 16px - left-4 */
+    left: 1.75rem;
+    /* 16px - left-4 */
     transform: translateX(-50%);
     top: 0;
     height: 100%;
-    width: 4px; /* 1rem = 16px, so 4px for w-1 */
-    background: linear-gradient(
-        to bottom,
-        transparent,
-        rgba(183, 110, 121, 0.6),
-        transparent
-    );
+    width: 4px;
+    /* 1rem = 16px, so 4px for w-1 */
+    background: linear-gradient(to bottom,
+            transparent,
+            rgba(183, 110, 121, 0.6),
+            transparent);
     pointer-events: none;
-    z-index: 0;
+    z-index: 10;
+    /* Increased from 0 to 10 */
 }
 
 /* Desktop Version - Centered */
 @media (min-width: 768px) {
     .timeline-line {
         left: 50%;
-        width: 2px; /* md:w-0.5 = 2px */
+        width: 2px;
+        /* md:w-0.5 = 2px */
     }
 }
 
 /* Timeline Content Wrapper */
 .timeline-wrapper {
     position: relative;
-    z-index: 10;
+    z-index: 20;
+    /* Increased from 10 to 20 */
 }
 
 /* Timeline Container */
 .timeline-container {
     position: relative;
-    max-width: 56rem; /* max-w-4xl */
+    max-width: 56rem;
+    /* max-w-4xl */
     margin-left: auto;
     margin-right: auto;
     padding-left: 1rem;
     padding-right: 1rem;
-    margin-bottom: 2rem; /* mb-8 */
-    padding-top: 2rem; /* py-8 */
+    margin-bottom: 2rem;
+    /* mb-8 */
+    padding-top: 2rem;
+    /* py-8 */
     padding-bottom: 2rem;
 }
 
 @media (min-width: 768px) {
     .timeline-container {
-        padding-top: 3rem; /* md:py-12 */
+        padding-top: 3rem;
+        /* md:py-12 */
         padding-bottom: 3rem;
     }
 }
@@ -55,18 +62,23 @@
 /* Timeline Dots - Solid Filled Circles */
 .timeline-dot {
     position: absolute;
-    left: 0.75rem; /* Adjusted for better mobile alignment */
+    left: 0.75rem;
+    /* Adjusted for better mobile alignment */
     transform: translateX(-50%);
-    width: 1rem; /* 16px */
+    width: 1rem;
+    /* 16px */
     height: 1rem;
     border-radius: 50%;
-    background-color: #B76E79; /* Rose Gold - theme-highlight */
+    background-color: #B76E79;
+    /* Rose Gold - theme-highlight */
     border: none;
-    z-index: 10;
+    z-index: 20;
+    /* Increased from 10 to 20 */
     top: 0.5rem;
     pointer-events: auto;
     transition: all 1s ease-out;
-    box-shadow: 0 0 0 3px #FAF9F6; /* Cream bg ring */
+    box-shadow: 0 0 0 3px #FAF9F6;
+    /* Cream bg ring */
 }
 
 /* Mobile view - line and dot alignment */
@@ -76,7 +88,8 @@
     width: 100%;
     height: 100%;
     border-radius: 50%;
-    background-color: rgba(183, 110, 121, 0.15); /* Light rose gold tint */
+    background-color: rgba(183, 110, 121, 0.15);
+    /* Light rose gold tint */
     opacity: 0;
     transform: scale(1);
     transition: all 0.3s ease-out;
@@ -85,7 +98,8 @@
 /* Hover/Active state - Reveal visible state */
 .timeline-dot.active,
 .group- .reveal-visible .timeline-dot {
-    background-color: #B76E79; /* Solid rose gold */
+    background-color: #B76E79;
+    /* Solid rose gold */
     box-shadow: 0 0 0 3px #FAF9F6, 0 0 20px rgba(183, 110, 121, 0.5);
 }
 
@@ -99,11 +113,170 @@
 @media (min-width: 768px) {
     .timeline-dot {
         left: 50%;
-        width: 1.5rem; /* 24px */
+        width: 1.5rem;
+        /* 24px */
         height: 1.5rem;
         top: 50%;
         transform: translate(-50%, -50%);
-        box-shadow: 0 0 0 4px #FAF9F6; /* Larger ring on desktop */
+        box-shadow: 0 0 0 4px #FAF9F6;
+        /* Larger ring on desktop */
     }
 }
 
+/* ============================================
+   MOBILE PHOTO CAROUSEL STYLES
+   ============================================ */
+
+.mobile-photo-carousel {
+    /* MOBILE IMAGE SYSTEM: Swipe-only carousel with NO overlap
+       - Container: Flexible, maintains 4:5 aspect ratio
+       - Only 3 images rendered at a time (current + left/right adjacent)
+       - Prevents overlap: explicit z-index layering + pointer-events isolation
+       - Interaction model: SWIPE ONLY (no click, no scroll)
+       - Images must be: PNG/JPG, 4:5 aspect ratio, transparent background
+       - Container overflow: hidden prevents any image escape */
+    position: relative;
+    width: 100%;
+    max-width: 260px;
+    margin: 0 auto;
+    aspect-ratio: 4 / 5;
+    /* Flexible height, maintains aspect ratio */
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    overflow: visible;
+    /* Changed from hidden - allows side previews to show */
+    cursor: grab;
+    user-select: none;
+    -webkit-touch-callout: none;
+    perspective: 1200px;
+    /* Increased for stronger 3D effect */
+    perspective-origin: center;
+    padding: 0 60px;
+    /* Add horizontal padding to accommodate side images */
+}
+
+.mobile-photo-carousel:active {
+    cursor: grabbing;
+}
+
+/* Carousel image wrapper: Absolute positioning for stacked carousel effect */
+.carousel-photo-wrapper {
+    position: absolute;
+    width: 100%;
+    height: 100%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    /* All wrappers occupy same space but positioned via transform */
+    /* Enhanced transition timing: 700ms for smooth, visible, calm animation */
+    transition: transform 0.7s cubic-bezier(0.25, 0.46, 0.45, 0.94),
+        opacity 0.7s cubic-bezier(0.25, 0.46, 0.45, 0.94),
+        box-shadow 0.7s cubic-bezier(0.25, 0.46, 0.45, 0.94),
+        z-index 0s linear;
+}
+
+/* Center image: Active, pops forward in 3D space, fully visible, premium shadow */
+.carousel-photo-wrapper.center {
+    z-index: 30;
+    pointer-events: auto;
+    transform: translateX(0) translateZ(40px) scale(1);
+    /* translateZ makes it pop forward */
+    opacity: 1;
+}
+
+/* Left preview image: Visible on left side, angled and faded for depth */
+.carousel-photo-wrapper.left {
+    z-index: 20;
+    pointer-events: none;
+    transform: translateX(-45%) translateZ(-20px) scale(0.88) rotateY(8deg);
+    /* Reduced translateX so it's visible */
+    opacity: 0.75;
+    /* More visible than before */
+}
+
+/* Right preview image: Visible on right side, mirrored angle and fade */
+.carousel-photo-wrapper.right {
+    z-index: 20;
+    pointer-events: none;
+    transform: translateX(45%) translateZ(-20px) scale(0.88) rotateY(-8deg);
+    /* Reduced translateX so it's visible */
+    opacity: 0.75;
+    /* More visible than before */
+}
+
+.carousel-photo {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    object-position: center;
+    border-radius: 1rem;
+    border: 1px solid rgba(183, 110, 121, 0.2);
+    transition: box-shadow 0.5s ease-in-out;
+    box-shadow: 0 10px 30px rgba(183, 110, 121, 0.1);
+    aspect-ratio: 4/5;
+    -webkit-user-select: none;
+    user-select: none;
+    -webkit-appearance: none;
+    appearance: none;
+    backface-visibility: hidden;
+}
+
+/* Enhanced shadow for center image - premium depth with soft glow */
+.carousel-photo-wrapper.center .carousel-photo {
+    box-shadow: 0 20px 50px rgba(183, 110, 121, 0.3),
+        0 10px 30px rgba(183, 110, 121, 0.2),
+        0 0 40px rgba(183, 110, 121, 0.1);
+}
+
+
+/* ============================================
+   DESKTOP PHOTO FADE-CYCLE STYLES
+   ============================================ */
+
+.desktop-photo-fade {
+    /* DESKTOP IMAGE SYSTEM: Cinematic fade-cycle animation
+       - Container: Flexible width with 4:5 aspect ratio (maintains proportion)
+       - All images in fixed position: fade-in/out cycling
+       - Cycle timing: 7000ms per image auto-cycling
+       - Creates calm, editorial, magazine-style pacing
+       - Images must be: PNG, 4:5 aspect ratio, transparent background
+       - No scroll interaction - auto-cycling only */
+    position: relative;
+    width: 100%;
+    max-width: 340px;
+    aspect-ratio: 4 / 5;
+    overflow: hidden;
+    border-radius: 1rem;
+    border: 1px solid rgba(183, 110, 121, 0.2);
+    box-shadow: 0 20px 40px rgba(183, 110, 121, 0.1);
+}
+
+.fade-photo {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    /* Fill border frame, maintain aspect ratio */
+    object-position: center;
+    /* Keep face/center of image visible */
+    /* Desktop fade animation timing: 2.5 second smooth fade
+       Creates calm, editorial magazine-style pacing (not rushed) */
+    transition: opacity 2.5s ease-in-out;
+    backface-visibility: hidden;
+    /* Prevent GPU flicker */
+}
+
+.fade-photo.fade-in {
+    opacity: 1;
+    z-index: 20;
+    /* Increased from 10 to 20 */
+}
+
+.fade-photo.fade-out {
+    opacity: 0;
+    z-index: 15;
+    /* Increased from 5 to 15 */
+}

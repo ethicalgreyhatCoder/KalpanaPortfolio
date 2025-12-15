@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useRef, useEffect } from 'react';
 import RevealOnScroll from './RevealOnScroll';
 import './About.css';
 import './About-Enhanced.css';
@@ -7,6 +7,39 @@ import './About-Cards-Timeline-Enhanced.css';
 const About = () => {
     const [activeTimelineDots, setActiveTimelineDots] = useState({});
 
+    // Mobile carousel state
+    const [currentPhotoIndex, setCurrentPhotoIndex] = useState(2); // Start with center image
+    const carouselRef = useRef(null);
+    const [isMobile, setIsMobile] = useState(window.innerWidth <= 768);
+
+    // Desktop fade-cycle state
+    const [desktopPhotoIndex, setDesktopPhotoIndex] = useState(0);
+    const desktopCycleIntervalRef = useRef(null);
+
+    // Photo collection (6 mobile, 8+ desktop)
+    const mobilePhotos = [
+        `${import.meta.env.BASE_URL}Kalpana-About.png`,
+        `${import.meta.env.BASE_URL}Kalpana-About2.png`,
+        `${import.meta.env.BASE_URL}Kalpana-About3.png`,
+        `${import.meta.env.BASE_URL}Kalpana-About2.png`,
+        `${import.meta.env.BASE_URL}Kalpana-About.png`,
+        `${import.meta.env.BASE_URL}Kalpana-About3.png`,
+    ];
+
+    const desktopPhotos = [
+        `${import.meta.env.BASE_URL}Kalpana-About.png`,
+        `${import.meta.env.BASE_URL}Kalpana-About3.png`,
+        `${import.meta.env.BASE_URL}Kalpana-About2.png`,
+        `${import.meta.env.BASE_URL}Kalpana-About3.png`,
+        `${import.meta.env.BASE_URL}Kalpana-About.png`,
+        `${import.meta.env.BASE_URL}Kalpana-About2.png`,
+        `${import.meta.env.BASE_URL}Kalpana-About3.png`,
+        `${import.meta.env.BASE_URL}Kalpana-About.png`,
+        `${import.meta.env.BASE_URL}Kalpana-About2.png`,
+        `${import.meta.env.BASE_URL}Kalpana-About3.png`,
+    ];
+
+    // Timeline observer
     useEffect(() => {
         const observer = new IntersectionObserver((entries) => {
             entries.forEach((entry) => {
@@ -28,32 +61,169 @@ const About = () => {
         return () => observer.disconnect();
     }, []);
 
+    // Handle responsive change
+    useEffect(() => {
+        const handleResize = () => {
+            setIsMobile(window.innerWidth <= 768);
+        };
+
+        window.addEventListener('resize', handleResize);
+        return () => window.removeEventListener('resize', handleResize);
+    }, []);
+
+    // Mobile carousel swipe handling
+    useEffect(() => {
+        if (!isMobile || !carouselRef.current) return;
+
+        let startX = 0;
+        let currentX = 0;
+
+        const handleTouchStart = (e) => {
+            startX = e.touches[0].clientX;
+        };
+
+        const handleTouchMove = (e) => {
+            currentX = e.touches[0].clientX;
+        };
+
+        const handleTouchEnd = () => {
+            const diff = startX - currentX;
+            const threshold = 50; // Minimum swipe distance
+
+            if (Math.abs(diff) > threshold) {
+                if (diff > 0) {
+                    // Swipe left - next photo
+                    setCurrentPhotoIndex((prev) => (prev + 1) % mobilePhotos.length);
+                } else {
+                    // Swipe right - previous photo
+                    setCurrentPhotoIndex((prev) => (prev - 1 + mobilePhotos.length) % mobilePhotos.length);
+                }
+            }
+        };
+
+        const carousel = carouselRef.current;
+        carousel.addEventListener('touchstart', handleTouchStart);
+        carousel.addEventListener('touchmove', handleTouchMove);
+        carousel.addEventListener('touchend', handleTouchEnd);
+
+        return () => {
+            carousel.removeEventListener('touchstart', handleTouchStart);
+            carousel.removeEventListener('touchmove', handleTouchMove);
+            carousel.removeEventListener('touchend', handleTouchEnd);
+        };
+    }, [isMobile, mobilePhotos.length]);
+
+    // Desktop photo fade cycle (7 second intervals for cinematic feel)
+    // Fade transitions: 1 second, visible duration: ~6 seconds
+    useEffect(() => {
+        if (isMobile) return;
+
+        // Clear any existing interval
+        if (desktopCycleIntervalRef.current) {
+            clearInterval(desktopCycleIntervalRef.current);
+        }
+
+        // Set up new interval: 7000ms = 7 seconds per image (1s fade + 6s visible)
+        // This creates calm, editorial magazine-style pacing
+        desktopCycleIntervalRef.current = setInterval(() => {
+            setDesktopPhotoIndex((prev) => (prev + 1) % desktopPhotos.length);
+        }, 7000); // 7 seconds for even more cinematic, slow-paced presentation
+
+        return () => {
+            if (desktopCycleIntervalRef.current) {
+                clearInterval(desktopCycleIntervalRef.current);
+            }
+        };
+    }, [isMobile, desktopPhotos.length]);
+
     return (
         <section id="about" className="about-section">
-            <div className="container mx-auto px-6 space-y-24">
+            {/* Cherry blossom effect - scoped to this section only */}
+            <div className="about-section-blossoms">
+                {[...Array(15)].map((_, i) => (
+                    <div
+                        key={i}
+                        className="petal"
+                        style={{
+                            left: `${Math.random() * 100}%`,
+                            top: '-50px',
+                            width: `${Math.random() * 10 + 10}px`,
+                            height: `${Math.random() * 10 + 10}px`,
+                            animationDelay: `${Math.random() * 10}s`,
+                            animationDuration: `${Math.random() * 15 + 25}s`
+                        }}
+                    ></div>
+                ))}
+            </div>
+
+            <div className="container mx-auto px-6 space-y-20">
 
                 {/* 1. Intro Section (Portrait + Bio) */}
                 <RevealOnScroll>
                     <div className="about-intro-wrapper">
-                        {/* Portrait */}
+                        {/* Portrait - Carousel (Mobile) / Fade Cycle (Desktop) */}
                         <div className="about-portrait-container">
-                            <div className="relative group mx-auto w-[75%] max-w-[260px] md:w-full md:max-w-[340px]">
-                                <div className="absolute inset-0 bg-theme-accent/10 translate-x-3 translate-y-3 rounded-2xl transition-transform duration-700 group-hover:translate-x-2 group-hover:translate-y-2"></div>
+                            {isMobile ? (
+                                // Mobile: Horizontal swipe carousel
+                                // MOBILE IMAGE SYSTEM:
+                                // - Only ONE primary image visible at a time (center)
+                                // - Adjacent images barely visible (skewed, dimmed)
+                                // - Prevents image overlap by strict opacity and z-index layering
+                                // - Expected image format: PNG with 4:5 aspect ratio (height > width)
+                                // - All images must have transparent backgrounds
+                                // - Container enforces fixed aspect ratio to prevent jumping
                                 <div
-                                    className="relative aspect-[4/5] bg-theme-surface rounded-2xl overflow-hidden border border-theme-highlight/20 shadow-lg shadow-theme-highlight/5 transition-all duration-500 group-hover:shadow-theme-highlight/20"
-                                    style={{
-                                        '--tw-shadow': '0 0 10px var(--tw-shadow-color, rgba(255, 0, 38, 0.5))',
-                                        boxShadow: 'var(--tw-inset-shadow), var(--tw-inset-ring-shadow), var(--tw-ring-offset-shadow), var(--tw-ring-shadow), var(--tw-shadow)'
-                                    }}
+                                    className="mobile-photo-carousel"
+                                    ref={carouselRef}
+                                    onClickCapture={(e) => e.preventDefault()}
                                 >
-                                    <img
-                                        src={`${import.meta.env.BASE_URL}Kalpana-About.png`}
-                                        alt="Kalpana - Professional Makeup Artist"
-                                        className="w-full h-full object-cover opacity-95 group-hover:scale-105 transition-transform duration-1000"
-                                        style={{ transform: 'scaleX(-1)' }}
-                                    />
+                                    {/* Left preview image: Previous (skewed left, partially visible) */}
+                                    <div className="carousel-photo-wrapper left">
+                                        <img
+                                            src={mobilePhotos[(currentPhotoIndex - 1 + mobilePhotos.length) % mobilePhotos.length]}
+                                            alt="Previous"
+                                            className="carousel-photo"
+                                            style={{ transform: 'scaleX(-1)' }}
+                                        />
+                                    </div>
+
+                                    {/* Center image: Active, fully visible, highest z-index */}
+                                    <div className="carousel-photo-wrapper center">
+                                        <img
+                                            src={mobilePhotos[currentPhotoIndex]}
+                                            alt={`Kalpana Portfolio ${currentPhotoIndex + 1}`}
+                                            className="carousel-photo"
+                                            style={{ transform: 'scaleX(-1)' }}
+                                        />
+                                    </div>
+
+                                    {/* Right preview image: Next (skewed right, partially visible) */}
+                                    <div className="carousel-photo-wrapper right">
+                                        <img
+                                            src={mobilePhotos[(currentPhotoIndex + 1) % mobilePhotos.length]}
+                                            alt="Next"
+                                            className="carousel-photo"
+                                            style={{ transform: 'scaleX(-1)' }}
+                                        />
+                                    </div>
                                 </div>
-                            </div>
+                            ) : (
+                                // Desktop: Cinematic fade cycle
+                                <div className="desktop-photo-fade">
+                                    {desktopPhotos.map((photo, index) => (
+                                        <img
+                                            key={index}
+                                            src={photo}
+                                            alt={`Kalpana Portfolio ${index + 1}`}
+                                            className={`fade-photo ${index === desktopPhotoIndex ? 'fade-in' : 'fade-out'}`}
+                                            style={{
+                                                transform: 'scaleX(-1)',
+                                                opacity: index === desktopPhotoIndex ? 1 : 0
+                                            }}
+                                        />
+                                    ))}
+                                </div>
+                            )}
                         </div>
 
                         {/* Bio Text */}
@@ -127,10 +297,10 @@ const About = () => {
                     <div className="timeline-line-enhanced"></div>
                     <div className="timeline-wrapper-enhanced">
                         {[
-                            { year: '2021', title: 'Passion Ignited', quote: 'Discovered the transformative power of makeup.' },
-                            { year: '2022', title: 'Professional Training', quote: 'Honing skills with master artists at Red Fox.' },
-                            { year: '2023', title: 'Freelance Career', quote: 'Building a portfolio of diverse faces and stories.' },
-                            { year: '2024', title: 'BBA & Brand Growth', quote: 'Merging business strategy with creative artistry.' }
+                            { year: '2021', title: 'Passion Ignited', quote: 'Found my calling in the art of transformation.' },
+                            { year: '2022', title: 'Professional Training', quote: 'Mastered techniques under Red Fox Academy expertise.' },
+                            { year: '2023', title: 'Freelance Career', quote: 'Built a diverse portfolio across bridal and editorial.' },
+                            { year: '2024', title: 'BBA & Brand Growth', quote: 'Blending artistry with strategic business vision.' }
                         ].map((item, index) => (
                             <RevealOnScroll key={index} className="timeline-item">
                                 {index % 2 === 0 ? (

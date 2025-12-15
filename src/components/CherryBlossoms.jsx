@@ -33,7 +33,7 @@ const CherryBlossoms = React.memo(() => {
         , [petalCount]);
 
     return (
-        <div className="cherry-blossom-container fixed inset-0 pointer-events-none -z-1 overflow-hidden">
+        <div className="cherry-blossom-container fixed inset-0 pointer-events-none overflow-hidden">
             {petalStyles.map((style, i) => (
                 <div key={i} className="petal" style={style}></div>
             ))}
