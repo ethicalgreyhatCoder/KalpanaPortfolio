@@ -45,6 +45,7 @@ const About = () => {
     ];
 
     // Generate cherry blossom petals on mount (pure function outside of render)
+     
     useEffect(() => {
         const generatedPetals = [...Array(15)].map(() => ({
             left: Math.random() * 100,
@@ -302,15 +303,14 @@ const About = () => {
                                             zIndex: getLayerDepth('left', swipeOffset),
                                             opacity: getLayerOpacity('left', swipeOffset),
                                             transition: isTransitioning ?
-                                                'transform 1.5s cubic-bezier(0.25, 0.46, 0.45, 0.94), opacity 1.5s ease, z-index 0s' :
-                                                'transform 0.15s ease-out, opacity 0.15s ease-out, z-index 0s',
+                                                'transform 1.5s cubic-bezier(0.25, 0.46, 0.45, 0.94), opacity 1.5s ease' :
+                                                'transform 0.15s ease-out, opacity 0.15s ease-out',
                                         }}
                                     >
                                         <img
                                             src={mobilePhotos[(currentPhotoIndex - 1 + mobilePhotos.length) % mobilePhotos.length]}
                                             alt="Previous"
                                             className="carousel-photo"
-                                            style={{ transform: 'scaleX(-1)' }}
                                         />
                                     </div>
 
@@ -321,14 +321,13 @@ const About = () => {
                                             transform: `translateX(${swipeOffset}%) translateZ(80px) scale(1)`,
                                             zIndex: getLayerDepth('center', swipeOffset),
                                             opacity: getLayerOpacity('center', swipeOffset),
-                                            transition: isTransitioning ? 'transform 1.5s cubic-bezier(0.25, 0.46, 0.45, 0.94), opacity 1.5s ease, z-index 0s' : 'transform 0.15s ease-out, opacity 0.15s ease-out, z-index 0s',
+                                            transition: isTransitioning ? 'transform 1.5s cubic-bezier(0.25, 0.46, 0.45, 0.94), opacity 1.5s ease' : 'transform 0.15s ease-out, opacity 0.15s ease-out',
                                         }}
                                     >
                                         <img
                                             src={mobilePhotos[currentPhotoIndex]}
                                             alt={`Kalpana Portfolio ${currentPhotoIndex + 1}`}
                                             className="carousel-photo"
-                                            style={{ transform: 'scaleX(-1)' }}
                                         />
                                     </div>
 
@@ -339,14 +338,13 @@ const About = () => {
                                             transform: `translateX(calc(45% + ${swipeOffset}%)) translateZ(-60px) scale(0.85) rotateY(-12deg)`,
                                             zIndex: getLayerDepth('right', swipeOffset),
                                             opacity: getLayerOpacity('right', swipeOffset),
-                                            transition: isTransitioning ? 'transform 1.5s cubic-bezier(0.25, 0.46, 0.45, 0.94), opacity 1.5s ease, z-index 0s' : 'transform 0.15s ease-out, opacity 0.15s ease-out, z-index 0s',
+                                            transition: isTransitioning ? 'transform 1.5s cubic-bezier(0.25, 0.46, 0.45, 0.94), opacity 1.5s ease' : 'transform 0.15s ease-out, opacity 0.15s ease-out',
                                         }}
                                     >
                                         <img
                                             src={mobilePhotos[(currentPhotoIndex + 1) % mobilePhotos.length]}
                                             alt="Next"
                                             className="carousel-photo"
-                                            style={{ transform: 'scaleX(-1)' }}
                                         />
                                     </div>
                                 </div>
