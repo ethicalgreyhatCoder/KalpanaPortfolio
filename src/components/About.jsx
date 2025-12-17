@@ -53,6 +53,7 @@ const About = () => {
             duration: Math.random() * 15 + 25,
             size: Math.random() * 10 + 10,
         }));
+        // eslint-disable-next-line react-hooks/set-state-in-effect
         setPetals(generatedPetals);
     }, []);
 
