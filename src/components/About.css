@@ -163,7 +163,7 @@
     /* INTERACTION CONTAINMENT - Prevent page scroll */
     touch-action: pan-y pinch-zoom;
     /* Allow vertical scroll/zoom, block horizontal */
-    overflow-x: hidden;
+    /*overflow-x: ;*/
     /* Prevent horizontal overflow - CRITICAL for containment */
     overscroll-behavior-x: none;
     /* Prevent bounce/pull-to-refresh on horizontal overscroll */
