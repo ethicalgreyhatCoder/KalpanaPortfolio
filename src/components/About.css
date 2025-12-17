@@ -149,9 +149,25 @@
     cursor: grab;
     user-select: none;
     -webkit-touch-callout: none;
-    perspective: 1200px;
-    /* Increased for stronger 3D effect */
-    perspective-origin: center;
+
+    /* TRUE 3D PERSPECTIVE CONTEXT - Critical for mobile depth */
+    perspective: 1500px;
+    /* Stronger perspective for pronounced depth */
+    perspective-origin: center 60%;
+    /* Slightly lower - natural hand-held viewing angle */
+    transform-style: preserve-3d;
+    /* Ensures child transforms are in 3D space */
+    -webkit-transform-style: preserve-3d;
+    /* Safari mobile support */
+
+    /* INTERACTION CONTAINMENT - Prevent page scroll */
+    touch-action: pan-y pinch-zoom;
+    /* Allow vertical scroll/zoom, block horizontal */
+    overflow-x: hidden;
+    /* Prevent horizontal overflow - CRITICAL for containment */
+    overscroll-behavior-x: none;
+    /* Prevent bounce/pull-to-refresh on horizontal overscroll */
+
     padding: 0 60px;
     /* Add horizontal padding to accommodate side images */
 }
@@ -169,19 +185,21 @@
     align-items: center;
     justify-content: center;
     /* All wrappers occupy same space but positioned via transform */
-    /* Enhanced transition timing: 700ms for smooth, visible, calm animation */
-    transition: transform 0.7s cubic-bezier(0.25, 0.46, 0.45, 0.94),
-        opacity 0.7s cubic-bezier(0.25, 0.46, 0.45, 0.94),
-        box-shadow 0.7s cubic-bezier(0.25, 0.46, 0.45, 0.94),
-        z-index 0s linear;
+    /* Transitions now controlled dynamically via inline styles for better UX */
+
+    /* Preserve 3D context inheritance from parent */
+    transform-style: preserve-3d;
+    -webkit-transform-style: preserve-3d;
+    backface-visibility: hidden;
+    -webkit-backface-visibility: hidden;
 }
 
 /* Center image: Active, pops forward in 3D space, fully visible, premium shadow */
 .carousel-photo-wrapper.center {
     z-index: 30;
     pointer-events: auto;
-    transform: translateX(0) translateZ(40px) scale(1);
-    /* translateZ makes it pop forward */
+    /* Enhanced forward position for stronger depth contrast */
+    transform: translateX(0) translateZ(80px) scale(1);
     opacity: 1;
 }
 
@@ -189,20 +207,20 @@
 .carousel-photo-wrapper.left {
     z-index: 20;
     pointer-events: none;
-    transform: translateX(-45%) translateZ(-20px) scale(0.88) rotateY(8deg);
-    /* Reduced translateX so it's visible */
-    opacity: 0.75;
-    /* More visible than before */
+    /* Recessed position with book-like rotation */
+    transform: translateX(-45%) translateZ(-60px) scale(0.85) rotateY(12deg);
+    opacity: 0.65;
+    /* Reduced opacity for stronger hierarchy */
 }
 
 /* Right preview image: Visible on right side, mirrored angle and fade */
 .carousel-photo-wrapper.right {
     z-index: 20;
     pointer-events: none;
-    transform: translateX(45%) translateZ(-20px) scale(0.88) rotateY(-8deg);
-    /* Reduced translateX so it's visible */
-    opacity: 0.75;
-    /* More visible than before */
+    /* Recessed position with book-like rotation (mirrored) */
+    transform: translateX(45%) translateZ(-60px) scale(0.85) rotateY(-12deg);
+    opacity: 0.65;
+    /* Reduced opacity for stronger hierarchy */
 }
 
 .carousel-photo {
@@ -222,11 +240,25 @@
     backface-visibility: hidden;
 }
 
-/* Enhanced shadow for center image - premium depth with soft glow */
+/* STRONG center shadow - creates clear forward depth perception */
 .carousel-photo-wrapper.center .carousel-photo {
-    box-shadow: 0 20px 50px rgba(183, 110, 121, 0.3),
-        0 10px 30px rgba(183, 110, 121, 0.2),
-        0 0 40px rgba(183, 110, 121, 0.1);
+    box-shadow:
+        0 40px 80px rgba(183, 110, 121, 0.5),
+        /* Primary depth layer */
+        0 20px 45px rgba(183, 110, 121, 0.4),
+        /* Mid-range depth */
+        0 0 60px rgba(183, 110, 121, 0.2);
+    /* Ambient glow */
+}
+
+/* SOFT side shadows - recessed depth perception */
+.carousel-photo-wrapper.left .carousel-photo,
+.carousel-photo-wrapper.right .carousel-photo {
+    box-shadow:
+        0 15px 40px rgba(183, 110, 121, 0.2),
+        /* Softer, wider spread */
+        0 8px 20px rgba(183, 110, 121, 0.15);
+    /* Gentle depth hint */
 }
 
 

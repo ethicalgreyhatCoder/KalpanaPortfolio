@@ -11,10 +11,15 @@ const About = () => {
     const [currentPhotoIndex, setCurrentPhotoIndex] = useState(2); // Start with center image
     const carouselRef = useRef(null);
     const [isMobile, setIsMobile] = useState(window.innerWidth <= 768);
+    const [swipeOffset, setSwipeOffset] = useState(0); // Track swipe position for continuous animation
+    const [isTransitioning, setIsTransitioning] = useState(false); // Track if auto-transitioning
 
     // Desktop fade-cycle state
     const [desktopPhotoIndex, setDesktopPhotoIndex] = useState(0);
     const desktopCycleIntervalRef = useRef(null);
+
+    // Cherry blossom petals state - generated once on mount to avoid impure function during render
+    const [petals, setPetals] = useState([]);
 
     // Photo collection (6 mobile, 8+ desktop)
     const mobilePhotos = [
@@ -38,6 +43,17 @@ const About = () => {
         `${import.meta.env.BASE_URL}Kalpana-About2.png`,
         `${import.meta.env.BASE_URL}Kalpana-About3.png`,
     ];
+
+    // Generate cherry blossom petals on mount (pure function outside of render)
+    useEffect(() => {
+        const generatedPetals = [...Array(15)].map(() => ({
+            left: Math.random() * 100,
+            delay: Math.random() * 10,
+            duration: Math.random() * 15 + 25,
+            size: Math.random() * 10 + 10,
+        }));
+        setPetals(generatedPetals);
+    }, []);
 
     // Timeline observer
     useEffect(() => {
@@ -71,24 +87,58 @@ const About = () => {
         return () => window.removeEventListener('resize', handleResize);
     }, []);
 
-    // Mobile carousel swipe handling
+    // Mobile carousel swipe handling with visible transitions
     useEffect(() => {
         if (!isMobile || !carouselRef.current) return;
 
         let startX = 0;
+        let startY = 0;
         let currentX = 0;
+        let currentY = 0;
+        let isHorizontalSwipe = false;
 
         const handleTouchStart = (e) => {
             startX = e.touches[0].clientX;
+            startY = e.touches[0].clientY;
+            currentX = startX;
+            currentY = startY;
+            isHorizontalSwipe = false;
+            setIsTransitioning(false); // Disable CSS transitions during drag
         };
 
         const handleTouchMove = (e) => {
+            if (isTransitioning) return;
+
             currentX = e.touches[0].clientX;
+            currentY = e.touches[0].clientY;
+            const diffX = Math.abs(currentX - startX);
+            const diffY = Math.abs(currentY - startY);
+
+            // CRITICAL: Detect horizontal intent EARLIER (5px threshold)
+            if (!isHorizontalSwipe && (diffX > 5 || diffY > 5)) {
+                isHorizontalSwipe = diffX > diffY;
+            }
+
+            // AGGRESSIVE GESTURE LOCK: Once horizontal, prevent ALL browser interference
+            if (isHorizontalSwipe) {
+                e.preventDefault(); // Lock gesture immediately
+                e.stopPropagation(); // Stop event bubbling
+            }
+
+            const diff = currentX - startX;
+
+            // Update swipe offset for real-time sliding effect
+            // Normalize to percentage of container width for smooth scaling
+            const containerWidth = carouselRef.current?.offsetWidth || 260;
+            const offsetPercent = (diff / containerWidth) * 100;
+            setSwipeOffset(offsetPercent);
         };
 
         const handleTouchEnd = () => {
             const diff = startX - currentX;
             const threshold = 50; // Minimum swipe distance
+
+            setIsTransitioning(true); // Enable CSS transitions for snap
 
             if (Math.abs(diff) > threshold) {
                 if (diff > 0) {
@@ -99,11 +149,17 @@ const About = () => {
                     setCurrentPhotoIndex((prev) => (prev - 1 + mobilePhotos.length) % mobilePhotos.length);
                 }
             }
+
+            // Reset swipe offset after a brief delay to allow transition
+            setTimeout(() => {
+                setSwipeOffset(0);
+            }, 50);
         };
 
         const carousel = carouselRef.current;
-        carousel.addEventListener('touchstart', handleTouchStart);
-        carousel.addEventListener('touchmove', handleTouchMove);
+        carousel.addEventListener('touchstart', handleTouchStart, { passive: true });
+        // touchmove must NOT be passive to allow preventDefault
+        carousel.addEventListener('touchmove', handleTouchMove, { passive: false });
         carousel.addEventListener('touchend', handleTouchEnd);
 
         return () => {
@@ -111,7 +167,8 @@ const About = () => {
             carousel.removeEventListener('touchmove', handleTouchMove);
             carousel.removeEventListener('touchend', handleTouchEnd);
         };
-    }, [isMobile, mobilePhotos.length]);
+    }, [isMobile, mobilePhotos.length, isTransitioning]);
+
 
     // Desktop photo fade cycle (7 second intervals for cinematic feel)
     // Fade transitions: 1 second, visible duration: ~6 seconds
@@ -136,21 +193,81 @@ const About = () => {
         };
     }, [isMobile, desktopPhotos.length]);
 
+    // Helper functions for smooth book-swap 3D layering
+    // Calculate dynamic z-index based on swipe direction and progress
+    const getLayerDepth = (position, offset) => {
+        // Normalize swipe offset: -100 (swipe left) to +100 (swipe right)
+        const normalizedOffset = Math.max(-100, Math.min(100, offset));
+
+        if (position === 'center') {
+            // Center starts at 30, decreases as it moves away
+            if (normalizedOffset > 20) {
+                // Swiping right - center moving to right
+                return Math.max(20, 30 - Math.abs(normalizedOffset - 20) / 3);
+            } else if (normalizedOffset < -20) {
+                // Swiping left - center moving to left
+                return Math.max(20, 30 - Math.abs(normalizedOffset + 20) / 3);
+            }
+            return 30; // Center dominant
+        } else if (position === 'left') {
+            // Left starts at 20, increases when becoming center
+            if (normalizedOffset < -20) {
+                // Swiping left - left image coming to center
+                return Math.min(30, 20 + Math.abs(normalizedOffset + 20) / 3);
+            }
+            return 20;
+        } else if (position === 'right') {
+            // Right starts at 20, increases when becoming center
+            if (normalizedOffset > 20) {
+                // Swiping right - right image coming to center
+                return Math.min(30, 20 + Math.abs(normalizedOffset - 20) / 3);
+            }
+            return 20;
+        }
+        return 20;
+    };
+
+    // Calculate dynamic opacity for smooth fade transitions
+    const getLayerOpacity = (position, offset) => {
+        const normalizedOffset = Math.max(-100, Math.min(100, offset));
+
+        if (position === 'center') {
+            // Center: 1.0 at rest, fades slightly as it moves
+            const fadeAmount = Math.abs(normalizedOffset) / 100;
+            return Math.max(0.65, 1.0 - (fadeAmount * 0.35));
+        } else if (position === 'left') {
+            // Left: 0.65 at rest, brightens when becoming center
+            if (normalizedOffset < -20) {
+                const brighten = Math.abs(normalizedOffset + 20) / 80;
+                return Math.min(1.0, 0.65 + (brighten * 0.35));
+            }
+            return 0.65;
+        } else if (position === 'right') {
+            // Right: 0.65 at rest, brightens when becoming center
+            if (normalizedOffset > 20) {
+                const brighten = Math.abs(normalizedOffset - 20) / 80;
+                return Math.min(1.0, 0.65 + (brighten * 0.35));
+            }
+            return 0.65;
+        }
+        return 0.65;
+    };
+
     return (
         <section id="about" className="about-section">
             {/* Cherry blossom effect - scoped to this section only */}
             <div className="about-section-blossoms">
-                {[...Array(15)].map((_, i) => (
+                {petals.map((petal, i) => (
                     <div
                         key={i}
                         className="petal"
                         style={{
-                            left: `${Math.random() * 100}%`,
+                            left: `${petal.left}%`,
                             top: '-50px',
-                            width: `${Math.random() * 10 + 10}px`,
-                            height: `${Math.random() * 10 + 10}px`,
-                            animationDelay: `${Math.random() * 10}s`,
-                            animationDuration: `${Math.random() * 15 + 25}s`
+                            width: `${petal.size}px`,
+                            height: `${petal.size}px`,
+                            animationDelay: `${petal.delay}s`,
+                            animationDuration: `${petal.duration}s`
                         }}
                     ></div>
                 ))}
@@ -178,7 +295,17 @@ const About = () => {
                                     onClickCapture={(e) => e.preventDefault()}
                                 >
                                     {/* Left preview image: Previous (skewed left, partially visible) */}
-                                    <div className="carousel-photo-wrapper left">
+                                    <div
+                                        className="carousel-photo-wrapper left"
+                                        style={{
+                                            transform: `translateX(calc(-45% + ${swipeOffset}%)) translateZ(-60px) scale(0.85) rotateY(12deg)`,
+                                            zIndex: getLayerDepth('left', swipeOffset),
+                                            opacity: getLayerOpacity('left', swipeOffset),
+                                            transition: isTransitioning ?
+                                                'transform 1.5s cubic-bezier(0.25, 0.46, 0.45, 0.94), opacity 1.5s ease, z-index 0s' :
+                                                'transform 0.15s ease-out, opacity 0.15s ease-out, z-index 0s',
+                                        }}
+                                    >
                                         <img
                                             src={mobilePhotos[(currentPhotoIndex - 1 + mobilePhotos.length) % mobilePhotos.length]}
                                             alt="Previous"
@@ -188,7 +315,15 @@ const About = () => {
                                     </div>
 
                                     {/* Center image: Active, fully visible, highest z-index */}
-                                    <div className="carousel-photo-wrapper center">
+                                    <div
+                                        className="carousel-photo-wrapper center"
+                                        style={{
+                                            transform: `translateX(${swipeOffset}%) translateZ(80px) scale(1)`,
+                                            zIndex: getLayerDepth('center', swipeOffset),
+                                            opacity: getLayerOpacity('center', swipeOffset),
+                                            transition: isTransitioning ? 'transform 1.5s cubic-bezier(0.25, 0.46, 0.45, 0.94), opacity 1.5s ease, z-index 0s' : 'transform 0.15s ease-out, opacity 0.15s ease-out, z-index 0s',
+                                        }}
+                                    >
                                         <img
                                             src={mobilePhotos[currentPhotoIndex]}
                                             alt={`Kalpana Portfolio ${currentPhotoIndex + 1}`}
@@ -198,7 +333,15 @@ const About = () => {
                                     </div>
 
                                     {/* Right preview image: Next (skewed right, partially visible) */}
-                                    <div className="carousel-photo-wrapper right">
+                                    <div
+                                        className="carousel-photo-wrapper right"
+                                        style={{
+                                            transform: `translateX(calc(45% + ${swipeOffset}%)) translateZ(-60px) scale(0.85) rotateY(-12deg)`,
+                                            zIndex: getLayerDepth('right', swipeOffset),
+                                            opacity: getLayerOpacity('right', swipeOffset),
+                                            transition: isTransitioning ? 'transform 1.5s cubic-bezier(0.25, 0.46, 0.45, 0.94), opacity 1.5s ease, z-index 0s' : 'transform 0.15s ease-out, opacity 0.15s ease-out, z-index 0s',
+                                        }}
+                                    >
                                         <img
                                             src={mobilePhotos[(currentPhotoIndex + 1) % mobilePhotos.length]}
                                             alt="Next"
@@ -383,8 +526,8 @@ const About = () => {
                     </div>
                 </RevealOnScroll>
 
-            </div>
-        </section>
+            </div >
+        </section >
     );
 };
 
