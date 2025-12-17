@@ -13,6 +13,8 @@ const About = () => {
     const [isMobile, setIsMobile] = useState(window.innerWidth <= 768);
     const [swipeOffset, setSwipeOffset] = useState(0); // Track swipe position for continuous animation
     const [isTransitioning, setIsTransitioning] = useState(false); // Track if auto-transitioning
+    const [dynamicRotation, setDynamicRotation] = useState(0); // Velocity-based rotation for center image
+    const velocityTrackingRef = useRef({ lastX: 0, lastTime: 0, velocity: 0 }); // Track velocity during drag
 
     // Desktop fade-cycle state
     const [desktopPhotoIndex, setDesktopPhotoIndex] = useState(0);
@@ -89,6 +91,29 @@ const About = () => {
         return () => window.removeEventListener('resize', handleResize);
     }, []);
 
+    /**
+     * Calculate dynamic rotation based on swipe velocity
+     * Slower swipe → 4-6° rotation
+     * Faster swipe → 14-18° rotation
+     * Direction follows swipe direction (positive = right, negative = left)
+     */
+    const calculateRotationFromVelocity = (velocity) => {
+        // Normalize velocity: pixels/ms to a 0-1 scale
+        // Typical swipe velocity: 0.5-2.0 pixels/ms
+        const normalizedVelocity = Math.min(Math.abs(velocity) / 1.5, 1.0);
+
+        // Rotation bounds: 4-18 degrees
+        const minRotation = 4;
+        const maxRotation = 18;
+
+        // Interpolate between min and max based on normalized velocity
+        const rotationMagnitude = minRotation + (maxRotation - minRotation) * normalizedVelocity;
+
+        // Apply direction: positive velocity (swipe right) = positive rotation
+        // negative velocity (swipe left) = negative rotation
+        return velocity >= 0 ? rotationMagnitude : -rotationMagnitude;
+    };
+
     // Mobile carousel swipe handling with visible transitions
     useEffect(() => {
         if (!isMobile || !carouselRef.current) return;
@@ -106,6 +131,13 @@ const About = () => {
             currentY = startY;
             isHorizontalSwipe = false;
             setIsTransitioning(false); // Disable CSS transitions during drag
+
+            // Initialize velocity tracking
+            velocityTrackingRef.current = {
+                lastX: startX,
+                lastTime: Date.now(),
+                velocity: 0
+            };
         };
 
         const handleTouchMove = (e) => {
@@ -134,6 +166,25 @@ const About = () => {
             const containerWidth = carouselRef.current?.offsetWidth || 260;
             const offsetPercent = (diff / containerWidth) * 100;
             setSwipeOffset(offsetPercent);
+
+            // Calculate velocity: distance moved / time elapsed (pixels/ms)
+            const now = Date.now();
+            const timeDelta = now - velocityTrackingRef.current.lastTime;
+            const distanceDelta = currentX - velocityTrackingRef.current.lastX;
+
+            if (timeDelta > 0) {
+                // Compute velocity in pixels/ms (positive = right, negative = left)
+                const velocity = distanceDelta / timeDelta;
+                velocityTrackingRef.current = {
+                    lastX: currentX,
+                    lastTime: now,
+                    velocity: velocity
+                };
+
+                // Calculate and apply dynamic rotation based on velocity
+                const rotation = calculateRotationFromVelocity(velocity);
+                setDynamicRotation(rotation);
+            }
         };
 
         const handleTouchEnd = () => {
@@ -141,6 +192,9 @@ const About = () => {
             const threshold = 50; // Minimum swipe distance
 
             setIsTransitioning(true); // Enable CSS transitions for snap
+
+            // Ease rotation back to 0 after release
+            setDynamicRotation(0);
 
             if (Math.abs(diff) > threshold) {
                 if (diff > 0) {
@@ -316,10 +370,11 @@ const About = () => {
                                     </div>
 
                                     {/* Center image: Active, fully visible, highest z-index */}
+                                    {/* Includes dynamic rotateZ based on swipe velocity for premium feel */}
                                     <div
                                         className="carousel-photo-wrapper center"
                                         style={{
-                                            transform: `translateX(${swipeOffset}%) translateZ(80px) scale(1)`,
+                                            transform: `translateX(${swipeOffset}%) translateZ(80px) scale(1) rotateZ(${dynamicRotation}deg)`,
                                             zIndex: getLayerDepth('center', swipeOffset),
                                             opacity: getLayerOpacity('center', swipeOffset),
                                             transition: isTransitioning ? 'transform 1.5s cubic-bezier(0.25, 0.46, 0.45, 0.94), opacity 1.5s ease' : 'transform 0.15s ease-out, opacity 0.15s ease-out',
