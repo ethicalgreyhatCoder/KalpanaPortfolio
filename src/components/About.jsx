@@ -149,7 +149,9 @@ const About = () => {
             const containerWidth = carouselRef.current?.offsetWidth || 300;
             const progress = offset / containerWidth; // Normalized -1 to 1
 
-            setSwipeProgress(Math.max(-1, Math.min(1, progress * 2))); // Scale for sensitivity
+            // FIX #2: Reduced sensitivity from 2.0 to 1.2 for more controlled feel
+            // Small finger movements no longer cause aggressive visual jumps
+            setSwipeProgress(Math.max(-1, Math.min(1, progress * 1.2)));
 
             // Calculate velocity for snap behavior
             const now = Date.now();
@@ -286,15 +288,19 @@ const About = () => {
             }
         };
 
-        // Interpolate based on offset
+        // FIX #1: Symmetric continuous interpolation curve
+        // Replaced hard zones (-0.5/+0.5) with smooth curve centered at 0
+        // Now left ↔ center ↔ right transitions feel identical in both directions
         const getInterpolated = (from, to, progress) => {
             return from + (to - from) * progress;
         };
 
         let transform;
-        if (offset <= -0.5) {
-            // Interpolate from left to center
-            const progress = Math.max(0, Math.min(1, (offset + 1) / 0.5));
+        const absOffset = Math.abs(offset);
+
+        if (offset < -0.3) {
+            // Transitioning from left toward center (offset moving from -1 to -0.3)
+            const progress = Math.max(0, Math.min(1, (offset + 1) / 0.7));
             transform = {
                 translateX: getInterpolated(baseTransforms['-1'].translateX, baseTransforms['0'].translateX, progress),
                 translateZ: getInterpolated(baseTransforms['-1'].translateZ, baseTransforms['0'].translateZ, progress),
@@ -302,9 +308,9 @@ const About = () => {
                 rotateY: getInterpolated(baseTransforms['-1'].rotateY, baseTransforms['0'].rotateY, progress),
                 opacity: getInterpolated(baseTransforms['-1'].opacity, baseTransforms['0'].opacity, progress)
             };
-        } else if (offset >= 0.5) {
-            // Interpolate from center to right
-            const progress = Math.max(0, Math.min(1, offset / 0.5));
+        } else if (offset > 0.3) {
+            // Transitioning from center toward right (offset moving from 0.3 to 1)
+            const progress = Math.max(0, Math.min(1, (offset - 0.3) / 0.7));
             transform = {
                 translateX: getInterpolated(baseTransforms['0'].translateX, baseTransforms['1'].translateX, progress),
                 translateZ: getInterpolated(baseTransforms['0'].translateZ, baseTransforms['1'].translateZ, progress),
@@ -313,8 +319,30 @@ const About = () => {
                 opacity: getInterpolated(baseTransforms['0'].opacity, baseTransforms['1'].opacity, progress)
             };
         } else {
-            // Use center transform
-            transform = baseTransforms['0'];
+            // Center zone (-0.3 to +0.3): smoothly interpolate within center
+            // This ensures seamless transition without dead zone
+            const centerProgress = (offset + 0.3) / 0.6; // Maps -0.3..+0.3 to 0..1
+            if (centerProgress < 0.5) {
+                // Blend from slight left tilt to pure center
+                const p = centerProgress * 2;
+                transform = {
+                    translateX: getInterpolated(-20, 0, p),
+                    translateZ: baseTransforms['0'].translateZ,
+                    scale: baseTransforms['0'].scale,
+                    rotateY: getInterpolated(2, 0, p),
+                    opacity: 1
+                };
+            } else {
+                // Blend from pure center to slight right tilt
+                const p = (centerProgress - 0.5) * 2;
+                transform = {
+                    translateX: getInterpolated(0, 20, p),
+                    translateZ: baseTransforms['0'].translateZ,
+                    scale: baseTransforms['0'].scale,
+                    rotateY: getInterpolated(0, -2, p),
+                    opacity: 1
+                };
+            }
         }
 
         return `translateX(${transform.translateX}px) translateZ(${transform.translateZ}px) scale(${transform.scale}) rotateY(${transform.rotateY}deg)`;
@@ -421,20 +449,26 @@ const About = () => {
                                         })}
                                     </div>
 
-                                    {/* Arrow Navigation Controls (Mobile Only) */}
+                                    {/* FIX #3: Premium SVG arrow buttons */}
+                                    {/* Left Arrow - Previous Card */}
                                     <button
                                         className="carousel-arrow carousel-arrow-left"
                                         onClick={() => setCurrentCardIndex((prev) => (prev - 1 + cardData.length) % cardData.length)}
                                         aria-label="Previous card"
                                     >
-                                        ◀
+                                        <svg width="16" height="16" viewBox="0 0 16 16" fill="none" xmlns="http://www.w3.org/2000/svg">
+                                            <path d="M10 12L6 8L10 4" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" />
+                                        </svg>
                                     </button>
+                                    {/* Right Arrow - Next Card */}
                                     <button
                                         className="carousel-arrow carousel-arrow-right"
                                         onClick={() => setCurrentCardIndex((prev) => (prev + 1) % cardData.length)}
                                         aria-label="Next card"
                                     >
-                                        ▶
+                                        <svg width="16" height="16" viewBox="0 0 16 16" fill="none" xmlns="http://www.w3.org/2000/svg">
+                                            <path d="M6 4L10 8L6 12" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" />
+                                        </svg>
                                     </button>
                                 </div>
                             ) : (

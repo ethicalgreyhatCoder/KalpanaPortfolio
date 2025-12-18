@@ -260,33 +260,32 @@
 
 /* ARROW NAVIGATION CONTROLS (Mobile Only) */
 /* Arrows are positioned INSIDE .card-carousel-container */
+/* FIX #3: Premium arrow controls (mobile only) */
+/* SVG-based chevrons with dark semi-transparent background */
 .carousel-arrow {
     position: absolute;
     top: 210px;
-    /* Vertically centered on the 420px track (50% = 210px) */
+    /* Vertically centered on 420px track */
     transform: translateY(-50%);
-    /* Additional centering adjustment */
-    width: 50px;
-    height: 50px;
+    width: 48px;
+    height: 48px;
     border-radius: 50%;
     border: none;
-    background: rgba(183, 110, 121, 0.35);
-    /* More opaque for visibility */
-    backdrop-filter: blur(12px);
-    -webkit-backdrop-filter: blur(12px);
+    /* Dark semi-transparent background for premium feel */
+    background: rgba(0, 0, 0, 0.4);
+    backdrop-filter: blur(16px);
+    -webkit-backdrop-filter: blur(16px);
+    /* Stronger shadow for depth */
     box-shadow:
-        0 8px 16px rgba(183, 110, 121, 0.3),
-        0 4px 8px rgba(0, 0, 0, 0.25),
-        inset 0 1px 0 rgba(255, 255, 255, 0.25);
-    color: #FAF9F6;
-    font-size: 1.5rem;
-    /* 24px - very visible */
-    font-weight: bold;
+        0 4px 12px rgba(0, 0, 0, 0.3),
+        0 2px 4px rgba(0, 0, 0, 0.2),
+        inset 0 1px 0 rgba(255, 255, 255, 0.1);
+    color: #ffffff;
     cursor: pointer;
-    opacity: 0.9;
-    transition: all 0.25s cubic-bezier(0.4, 0, 0.2, 1);
+    opacity: 0.85;
+    transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
     z-index: 50;
-    /* CRITICAL: Above all cards (cards are z-index 30) */
+    /* Above all cards (cards are z-index 30) */
     display: flex;
     align-items: center;
     justify-content: center;
@@ -295,47 +294,55 @@
     user-select: none;
 }
 
+/* SVG icon styling */
+.carousel-arrow svg {
+    width: 16px;
+    height: 16px;
+    stroke-width: 2.5;
+    filter: drop-shadow(0 1px 2px rgba(0, 0, 0, 0.3));
+}
+
 .carousel-arrow-left {
-    left: -5px;
-    /* Position outside container slightly */
+    left: 10px;
+    /* Close to left edge */
 }
 
 .carousel-arrow-right {
-    right: -5px;
+    right: 10px;
+    /* Close to right edge */
 }
 
-/* Hover/Active States - Premium feel */
+/* Hover state - enlarge and brighten */
 .carousel-arrow:hover {
     opacity: 1;
-    background: rgba(183, 110, 121, 0.5);
+    background: rgba(0, 0, 0, 0.55);
     box-shadow:
-        0 12px 24px rgba(183, 110, 121, 0.4),
-        0 6px 12px rgba(0, 0, 0, 0.3),
-        inset 0 1px 0 rgba(255, 255, 255, 0.35);
-    transform: translateY(-50%) scale(1.08);
+        0 6px 16px rgba(0, 0, 0, 0.4),
+        0 3px 6px rgba(0, 0, 0, 0.25),
+        inset 0 1px 0 rgba(255, 255, 255, 0.15);
+    transform: translateY(-50%) scale(1.1);
 }
 
+/* Active state - shrink for tactile feedback */
 .carousel-arrow:active {
-    transform: translateY(-50%) scale(0.92);
+    transform: translateY(-50%) scale(0.95);
     opacity: 1;
-    background: rgba(183, 110, 121, 0.6);
+    background: rgba(0, 0, 0, 0.65);
     box-shadow:
-        0 6px 12px rgba(183, 110, 121, 0.35),
-        0 3px 6px rgba(0, 0, 0, 0.25),
-        inset 0 -1px 2px rgba(0, 0, 0, 0.15);
+        0 2px 8px rgba(0, 0, 0, 0.35),
+        0 1px 3px rgba(0, 0, 0, 0.2);
 }
 
 /* Focus state for accessibility */
 .carousel-arrow:focus-visible {
-    outline: 3px solid rgba(183, 110, 121, 0.8);
-    outline-offset: 4px;
+    outline: 2px solid rgba(255, 255, 255, 0.6);
+    outline-offset: 3px;
 }
 
-/* Ensure arrows are visible on touch devices */
+/* Touch devices - ensure visibility */
 @media (hover: none) and (pointer: coarse) {
     .carousel-arrow {
-        opacity: 0.95;
-        /* Very visible on touch */
+        opacity: 0.9;
     }
 }
 
