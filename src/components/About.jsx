@@ -136,6 +136,12 @@ const About = () => {
             isHorizontalLocked = false;
             isPointerDown = true;
 
+            console.log('🟢 [CAROUSEL] Start:', {
+                startX,
+                startY,
+                currentCardIndex
+            });
+
             setIsDragging(true);
             setSwipeProgress(0);
 
@@ -146,7 +152,9 @@ const About = () => {
 
         // UNIFIED MOVE HANDLER (touch or mouse)
         const handleMove = (clientX, clientY, event) => {
-            if (!isDragging || !isPointerDown) return;
+            // CRITICAL FIX: Only check isPointerDown (synchronous local variable)
+            // Don't check isDragging (async state) - causes every-other-swipe to fail
+            if (!isPointerDown) return;
 
             currentX = clientX;
             const currentY = clientY;
@@ -157,6 +165,11 @@ const About = () => {
             // Once horizontal intent is detected, lock the gesture
             if (!isHorizontalLocked && (diffX > 8 || diffY > 8)) {
                 isHorizontalLocked = diffX > diffY;
+                console.log('🔒 [CAROUSEL] Gesture locked:', {
+                    isHorizontal: isHorizontalLocked,
+                    diffX,
+                    diffY
+                });
             }
 
             // GESTURE LOCK: If horizontal, prevent page scroll/navigation
@@ -165,7 +178,7 @@ const About = () => {
                 event.stopPropagation();
             }
 
-            // Calculate drag offset using dragStartX for consistency
+            // Calculate drag offset using startX directly
             // Positive offset = swiped RIGHT → show previous card
             // Negative offset = swiped LEFT → show next card
             const offset = currentX - startX;
@@ -186,6 +199,12 @@ const About = () => {
 
         // UNIFIED END HANDLER (touch or mouse)
         const handleEnd = () => {
+            console.log('🎯 [CAROUSEL] handleEnd called:', {
+                isDragging,
+                isPointerDown,
+                willProceed: isDragging && isPointerDown
+            });
+
             if (!isDragging || !isPointerDown) return;
 
             const threshold = 80; // Minimum drag distance to trigger swipe
@@ -194,24 +213,49 @@ const About = () => {
             setIsDragging(false);
             isPointerDown = false;
 
-            // CRITICAL: Calculate final swipe delta using dragStartX directly
+            // CRITICAL: Calculate final swipe delta using startX directly
             // This avoids potential stale state from dragOffset
             const finalDelta = currentX - startX;
+
+            console.log('🔴 [CAROUSEL] End:', {
+                startX,
+                currentX,
+                finalDelta,
+                velocity: velocityRef.current,
+                threshold,
+                currentCardIndex
+            });
 
             // Determine if we should advance to next/previous card
             const shouldAdvance = Math.abs(finalDelta) > threshold || Math.abs(velocityRef.current) > velocityThreshold;
 
+            console.log('📊 [CAROUSEL] Decision:', {
+                shouldAdvance,
+                distanceCheck: `${Math.abs(finalDelta)} > ${threshold} = ${Math.abs(finalDelta) > threshold}`,
+                velocityCheck: `${Math.abs(velocityRef.current)} > ${velocityThreshold} = ${Math.abs(velocityRef.current) > velocityThreshold}`
+            });
+
             if (shouldAdvance) {
-                // SWIPE DIRECTION LOGIC (using dragStartX for accuracy):
+                // SWIPE DIRECTION LOGIC (using startX for accuracy):
                 // finalDelta < 0 → user dragged LEFT → show NEXT card
                 // finalDelta > 0 → user dragged RIGHT → show PREVIOUS card
                 if (finalDelta < 0) {
-                    // Swiped LEFT - next card
-                    setCurrentCardIndex((prev) => (prev + 1) % cardData.length);
+                    const newIndex = (currentCardIndex + 1) % cardData.length;
+                    console.log('⬅️ [CAROUSEL] Swiped LEFT → Next card:', {
+                        from: currentCardIndex,
+                        to: newIndex
+                    });
+                    setCurrentCardIndex(newIndex);
                 } else {
-                    // Swiped RIGHT - previous card
-                    setCurrentCardIndex((prev) => (prev - 1 + cardData.length) % cardData.length);
+                    const newIndex = (currentCardIndex - 1 + cardData.length) % cardData.length;
+                    console.log('➡️ [CAROUSEL] Swiped RIGHT → Previous card:', {
+                        from: currentCardIndex,
+                        to: newIndex
+                    });
+                    setCurrentCardIndex(newIndex);
                 }
+            } else {
+                console.log('↩️ [CAROUSEL] Snap back - no advance');
             }
 
             // Reset states with smooth transition
@@ -276,12 +320,21 @@ const About = () => {
             carousel.removeEventListener('mouseup', handleMouseUp);
             carousel.removeEventListener('mouseleave', handleMouseLeave);
         };
-    }, [isMobile, isDragging, cardData.length]);
+    }, [isMobile, cardData.length]); // CRITICAL: Removed isDragging - it was causing event listeners to detach mid-gesture
+
 
     // Calculate card transforms based on position and swipe progress
     const getCardTransform = (cardPosition) => {
         // cardPosition: -1 (left), 0 (center), 1 (right)
-        const offset = cardPosition - swipeProgress;
+        // CRITICAL FIX: Add swipeProgress instead of subtract to get correct direction
+        const offset = cardPosition + swipeProgress;
+
+        console.log('🎨 [TRANSFORM]:', {
+            cardPosition,
+            swipeProgress: swipeProgress.toFixed(2),
+            calculatedOffset: offset.toFixed(2),
+            meaning: cardPosition === -1 ? 'LEFT/PREV' : cardPosition === 0 ? 'CENTER/CURRENT' : 'RIGHT/NEXT'
+        });
 
         // Base transforms for each position
         const baseTransforms = {
@@ -343,7 +396,8 @@ const About = () => {
     };
 
     const getCardOpacity = (cardPosition) => {
-        const offset = cardPosition - swipeProgress;
+        // CRITICAL FIX: Add swipeProgress instead of subtract (same fix as transform)
+        const offset = cardPosition + swipeProgress;
 
         if (offset <= -0.5) {
             const progress = Math.max(0, Math.min(1, (offset + 1) / 0.5));
