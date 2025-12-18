@@ -7,32 +7,57 @@ import './About-Cards-Timeline-Enhanced.css';
 const About = () => {
     const [activeTimelineDots, setActiveTimelineDots] = useState({});
 
-    // Mobile carousel state
-    const [currentPhotoIndex, setCurrentPhotoIndex] = useState(2); // Start with center image
+    // NEW CARD CAROUSEL STATE
+    const [currentCardIndex, setCurrentCardIndex] = useState(0);
     const carouselRef = useRef(null);
     const [isMobile, setIsMobile] = useState(window.innerWidth <= 768);
-    const [swipeOffset, setSwipeOffset] = useState(0); // Track swipe position for continuous animation
-    const [isTransitioning, setIsTransitioning] = useState(false); // Track if auto-transitioning
-    const [dynamicRotation, setDynamicRotation] = useState(0); // Velocity-based rotation for center image
-    const velocityTrackingRef = useRef({ lastX: 0, lastTime: 0, velocity: 0 }); // Track velocity during drag
+    const [isDragging, setIsDragging] = useState(false);
+    const [swipeProgress, setSwipeProgress] = useState(0); // -1 to 1 for smooth interpolation
+    const velocityRef = useRef(0);
+    const lastPosRef = useRef({ x: 0, time: 0 });
 
-    // Desktop fade-cycle state
+    // Desktop fade-cycle state (unchanged)
     const [desktopPhotoIndex, setDesktopPhotoIndex] = useState(0);
     const desktopCycleIntervalRef = useRef(null);
 
-    // Cherry blossom petals state - generated once on mount to avoid impure function during render
+    // Cherry blossom petals state
     const [petals, setPetals] = useState([]);
 
-    // Photo collection (6 mobile, 8+ desktop)
-    const mobilePhotos = [
-        `${import.meta.env.BASE_URL}Kalpana-About.png`,
-        `${import.meta.env.BASE_URL}Kalpana-About2.png`,
-        `${import.meta.env.BASE_URL}Kalpana-About3.png`,
-        `${import.meta.env.BASE_URL}Kalpana-About2.png`,
-        `${import.meta.env.BASE_URL}Kalpana-About.png`,
-        `${import.meta.env.BASE_URL}Kalpana-About3.png`,
+    // CARD DATA - Portrait photos with overlay titles and descriptions
+    const cardData = [
+        {
+            image: `${import.meta.env.BASE_URL}Kalpana-About.png`,
+            title: 'Bridal Elegance',
+            description: 'Timeless beauty for your special day'
+        },
+        {
+            image: `${import.meta.env.BASE_URL}Kalpana-About2.png`,
+            title: 'Editorial Artistry',
+            description: 'Bold looks for fashion-forward shoots'
+        },
+        {
+            image: `${import.meta.env.BASE_URL}Kalpana-About3.png`,
+            title: 'Natural Radiance',
+            description: 'Enhancing your authentic beauty'
+        },
+        {
+            image: `${import.meta.env.BASE_URL}Kalpana-About.png`,
+            title: 'Glamour & Grace',
+            description: 'Red carpet ready transformations'
+        },
+        {
+            image: `${import.meta.env.BASE_URL}Kalpana-About2.png`,
+            title: 'Creative Expression',
+            description: 'Artistic makeup for every vision'
+        },
+        {
+            image: `${import.meta.env.BASE_URL}Kalpana-About3.png`,
+            title: 'Premium Services',
+            description: 'Luxury treatments tailored for you'
+        }
     ];
 
+    // Desktop photos (unchanged)
     const desktopPhotos = [
         `${import.meta.env.BASE_URL}Kalpana-About.png`,
         `${import.meta.env.BASE_URL}Kalpana-About3.png`,
@@ -47,7 +72,7 @@ const About = () => {
     ];
 
     // Generate cherry blossom petals on mount (pure function outside of render)
-     
+
     useEffect(() => {
         const generatedPetals = [...Array(15)].map(() => ({
             left: Math.random() * 100,
@@ -91,156 +116,256 @@ const About = () => {
         return () => window.removeEventListener('resize', handleResize);
     }, []);
 
-    /**
-     * Calculate dynamic rotation based on swipe velocity
-     * Slower swipe → 4-6° rotation
-     * Faster swipe → 14-18° rotation
-     * Direction follows swipe direction (positive = right, negative = left)
-     */
-    const calculateRotationFromVelocity = (velocity) => {
-        // Normalize velocity: pixels/ms to a 0-1 scale
-        // Typical swipe velocity: 0.5-2.0 pixels/ms
-        const normalizedVelocity = Math.min(Math.abs(velocity) / 1.5, 1.0);
 
-        // Rotation bounds: 4-18 degrees
-        const minRotation = 4;
-        const maxRotation = 18;
-
-        // Interpolate between min and max based on normalized velocity
-        const rotationMagnitude = minRotation + (maxRotation - minRotation) * normalizedVelocity;
-
-        // Apply direction: positive velocity (swipe right) = positive rotation
-        // negative velocity (swipe left) = negative rotation
-        return velocity >= 0 ? rotationMagnitude : -rotationMagnitude;
-    };
-
-    // Mobile carousel swipe handling with visible transitions
+    // NEW CARD CAROUSEL TOUCH & MOUSE HANDLERS
+    // Supports both mobile touch and desktop mouse drag at mobile viewport width
     useEffect(() => {
         if (!isMobile || !carouselRef.current) return;
 
         let startX = 0;
         let startY = 0;
         let currentX = 0;
-        let currentY = 0;
-        let isHorizontalSwipe = false;
+        let isHorizontalLocked = false;
+        let isPointerDown = false;
 
-        const handleTouchStart = (e) => {
-            startX = e.touches[0].clientX;
-            startY = e.touches[0].clientY;
+        // UNIFIED START HANDLER (touch or mouse)
+        const handleStart = (clientX, clientY) => {
+            startX = clientX;
+            startY = clientY;
             currentX = startX;
-            currentY = startY;
-            isHorizontalSwipe = false;
-            setIsTransitioning(false); // Disable CSS transitions during drag
+            isHorizontalLocked = false;
+            isPointerDown = true;
+
+            setIsDragging(true);
+            setSwipeProgress(0);
 
             // Initialize velocity tracking
-            velocityTrackingRef.current = {
-                lastX: startX,
-                lastTime: Date.now(),
-                velocity: 0
-            };
+            lastPosRef.current = { x: startX, time: Date.now() };
+            velocityRef.current = 0;
         };
 
-        const handleTouchMove = (e) => {
-            if (isTransitioning) return;
+        // UNIFIED MOVE HANDLER (touch or mouse)
+        const handleMove = (clientX, clientY, event) => {
+            if (!isDragging || !isPointerDown) return;
 
-            currentX = e.touches[0].clientX;
-            currentY = e.touches[0].clientY;
+            currentX = clientX;
+            const currentY = clientY;
             const diffX = Math.abs(currentX - startX);
             const diffY = Math.abs(currentY - startY);
 
-            // CRITICAL: Detect horizontal intent EARLIER (5px threshold)
-            if (!isHorizontalSwipe && (diffX > 5 || diffY > 5)) {
-                isHorizontalSwipe = diffX > diffY;
+            // HORIZONTAL INTENT DETECTION: Detect early with 8px threshold
+            // Once horizontal intent is detected, lock the gesture
+            if (!isHorizontalLocked && (diffX > 8 || diffY > 8)) {
+                isHorizontalLocked = diffX > diffY;
             }
 
-            // AGGRESSIVE GESTURE LOCK: Once horizontal, prevent ALL browser interference
-            if (isHorizontalSwipe) {
-                e.preventDefault(); // Lock gesture immediately
-                e.stopPropagation(); // Stop event bubbling
+            // GESTURE LOCK: If horizontal, prevent page scroll/navigation
+            if (isHorizontalLocked) {
+                event.preventDefault();
+                event.stopPropagation();
             }
 
-            const diff = currentX - startX;
+            // Calculate drag offset using dragStartX for consistency
+            // Positive offset = swiped RIGHT → show previous card
+            // Negative offset = swiped LEFT → show next card
+            const offset = currentX - startX;
+            const containerWidth = carouselRef.current?.offsetWidth || 300;
+            const progress = offset / containerWidth; // Normalized -1 to 1
 
-            // Update swipe offset for real-time sliding effect
-            // Normalize to percentage of container width for smooth scaling
-            const containerWidth = carouselRef.current?.offsetWidth || 260;
-            const offsetPercent = (diff / containerWidth) * 100;
-            setSwipeOffset(offsetPercent);
+            setSwipeProgress(Math.max(-1, Math.min(1, progress * 2))); // Scale for sensitivity
 
-            // Calculate velocity: distance moved / time elapsed (pixels/ms)
+            // Calculate velocity for snap behavior
             const now = Date.now();
-            const timeDelta = now - velocityTrackingRef.current.lastTime;
-            const distanceDelta = currentX - velocityTrackingRef.current.lastX;
-
+            const timeDelta = now - lastPosRef.current.time;
             if (timeDelta > 0) {
-                // Compute velocity in pixels/ms (positive = right, negative = left)
-                const velocity = distanceDelta / timeDelta;
-                velocityTrackingRef.current = {
-                    lastX: currentX,
-                    lastTime: now,
-                    velocity: velocity
-                };
-
-                // Calculate and apply dynamic rotation based on velocity
-                const rotation = calculateRotationFromVelocity(velocity);
-                setDynamicRotation(rotation);
+                const velocity = (currentX - lastPosRef.current.x) / timeDelta;
+                velocityRef.current = velocity;
+                lastPosRef.current = { x: currentX, time: now };
             }
         };
 
-        const handleTouchEnd = () => {
-            const diff = startX - currentX;
-            const threshold = 50; // Minimum swipe distance
+        // UNIFIED END HANDLER (touch or mouse)
+        const handleEnd = () => {
+            if (!isDragging || !isPointerDown) return;
 
-            setIsTransitioning(true); // Enable CSS transitions for snap
+            const threshold = 80; // Minimum drag distance to trigger swipe
+            const velocityThreshold = 0.5; // Fast swipe detection (px/ms)
 
-            // Ease rotation back to 0 after release
-            setDynamicRotation(0);
+            setIsDragging(false);
+            isPointerDown = false;
 
-            if (Math.abs(diff) > threshold) {
-                if (diff > 0) {
-                    // Swipe left - next photo
-                    setCurrentPhotoIndex((prev) => (prev + 1) % mobilePhotos.length);
+            // CRITICAL: Calculate final swipe delta using dragStartX directly
+            // This avoids potential stale state from dragOffset
+            const finalDelta = currentX - startX;
+
+            // Determine if we should advance to next/previous card
+            const shouldAdvance = Math.abs(finalDelta) > threshold || Math.abs(velocityRef.current) > velocityThreshold;
+
+            if (shouldAdvance) {
+                // SWIPE DIRECTION LOGIC (using dragStartX for accuracy):
+                // finalDelta < 0 → user dragged LEFT → show NEXT card
+                // finalDelta > 0 → user dragged RIGHT → show PREVIOUS card
+                if (finalDelta < 0) {
+                    // Swiped LEFT - next card
+                    setCurrentCardIndex((prev) => (prev + 1) % cardData.length);
                 } else {
-                    // Swipe right - previous photo
-                    setCurrentPhotoIndex((prev) => (prev - 1 + mobilePhotos.length) % mobilePhotos.length);
+                    // Swiped RIGHT - previous card
+                    setCurrentCardIndex((prev) => (prev - 1 + cardData.length) % cardData.length);
                 }
             }
 
-            // Reset swipe offset after a brief delay to allow transition
+            // Reset states with smooth transition
             setTimeout(() => {
-                setSwipeOffset(0);
+                setSwipeProgress(0);
             }, 50);
         };
 
+        // TOUCH EVENT HANDLERS
+        const handleTouchStart = (e) => {
+            handleStart(e.touches[0].clientX, e.touches[0].clientY);
+        };
+
+        const handleTouchMove = (e) => {
+            handleMove(e.touches[0].clientX, e.touches[0].clientY, e);
+        };
+
+        const handleTouchEnd = () => {
+            handleEnd();
+        };
+
+        // MOUSE EVENT HANDLERS (for desktop at mobile width)
+        const handleMouseDown = (e) => {
+            e.preventDefault(); // Prevent text selection
+            handleStart(e.clientX, e.clientY);
+        };
+
+        const handleMouseMove = (e) => {
+            handleMove(e.clientX, e.clientY, e);
+        };
+
+        const handleMouseUp = () => {
+            handleEnd();
+        };
+
+        const handleMouseLeave = () => {
+            // End drag if mouse leaves carousel area
+            if (isPointerDown) {
+                handleEnd();
+            }
+        };
+
         const carousel = carouselRef.current;
+
+        // Add touch event listeners
         carousel.addEventListener('touchstart', handleTouchStart, { passive: true });
-        // touchmove must NOT be passive to allow preventDefault
         carousel.addEventListener('touchmove', handleTouchMove, { passive: false });
         carousel.addEventListener('touchend', handleTouchEnd);
+
+        // Add mouse event listeners (for desktop at mobile viewport)
+        carousel.addEventListener('mousedown', handleMouseDown);
+        carousel.addEventListener('mousemove', handleMouseMove);
+        carousel.addEventListener('mouseup', handleMouseUp);
+        carousel.addEventListener('mouseleave', handleMouseLeave);
 
         return () => {
             carousel.removeEventListener('touchstart', handleTouchStart);
             carousel.removeEventListener('touchmove', handleTouchMove);
             carousel.removeEventListener('touchend', handleTouchEnd);
+            carousel.removeEventListener('mousedown', handleMouseDown);
+            carousel.removeEventListener('mousemove', handleMouseMove);
+            carousel.removeEventListener('mouseup', handleMouseUp);
+            carousel.removeEventListener('mouseleave', handleMouseLeave);
         };
-    }, [isMobile, mobilePhotos.length, isTransitioning]);
+    }, [isMobile, isDragging, cardData.length]);
 
+    // Calculate card transforms based on position and swipe progress
+    const getCardTransform = (cardPosition) => {
+        // cardPosition: -1 (left), 0 (center), 1 (right)
+        const offset = cardPosition - swipeProgress;
 
-    // Desktop photo fade cycle (7 second intervals for cinematic feel)
-    // Fade transitions: 1 second, visible duration: ~6 seconds
+        // Base transforms for each position
+        const baseTransforms = {
+            '-1': { // Left card
+                translateX: -120,
+                translateZ: -80,
+                scale: 0.7,
+                rotateY: 18,
+                opacity: 0.5
+            },
+            '0': { // Center card
+                translateX: 0,
+                translateZ: 100,
+                scale: 1,
+                rotateY: 0,
+                opacity: 1
+            },
+            '1': { // Right card
+                translateX: 120,
+                translateZ: -80,
+                scale: 0.7,
+                rotateY: -25,
+                opacity: 0.5
+            }
+        };
+
+        // Interpolate based on offset
+        const getInterpolated = (from, to, progress) => {
+            return from + (to - from) * progress;
+        };
+
+        let transform;
+        if (offset <= -0.5) {
+            // Interpolate from left to center
+            const progress = Math.max(0, Math.min(1, (offset + 1) / 0.5));
+            transform = {
+                translateX: getInterpolated(baseTransforms['-1'].translateX, baseTransforms['0'].translateX, progress),
+                translateZ: getInterpolated(baseTransforms['-1'].translateZ, baseTransforms['0'].translateZ, progress),
+                scale: getInterpolated(baseTransforms['-1'].scale, baseTransforms['0'].scale, progress),
+                rotateY: getInterpolated(baseTransforms['-1'].rotateY, baseTransforms['0'].rotateY, progress),
+                opacity: getInterpolated(baseTransforms['-1'].opacity, baseTransforms['0'].opacity, progress)
+            };
+        } else if (offset >= 0.5) {
+            // Interpolate from center to right
+            const progress = Math.max(0, Math.min(1, offset / 0.5));
+            transform = {
+                translateX: getInterpolated(baseTransforms['0'].translateX, baseTransforms['1'].translateX, progress),
+                translateZ: getInterpolated(baseTransforms['0'].translateZ, baseTransforms['1'].translateZ, progress),
+                scale: getInterpolated(baseTransforms['0'].scale, baseTransforms['1'].scale, progress),
+                rotateY: getInterpolated(baseTransforms['0'].rotateY, baseTransforms['1'].rotateY, progress),
+                opacity: getInterpolated(baseTransforms['0'].opacity, baseTransforms['1'].opacity, progress)
+            };
+        } else {
+            // Use center transform
+            transform = baseTransforms['0'];
+        }
+
+        return `translateX(${transform.translateX}px) translateZ(${transform.translateZ}px) scale(${transform.scale}) rotateY(${transform.rotateY}deg)`;
+    };
+
+    const getCardOpacity = (cardPosition) => {
+        const offset = cardPosition - swipeProgress;
+
+        if (offset <= -0.5) {
+            const progress = Math.max(0, Math.min(1, (offset + 1) / 0.5));
+            return 0.5 + (0.5 * progress);
+        } else if (offset >= 0.5) {
+            const progress = Math.max(0, Math.min(1, offset / 0.5));
+            return 1 - (0.5 * progress);
+        }
+        return 1;
+    };
+
+    // Desktop photo fade cycle (unchanged - 7 second intervals for cinematic feel)
     useEffect(() => {
         if (isMobile) return;
 
-        // Clear any existing interval
         if (desktopCycleIntervalRef.current) {
             clearInterval(desktopCycleIntervalRef.current);
         }
 
-        // Set up new interval: 7000ms = 7 seconds per image (1s fade + 6s visible)
-        // This creates calm, editorial magazine-style pacing
         desktopCycleIntervalRef.current = setInterval(() => {
             setDesktopPhotoIndex((prev) => (prev + 1) % desktopPhotos.length);
-        }, 7000); // 7 seconds for even more cinematic, slow-paced presentation
+        }, 7000);
 
         return () => {
             if (desktopCycleIntervalRef.current) {
@@ -248,66 +373,6 @@ const About = () => {
             }
         };
     }, [isMobile, desktopPhotos.length]);
-
-    // Helper functions for smooth book-swap 3D layering
-    // Calculate dynamic z-index based on swipe direction and progress
-    const getLayerDepth = (position, offset) => {
-        // Normalize swipe offset: -100 (swipe left) to +100 (swipe right)
-        const normalizedOffset = Math.max(-100, Math.min(100, offset));
-
-        if (position === 'center') {
-            // Center starts at 30, decreases as it moves away
-            if (normalizedOffset > 20) {
-                // Swiping right - center moving to right
-                return Math.max(20, 30 - Math.abs(normalizedOffset - 20) / 3);
-            } else if (normalizedOffset < -20) {
-                // Swiping left - center moving to left
-                return Math.max(20, 30 - Math.abs(normalizedOffset + 20) / 3);
-            }
-            return 30; // Center dominant
-        } else if (position === 'left') {
-            // Left starts at 20, increases when becoming center
-            if (normalizedOffset < -20) {
-                // Swiping left - left image coming to center
-                return Math.min(30, 20 + Math.abs(normalizedOffset + 20) / 3);
-            }
-            return 20;
-        } else if (position === 'right') {
-            // Right starts at 20, increases when becoming center
-            if (normalizedOffset > 20) {
-                // Swiping right - right image coming to center
-                return Math.min(30, 20 + Math.abs(normalizedOffset - 20) / 3);
-            }
-            return 20;
-        }
-        return 20;
-    };
-
-    // Calculate dynamic opacity for smooth fade transitions
-    const getLayerOpacity = (position, offset) => {
-        const normalizedOffset = Math.max(-100, Math.min(100, offset));
-
-        if (position === 'center') {
-            // Center: 1.0 at rest, fades slightly as it moves
-            const fadeAmount = Math.abs(normalizedOffset) / 100;
-            return Math.max(0.65, 1.0 - (fadeAmount * 0.35));
-        } else if (position === 'left') {
-            // Left: 0.65 at rest, brightens when becoming center
-            if (normalizedOffset < -20) {
-                const brighten = Math.abs(normalizedOffset + 20) / 80;
-                return Math.min(1.0, 0.65 + (brighten * 0.35));
-            }
-            return 0.65;
-        } else if (position === 'right') {
-            // Right: 0.65 at rest, brightens when becoming center
-            if (normalizedOffset > 20) {
-                const brighten = Math.abs(normalizedOffset - 20) / 80;
-                return Math.min(1.0, 0.65 + (brighten * 0.35));
-            }
-            return 0.65;
-        }
-        return 0.65;
-    };
 
     return (
         <section id="about" className="about-section">
@@ -334,78 +399,70 @@ const About = () => {
                 {/* 1. Intro Section (Portrait + Bio) */}
                 <RevealOnScroll>
                     <div className="about-intro-wrapper">
-                        {/* Portrait - Carousel (Mobile) / Fade Cycle (Desktop) */}
+                        {/* Portrait - Card Carousel (Mobile) / Fade Cycle (Desktop) */}
                         <div className="about-portrait-container">
                             {isMobile ? (
-                                // Mobile: Horizontal swipe carousel
-                                // MOBILE IMAGE SYSTEM:
-                                // - Only ONE primary image visible at a time (center)
-                                // - Adjacent images barely visible (skewed, dimmed)
-                                // - Prevents image overlap by strict opacity and z-index layering
-                                // - Expected image format: PNG with 4:5 aspect ratio (height > width)
-                                // - All images must have transparent backgrounds
-                                // - Container enforces fixed aspect ratio to prevent jumping
+                                // NEW CARD CAROUSEL - Horizontal 3-card layout with text overlays
                                 <div
-                                    className="mobile-photo-carousel"
+                                    className="card-carousel-container"
                                     ref={carouselRef}
-                                    onClickCapture={(e) => e.preventDefault()}
                                 >
-                                    {/* Left preview image: Previous (skewed left, partially visible) */}
-                                    <div
-                                        className="carousel-photo-wrapper left"
-                                        style={{
-                                            transform: `translateX(calc(-45% + ${swipeOffset}%)) translateZ(-60px) scale(0.85) rotateY(12deg)`,
-                                            zIndex: getLayerDepth('left', swipeOffset),
-                                            opacity: getLayerOpacity('left', swipeOffset),
-                                            transition: isTransitioning ?
-                                                'transform 1.5s cubic-bezier(0.25, 0.46, 0.45, 0.94), opacity 1.5s ease' :
-                                                'transform 0.15s ease-out, opacity 0.15s ease-out',
-                                        }}
-                                    >
-                                        <img
-                                            src={mobilePhotos[(currentPhotoIndex - 1 + mobilePhotos.length) % mobilePhotos.length]}
-                                            alt="Previous"
-                                            className="carousel-photo"
-                                        />
+                                    <div className="card-carousel-track">
+                                        {/* Render 3 cards: previous, current, next */}
+                                        {[-1, 0, 1].map((offset) => {
+                                            const cardIndex = (currentCardIndex + offset + cardData.length) % cardData.length;
+                                            const card = cardData[cardIndex];
+
+                                            return (
+                                                <div
+                                                    key={`${cardIndex}-${offset}`}
+                                                    className="carousel-card"
+                                                    style={{
+                                                        transform: getCardTransform(offset),
+                                                        opacity: getCardOpacity(offset),
+                                                        transition: isDragging
+                                                            ? 'transform 0.1s ease-out, opacity 0.1s ease-out'
+                                                            : 'transform 0.6s cubic-bezier(0.25, 0.46, 0.45, 0.94), opacity 0.6s ease',
+                                                        zIndex: offset === 0 ? 30 : 20,
+                                                        pointerEvents: offset === 0 ? 'auto' : 'none'
+                                                    }}
+                                                >
+                                                    <div className="carousel-card-image-wrapper">
+                                                        <img
+                                                            src={card.image}
+                                                            alt={card.title}
+                                                            className="carousel-card-image"
+                                                            draggable="false"
+                                                        />
+                                                        {/* Text overlay - faded gradient background */}
+                                                        <div className="carousel-card-overlay">
+                                                            <h3 className="carousel-card-title">{card.title}</h3>
+                                                            <p className="carousel-card-description">{card.description}</p>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            );
+                                        })}
                                     </div>
 
-                                    {/* Center image: Active, fully visible, highest z-index */}
-                                    {/* Includes dynamic rotateZ based on swipe velocity for premium feel */}
-                                    <div
-                                        className="carousel-photo-wrapper center"
-                                        style={{
-                                            transform: `translateX(${swipeOffset}%) translateZ(80px) scale(1) rotateZ(${dynamicRotation}deg)`,
-                                            zIndex: getLayerDepth('center', swipeOffset),
-                                            opacity: getLayerOpacity('center', swipeOffset),
-                                            transition: isTransitioning ? 'transform 1.5s cubic-bezier(0.25, 0.46, 0.45, 0.94), opacity 1.5s ease' : 'transform 0.15s ease-out, opacity 0.15s ease-out',
-                                        }}
+                                    {/* Arrow Navigation Controls (Mobile Only) */}
+                                    <button
+                                        className="carousel-arrow carousel-arrow-left"
+                                        onClick={() => setCurrentCardIndex((prev) => (prev - 1 + cardData.length) % cardData.length)}
+                                        aria-label="Previous card"
                                     >
-                                        <img
-                                            src={mobilePhotos[currentPhotoIndex]}
-                                            alt={`Kalpana Portfolio ${currentPhotoIndex + 1}`}
-                                            className="carousel-photo"
-                                        />
-                                    </div>
-
-                                    {/* Right preview image: Next (skewed right, partially visible) */}
-                                    <div
-                                        className="carousel-photo-wrapper right"
-                                        style={{
-                                            transform: `translateX(calc(45% + ${swipeOffset}%)) translateZ(-60px) scale(0.85) rotateY(-12deg)`,
-                                            zIndex: getLayerDepth('right', swipeOffset),
-                                            opacity: getLayerOpacity('right', swipeOffset),
-                                            transition: isTransitioning ? 'transform 1.5s cubic-bezier(0.25, 0.46, 0.45, 0.94), opacity 1.5s ease' : 'transform 0.15s ease-out, opacity 0.15s ease-out',
-                                        }}
+                                        ◀
+                                    </button>
+                                    <button
+                                        className="carousel-arrow carousel-arrow-right"
+                                        onClick={() => setCurrentCardIndex((prev) => (prev + 1) % cardData.length)}
+                                        aria-label="Next card"
                                     >
-                                        <img
-                                            src={mobilePhotos[(currentPhotoIndex + 1) % mobilePhotos.length]}
-                                            alt="Next"
-                                            className="carousel-photo"
-                                        />
-                                    </div>
+                                        ▶
+                                    </button>
                                 </div>
                             ) : (
-                                // Desktop: Cinematic fade cycle
+                                // Desktop: Cinematic fade cycle (UNCHANGED)
                                 <div className="desktop-photo-fade">
                                     {desktopPhotos.map((photo, index) => (
                                         <img
