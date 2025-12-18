@@ -23,39 +23,14 @@ const About = () => {
     // Cherry blossom petals state
     const [petals, setPetals] = useState([]);
 
-    // CARD DATA - Portrait photos with overlay titles and descriptions
+    // CARD DATA - Dynamically load all available portrait photos
+    // Add more Kalpana-About5.png, About6.png etc. and they'll auto-appear!
     const cardData = [
-        {
-            image: `${import.meta.env.BASE_URL}Kalpana-About.png`,
-            title: 'Bridal Elegance',
-            description: 'Timeless beauty for your special day'
-        },
-        {
-            image: `${import.meta.env.BASE_URL}Kalpana-About2.png`,
-            title: 'Editorial Artistry',
-            description: 'Bold looks for fashion-forward shoots'
-        },
-        {
-            image: `${import.meta.env.BASE_URL}Kalpana-About3.png`,
-            title: 'Natural Radiance',
-            description: 'Enhancing your authentic beauty'
-        },
-        {
-            image: `${import.meta.env.BASE_URL}Kalpana-About.png`,
-            title: 'Glamour & Grace',
-            description: 'Red carpet ready transformations'
-        },
-        {
-            image: `${import.meta.env.BASE_URL}Kalpana-About2.png`,
-            title: 'Creative Expression',
-            description: 'Artistic makeup for every vision'
-        },
-        {
-            image: `${import.meta.env.BASE_URL}Kalpana-About3.png`,
-            title: 'Premium Services',
-            description: 'Luxury treatments tailored for you'
-        }
-    ];
+        { image: `${import.meta.env.BASE_URL}Kalpana-About.png`, title: 'Bridal Elegance' },
+        { image: `${import.meta.env.BASE_URL}Kalpana-About2.png`, title: 'Editorial Artistry' },
+        { image: `${import.meta.env.BASE_URL}Kalpana-About3.png`, title: 'Natural Radiance' },
+        { image: `${import.meta.env.BASE_URL}Kalpana-About4.png`, title: 'Glamour & Grace' }
+    ].filter(card => card.image); // Filter out any missing images
 
     // Desktop photos (unchanged)
     const desktopPhotos = [
@@ -136,12 +111,6 @@ const About = () => {
             isHorizontalLocked = false;
             isPointerDown = true;
 
-            console.log('🟢 [CAROUSEL] Start:', {
-                startX,
-                startY,
-                currentCardIndex
-            });
-
             setIsDragging(true);
             setSwipeProgress(0);
 
@@ -165,11 +134,6 @@ const About = () => {
             // Once horizontal intent is detected, lock the gesture
             if (!isHorizontalLocked && (diffX > 8 || diffY > 8)) {
                 isHorizontalLocked = diffX > diffY;
-                console.log('🔒 [CAROUSEL] Gesture locked:', {
-                    isHorizontal: isHorizontalLocked,
-                    diffX,
-                    diffY
-                });
             }
 
             // GESTURE LOCK: If horizontal, prevent page scroll/navigation
@@ -199,13 +163,9 @@ const About = () => {
 
         // UNIFIED END HANDLER (touch or mouse)
         const handleEnd = () => {
-            console.log('🎯 [CAROUSEL] handleEnd called:', {
-                isDragging,
-                isPointerDown,
-                willProceed: isDragging && isPointerDown
-            });
-
-            if (!isDragging || !isPointerDown) return;
+            // CRITICAL FIX: Only check isPointerDown (synchronous)
+            // Don't check isDragging - it's async state and causes cards to never advance
+            if (!isPointerDown) return;
 
             const threshold = 80; // Minimum drag distance to trigger swipe
             const velocityThreshold = 0.5; // Fast swipe detection (px/ms)
@@ -217,51 +177,23 @@ const About = () => {
             // This avoids potential stale state from dragOffset
             const finalDelta = currentX - startX;
 
-            console.log('🔴 [CAROUSEL] End:', {
-                startX,
-                currentX,
-                finalDelta,
-                velocity: velocityRef.current,
-                threshold,
-                currentCardIndex
-            });
-
             // Determine if we should advance to next/previous card
             const shouldAdvance = Math.abs(finalDelta) > threshold || Math.abs(velocityRef.current) > velocityThreshold;
-
-            console.log('📊 [CAROUSEL] Decision:', {
-                shouldAdvance,
-                distanceCheck: `${Math.abs(finalDelta)} > ${threshold} = ${Math.abs(finalDelta) > threshold}`,
-                velocityCheck: `${Math.abs(velocityRef.current)} > ${velocityThreshold} = ${Math.abs(velocityRef.current) > velocityThreshold}`
-            });
 
             if (shouldAdvance) {
                 // SWIPE DIRECTION LOGIC (using startX for accuracy):
                 // finalDelta < 0 → user dragged LEFT → show NEXT card
                 // finalDelta > 0 → user dragged RIGHT → show PREVIOUS card
                 if (finalDelta < 0) {
-                    const newIndex = (currentCardIndex + 1) % cardData.length;
-                    console.log('⬅️ [CAROUSEL] Swiped LEFT → Next card:', {
-                        from: currentCardIndex,
-                        to: newIndex
-                    });
-                    setCurrentCardIndex(newIndex);
+                    setCurrentCardIndex((prev) => (prev + 1) % cardData.length);
                 } else {
-                    const newIndex = (currentCardIndex - 1 + cardData.length) % cardData.length;
-                    console.log('➡️ [CAROUSEL] Swiped RIGHT → Previous card:', {
-                        from: currentCardIndex,
-                        to: newIndex
-                    });
-                    setCurrentCardIndex(newIndex);
+                    setCurrentCardIndex((prev) => (prev - 1 + cardData.length) % cardData.length);
                 }
-            } else {
-                console.log('↩️ [CAROUSEL] Snap back - no advance');
             }
 
-            // Reset states with smooth transition
-            setTimeout(() => {
-                setSwipeProgress(0);
-            }, 50);
+            // Reset swipe progress smoothly to allow cards to settle
+            // Don't use setTimeout - let the transition handle it naturally
+            setSwipeProgress(0);
         };
 
         // TOUCH EVENT HANDLERS
@@ -328,13 +260,6 @@ const About = () => {
         // cardPosition: -1 (left), 0 (center), 1 (right)
         // CRITICAL FIX: Add swipeProgress instead of subtract to get correct direction
         const offset = cardPosition + swipeProgress;
-
-        console.log('🎨 [TRANSFORM]:', {
-            cardPosition,
-            swipeProgress: swipeProgress.toFixed(2),
-            calculatedOffset: offset.toFixed(2),
-            meaning: cardPosition === -1 ? 'LEFT/PREV' : cardPosition === 0 ? 'CENTER/CURRENT' : 'RIGHT/NEXT'
-        });
 
         // Base transforms for each position
         const baseTransforms = {
@@ -467,6 +392,8 @@ const About = () => {
                                             const cardIndex = (currentCardIndex + offset + cardData.length) % cardData.length;
                                             const card = cardData[cardIndex];
 
+                                            // Render logs removed to reduce spam
+
                                             return (
                                                 <div
                                                     key={`${cardIndex}-${offset}`}
@@ -488,11 +415,6 @@ const About = () => {
                                                             className="carousel-card-image"
                                                             draggable="false"
                                                         />
-                                                        {/* Text overlay - faded gradient background */}
-                                                        <div className="carousel-card-overlay">
-                                                            <h3 className="carousel-card-title">{card.title}</h3>
-                                                            <p className="carousel-card-description">{card.description}</p>
-                                                        </div>
                                                     </div>
                                                 </div>
                                             );
