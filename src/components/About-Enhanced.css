@@ -3,7 +3,7 @@
 /* Main About Section */
 .about-section {
     padding: 6rem 0;
-    background-color: var(--theme-bg);
+    /*background-color: var(--theme-bg);*/
     position: relative;
     z-index: 11; /* Increased from 1 to 11 - cherry blossoms at -2 */
     transition: all 0.7s cubic-bezier(0.4, 0, 0.2, 1);
