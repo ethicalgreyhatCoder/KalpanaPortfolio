@@ -257,6 +257,35 @@ const About = () => {
     }, [isMobile, cardData.length]); // CRITICAL: Removed isDragging - it was causing event listeners to detach mid-gesture
 
 
+    // TASK 1: Dynamic z-index calculation during swipe
+    // Incoming card rises, outgoing card sinks - creates alive layered depth
+    const getCardZIndex = (cardPosition) => {
+        const offset = cardPosition + swipeProgress;
+
+        // Static z-index when not swiping (swipeProgress = 0)
+        if (Math.abs(swipeProgress) < 0.01) {
+            return cardPosition === 0 ? 30 : 20;
+        }
+
+        // Dynamic interpolation during swipe:
+        // - Incoming card (moving toward center): gradually rises to z-index 35
+        // - Center card (becoming outgoing): gradually sinks to z-index 25
+        // - Far card: stays low at z-index 15
+
+        if (offset < -0.3) {
+            // Left card moving toward center
+            const progress = Math.max(0, Math.min(1, (offset + 1) / 0.7));
+            return Math.round(20 + (15 * progress)); // 20 → 35
+        } else if (offset > 0.3) {
+            // Right card moving toward center  
+            const progress = Math.max(0, Math.min(1, (offset - 0.3) / 0.7));
+            return Math.round(35 - (15 * progress)); // 35 → 20
+        } else {
+            // Center zone: highest z-index
+            return 35;
+        }
+    };
+
     // Calculate card transforms based on position and swipe progress
     const getCardTransform = (cardPosition) => {
         // cardPosition: -1 (left), 0 (center), 1 (right)
@@ -345,7 +374,14 @@ const About = () => {
             }
         }
 
-        return `translateX(${transform.translateX}px) translateZ(${transform.translateZ}px) scale(${transform.scale}) rotateY(${transform.rotateY}deg)`;
+        // TASK 2: Velocity-based rotation boost
+        // Fast swipes get slightly more rotation, slow drags stay controlled
+        // Subtle effect clamped to ±30deg total for premium feel
+        const velocity = velocityRef.current || 0;
+        const velocityBoost = Math.max(-8, Math.min(8, velocity * 12)); // Clamp boost to ±8deg
+        const finalRotateY = Math.max(-30, Math.min(30, transform.rotateY + velocityBoost));
+
+        return `translateX(${transform.translateX}px) translateZ(${transform.translateZ}px) scale(${transform.scale}) rotateY(${finalRotateY}deg)`;
     };
 
     const getCardOpacity = (cardPosition) => {
@@ -409,54 +445,55 @@ const About = () => {
                         {/* Portrait - Card Carousel (Mobile) / Fade Cycle (Desktop) */}
                         <div className="about-portrait-container">
                             {isMobile ? (
-                                // NEW CARD CAROUSEL - Horizontal 3-card layout with text overlays
-                                <div
-                                    className="card-carousel-container"
-                                    ref={carouselRef}
-                                >
-                                    <div className="card-carousel-track">
-                                        {/* Render 3 cards: previous, current, next */}
-                                        {[-1, 0, 1].map((offset) => {
-                                            const cardIndex = (currentCardIndex + offset + cardData.length) % cardData.length;
-                                            const card = cardData[cardIndex];
+                                <>
+                                    {/* TASK 3: Card carousel container (3D scene only) */}
+                                    <div
+                                        className="card-carousel-container"
+                                        ref={carouselRef}
+                                    >
+                                        <div className="card-carousel-track">
+                                            {/* Render 3 cards: previous, current, next */}
+                                            {[-1, 0, 1].map((offset) => {
+                                                const cardIndex = (currentCardIndex + offset + cardData.length) % cardData.length;
+                                                const card = cardData[cardIndex];
 
-                                            // Render logs removed to reduce spam
-
-                                            return (
-                                                <div
-                                                    key={`${cardIndex}-${offset}`}
-                                                    className="carousel-card"
-                                                    style={{
-                                                        transform: getCardTransform(offset),
-                                                        opacity: getCardOpacity(offset),
-                                                        transition: isDragging
-                                                            ? 'transform 0.1s ease-out, opacity 0.1s ease-out'
-                                                            : 'transform 0.6s cubic-bezier(0.25, 0.46, 0.45, 0.94), opacity 0.6s ease',
-                                                        zIndex: offset === 0 ? 30 : 20,
-                                                        pointerEvents: offset === 0 ? 'auto' : 'none'
-                                                    }}
-                                                >
-                                                    <div className="carousel-card-image-wrapper">
-                                                        <img
-                                                            src={card.image}
-                                                            alt={card.title}
-                                                            className="carousel-card-image"
-                                                            draggable="false"
-                                                        />
+                                                return (
+                                                    <div
+                                                        key={`${cardIndex}-${offset}`}
+                                                        className="carousel-card"
+                                                        style={{
+                                                            transform: getCardTransform(offset),
+                                                            opacity: getCardOpacity(offset),
+                                                            transition: isDragging
+                                                                ? 'transform 0.1s ease-out, opacity 0.1s ease-out, z-index 0s'
+                                                                : 'transform 0.6s cubic-bezier(0.25, 0.46, 0.45, 0.94), opacity 0.6s ease, z-index 0s',
+                                                            // TASK 1: Dynamic z-index replaces static values
+                                                            zIndex: getCardZIndex(offset),
+                                                            pointerEvents: offset === 0 ? 'auto' : 'none'
+                                                        }}
+                                                    >
+                                                        <div className="carousel-card-image-wrapper">
+                                                            <img
+                                                                src={card.image}
+                                                                alt={card.title}
+                                                                className="carousel-card-image"
+                                                                draggable="false"
+                                                            />
+                                                        </div>
                                                     </div>
-                                                </div>
-                                            );
-                                        })}
+                                                );
+                                            })}
+                                        </div>
                                     </div>
 
-                                    {/* FIX #3: Premium SVG arrow buttons */}
+                                    {/* TASK 3: Arrow buttons as UI chrome - positioned relative to about-portrait-container */}
                                     {/* Left Arrow - Previous Card */}
                                     <button
                                         className="carousel-arrow carousel-arrow-left"
                                         onClick={() => setCurrentCardIndex((prev) => (prev - 1 + cardData.length) % cardData.length)}
                                         aria-label="Previous card"
                                     >
-                                        <svg width="16" height="16" viewBox="0 0 16 16" fill="none" xmlns="http://www.w3.org/2000/svg">
+                                        <svg width="18" height="18" viewBox="0 0 16 16" fill="none" xmlns="http://www.w3.org/2000/svg">
                                             <path d="M10 12L6 8L10 4" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" />
                                         </svg>
                                     </button>
@@ -466,11 +503,11 @@ const About = () => {
                                         onClick={() => setCurrentCardIndex((prev) => (prev + 1) % cardData.length)}
                                         aria-label="Next card"
                                     >
-                                        <svg width="16" height="16" viewBox="0 0 16 16" fill="none" xmlns="http://www.w3.org/2000/svg">
+                                        <svg width="18" height="18" viewBox="0 0 16 16" fill="none" xmlns="http://www.w3.org/2000/svg">
                                             <path d="M6 4L10 8L6 12" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" />
                                         </svg>
                                     </button>
-                                </div>
+                                </>
                             ) : (
                                 // Desktop: Cinematic fade cycle (UNCHANGED)
                                 <div className="desktop-photo-fade">
