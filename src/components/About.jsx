@@ -458,7 +458,8 @@ const About = () => {
 
         const preventScroll = (e) => {
             const target = e.target;
-            const sheet = target.closest('.bottom-sheet-content');
+            // Check if scrolling inside the bottom sheet (scrollable container)
+            const sheet = target.closest('.bottom-sheet');
 
             // If not scrolling inside sheet, always prevent (if cancelable)
             if (!sheet) {
@@ -495,6 +496,7 @@ const About = () => {
                         e.stopPropagation();
                     }
                 }
+                // Otherwise, allow normal wheel scrolling inside the sheet
             }
         };
 
