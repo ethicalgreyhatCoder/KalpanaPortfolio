@@ -24,26 +24,26 @@ const About = () => {
     const [petals, setPetals] = useState([]);
 
     // CARD DATA - Dynamically load all available portrait photos
-    // Add more Kalpana-About5.png, About6.png etc. and they'll auto-appear!
+    // Add more Kalpana-About5.webp, About6.webp etc. and they'll auto-appear!
     const cardData = [
-        { image: `${import.meta.env.BASE_URL}Kalpana-About.png`, title: 'Bridal Elegance' },
-        { image: `${import.meta.env.BASE_URL}Kalpana-About2.png`, title: 'Editorial Artistry' },
-        { image: `${import.meta.env.BASE_URL}Kalpana-About3.png`, title: 'Natural Radiance' },
-        { image: `${import.meta.env.BASE_URL}Kalpana-About4.png`, title: 'Glamour & Grace' }
+        { image: `${import.meta.env.BASE_URL}Kalpana-About.webp`, title: 'Bridal Elegance' },
+        { image: `${import.meta.env.BASE_URL}Kalpana-About2.webp`, title: 'Editorial Artistry' },
+        { image: `${import.meta.env.BASE_URL}Kalpana-About3.webp`, title: 'Natural Radiance' },
+        { image: `${import.meta.env.BASE_URL}Kalpana-About4.webp`, title: 'Glamour & Grace' }
     ].filter(card => card.image); // Filter out any missing images
 
     // Desktop photos (unchanged)
     const desktopPhotos = [
-        `${import.meta.env.BASE_URL}Kalpana-About.png`,
-        `${import.meta.env.BASE_URL}Kalpana-About3.png`,
-        `${import.meta.env.BASE_URL}Kalpana-About2.png`,
-        `${import.meta.env.BASE_URL}Kalpana-About3.png`,
-        `${import.meta.env.BASE_URL}Kalpana-About.png`,
-        `${import.meta.env.BASE_URL}Kalpana-About2.png`,
-        `${import.meta.env.BASE_URL}Kalpana-About3.png`,
-        `${import.meta.env.BASE_URL}Kalpana-About.png`,
-        `${import.meta.env.BASE_URL}Kalpana-About2.png`,
-        `${import.meta.env.BASE_URL}Kalpana-About3.png`,
+        `${import.meta.env.BASE_URL}Kalpana-About.webp`,
+        `${import.meta.env.BASE_URL}Kalpana-About3.webp`,
+        `${import.meta.env.BASE_URL}Kalpana-About2.webp`,
+        `${import.meta.env.BASE_URL}Kalpana-About3.webp`,
+        `${import.meta.env.BASE_URL}Kalpana-About.webp`,
+        `${import.meta.env.BASE_URL}Kalpana-About2.webp`,
+        `${import.meta.env.BASE_URL}Kalpana-About3.webp`,
+        `${import.meta.env.BASE_URL}Kalpana-About.webp`,
+        `${import.meta.env.BASE_URL}Kalpana-About2.webp`,
+        `${import.meta.env.BASE_URL}Kalpana-About3.webp`,
     ];
 
     // Generate cherry blossom petals on mount (pure function outside of render)

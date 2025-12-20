@@ -12,7 +12,7 @@
 
 @media (min-width: 768px) {
     .hero-section {
-        padding-top: 20px;
+        /*padding-top: 20px;*/
     }
 }
 
@@ -25,7 +25,8 @@
     color: var(--theme-accent);
     opacity: 0.75;
     font-weight: 400;
-    margin-bottom: 0.25rem; /* Reduced spacing */
+    margin-bottom: 0.25rem;
+    /* Reduced spacing */
 }
 
 @media (min-width: 768px) {
@@ -109,10 +110,14 @@
 }
 
 @keyframes cursor-blink {
-    0%, 49% {
+
+    0%,
+    49% {
         opacity: 0.6;
     }
-    50%, 100% {
+
+    50%,
+    100% {
         opacity: 0;
     }
 }
@@ -163,6 +168,58 @@
     }
 }
 
+/* Achievements Section */
+.hero-achievements {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 1.5rem;
+    /*margin-top: 2rem;*/
+    text-align: center;
+}
+
+@media (min-width: 640px) {
+    .hero-achievements {
+        grid-template-columns: repeat(4, 1fr);
+        gap: 2rem;
+        text-align: left;
+    }
+}
+
+.achievement-item {
+    display: flex;
+    flex-direction: column;
+    gap: 0.25rem;
+}
+
+.achievement-value {
+    font-size: 2rem;
+    font-weight: 600;
+    line-height: 1;
+    color: var(--theme-highlight);
+    letter-spacing: -0.02em;
+}
+
+@media (min-width: 768px) {
+    .achievement-value {
+        font-size: 2.5rem;
+    }
+}
+
+.achievement-label {
+    font-size: 0.625rem;
+    font-weight: 300;
+    text-transform: uppercase;
+    letter-spacing: 0.08em;
+    color: rgba(74, 74, 74, 0.6);
+    line-height: 1.3;
+}
+
+@media (min-width: 768px) {
+    .achievement-label {
+        font-size: 0.75rem;
+    }
+}
+
 /* CTA Button - Full Width Mobile */
 .hero-cta-button {
     width: 100%;
@@ -189,7 +246,7 @@
     /*background-color: #b9737d;*/
     border-color: #ba757f;
     color: #b66d78;
-    box-shadow: 0 0 10px rgba(255 , 0, 38, 0.3);
+    box-shadow: 0 0 10px rgba(255, 0, 38, 0.3);
     transform: scale(1.1);
 }
 
@@ -222,7 +279,7 @@
 .social-icon:hover {
     color: #b9737d;
     border-color: #b9737d;
-    box-shadow: 0 0 10px rgba(255 , 0, 38, 0.5);
+    box-shadow: 0 0 10px rgba(255, 0, 38, 0.5);
     transform: scale(1.1);
 }
 
@@ -261,9 +318,12 @@
 
 /* SVG Glow Animation - Slower pulse for luxury feel */
 @keyframes glow-pulse-slow {
-    0%, 100% {
+
+    0%,
+    100% {
         filter: drop-shadow(0 0 10px rgba(255, 0, 38, 0.25));
     }
+
     50% {
         filter: drop-shadow(0 0 20px rgba(255, 0, 38, 0.35));
     }
@@ -297,9 +357,12 @@
 }
 
 @keyframes bounce {
-    0%, 100% {
+
+    0%,
+    100% {
         transform: translateX(-50%) translateY(0);
     }
+
     50% {
         transform: translateX(-50%) translateY(-0.5rem);
     }
@@ -385,6 +448,7 @@
         opacity: 0;
         transform: translateY(1.875rem);
     }
+
     100% {
         opacity: 1;
         transform: translateY(0);
@@ -397,6 +461,7 @@
         opacity: 0;
         transform: translateY(-2.5rem);
     }
+
     100% {
         opacity: 1;
         transform: translateY(0);
@@ -405,6 +470,7 @@
 
 /* Mobile Bloom Optimization - Prevent navbar overlap */
 @media (max-width: 576px) {
+
     /* Reduce bloom filter intensity on mobile */
     .hero-parallax-image {
         filter: drop-shadow(0 0 4px rgba(183, 110, 121, 0.15)) !important;
@@ -418,6 +484,91 @@
 
     /* Hide social icons on mobile only */
     .social-icons-group.hidden-mobile {
+        display: none !important;
+    }
+}
+
+/* =============================================================================
+   TABLET PORTRAIT VERTICAL LAYOUT (600px - 900px)
+   Goal: Vertical stack layout optimized for portrait orientation tablets
+   Fixes: Navbar overlap, spacing, achievements grid, image height
+   ============================================================================= */
+@media (min-width: 600px) and (max-width: 900px) {
+
+    /* Fix navbar overlap - ensure proper top padding */
+    .hero-section {
+        padding-top: 5.35rem;
+        min-height: 100vh;
+    }
+
+    /* 1. Switch to vertical single-column layout */
+    /* Stacks image above text like mobile, but optimized for tablet size */
+    .hero-content {
+        grid-template-columns: 1fr;
+        gap: 2rem;
+        /* Tighter gap to reduce excessive vertical spacing */
+    }
+
+    /* 2. Image positioning - Top of layout, centered, height constrained */
+    .hero-image-section {
+        order: 1;
+        justify-content: center;
+        padding-top: 1rem;
+        /* Small top padding prevents navbar overlap */
+        max-height: 22rem;
+        /* Constrain height to prevent cropping */
+    }
+
+    /* 3. Image size - Balanced presence without overwhelming */
+    .hero-image-wrapper {
+        max-width: 22rem;
+        /* Slightly larger than mobile, contained for tablet */
+        max-height: 22rem;
+        /* Prevent excessive vertical stretch */
+    }
+
+    /* 4. Text content - Below image, center-aligned like mobile */
+    .hero-text-section {
+        order: 2;
+        text-align: center;
+        /* Center-align all text for mobile-like UX */
+        max-width: 100%;
+        gap: 1.5rem;
+        align-items: center;
+        /* Center flex children */
+    }
+
+    /* 5. Achievements - 2×2 grid for tablet portrait, centered */
+    /* Two rows, two columns for balanced layout in portrait orientation */
+    .hero-achievements {
+        grid-template-columns: repeat(2, 1fr);
+        text-align: center;
+        gap: 1.25rem;
+        margin-top: 1.5rem;
+        margin-bottom: 0.5rem;
+    }
+
+    /* 6. CTA group - Tighter spacing, centered layout */
+    .hero-cta-group {
+        padding-top: 0.75rem;
+        flex-direction: column;
+        /* Stack vertically */
+        align-items: center;
+        /* Center items */
+    }
+
+    /* 7. CTA button - Centered horizontally, keep size */
+    .hero-cta-button {
+        width: auto;
+        /* Allow button to use its natural width */
+        max-width: 100%;
+        /* Prevent overflow */
+        margin: 0 auto;
+        /* Center horizontally */
+    }
+
+    /* 8. Hide social icons for cleaner tablet portrait UX */
+    .social-icons-group {
         display: none !important;
     }
 }

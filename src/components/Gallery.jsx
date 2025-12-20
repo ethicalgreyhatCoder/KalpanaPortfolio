@@ -481,7 +481,8 @@ const Gallery = () => {
                                         src={item.thumbnailImage || item.image}
                                         alt={item.title}
                                         className="card-image"
-                                        loading="lazy"
+                                        loading="eager"
+                                        fetchPriority="high"
                                     />
                                     <div className="card-overlay"></div>
                                 </div>

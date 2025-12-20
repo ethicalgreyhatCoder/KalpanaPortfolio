@@ -85,6 +85,26 @@ const Hero = () => {
                         I blend creativity, professionalism, and client-focused thinking.
                     </p>
 
+                    {/* Achievements Section */}
+                    <div className="hero-achievements">
+                        <div className="achievement-item">
+                            <div className="achievement-value">50+</div>
+                            <div className="achievement-label">HAPPY CLIENTS</div>
+                        </div>
+                        <div className="achievement-item">
+                            <div className="achievement-value">3+</div>
+                            <div className="achievement-label">YEARS EXPERIENCE</div>
+                        </div>
+                        <div className="achievement-item">
+                            <div className="achievement-value">2</div>
+                            <div className="achievement-label">CERTIFICATIONS</div>
+                        </div>
+                        <div className="achievement-item">
+                            <div className="achievement-value">100+</div>
+                            <div className="achievement-label">LOOKS DELIVERED</div>
+                        </div>
+                    </div>
+
                     <div className="hero-cta-group">
                         <button onClick={() => scrollTo('gallery')} className="hero-cta-button">
                             Explore My Portfolio
@@ -129,35 +149,35 @@ const Hero = () => {
 
                                 {/* Optimized neon bloom - mobile-friendly with reduced spread */}
                                 <filter id="neonBloom"
-                                        x="-80%" y="-80%"
-                                        width="260%" height="260%"
-                                        colorInterpolationFilters="sRGB">
+                                    x="-80%" y="-80%"
+                                    width="260%" height="260%"
+                                    colorInterpolationFilters="sRGB">
 
                                     {/* Inner blur for smoothness */}
                                     <feGaussianBlur in="SourceGraphic"
-                                                    stdDeviation="4"
-                                                    result="blur1" />
+                                        stdDeviation="4"
+                                        result="blur1" />
 
                                     {/* Outer glow - reduced for mobile */}
                                     <feGaussianBlur in="SourceGraphic"
-                                                    stdDeviation="8"
-                                                    result="blur2" />
+                                        stdDeviation="8"
+                                        result="blur2" />
 
                                     {/* Gentle animation */}
                                     <animate attributeName="stdDeviation"
-                                             values="6;12;6"
-                                             dur="4s"
-                                             repeatCount="indefinite" />
+                                        values="6;12;6"
+                                        dur="4s"
+                                        repeatCount="indefinite" />
 
                                     {/* Subtle neon color with reduced opacity */}
                                     <feFlood floodColor="#b76e79"
-                                             floodOpacity="0.25"
-                                             result="color" />
+                                        floodOpacity="0.25"
+                                        result="color" />
 
                                     <feComposite in="color"
-                                                 in2="blur2"
-                                                 operator="in"
-                                                 result="glow" />
+                                        in2="blur2"
+                                        operator="in"
+                                        result="glow" />
 
                                     {/* Merge glow + shape */}
                                     <feMerge>
@@ -187,7 +207,7 @@ const Hero = () => {
 
                             {/* Image clipped to prevent petal overlap */}
                             <image
-                                href={`${import.meta.env.BASE_URL}Kalpana-Hero.png`}
+                                href={`${import.meta.env.BASE_URL}Kalpana-Hero.webp`}
                                 x="20" y="0" width="160" height="200"
                                 clipPath="url(#popOutClip)"
                                 preserveAspectRatio="xMidYMax slice"
