@@ -3,6 +3,7 @@ import ReactDOM from 'react-dom';
 import RevealOnScroll from './RevealOnScroll';
 import { modalContent } from './aboutModalContent';
 import { aboutTimelineData } from '../data/aboutTimelineData';
+import { coreValuesData } from '../data/coreValuesData';
 import './About.css';
 import './About-Enhanced.css';
 import './About-Cards-Timeline-Enhanced.css';
@@ -796,29 +797,20 @@ const About = () => {
                     </div>
                 </RevealOnScroll>
 
-                {/* 5. Values & Philosophy - ENHANCED - TASK 3: Tap-to-expand */}
+                {/* 5. Values & Philosophy - Point 5: Data-driven from coreValuesData */}
                 <RevealOnScroll>
                     <div className="about-values-grid-enhanced">
-                        <div className="about-value-item-enhanced" onClick={() => handleValueClick('authenticity')}>
-                            <span className="about-value-icon-item">✨</span>
-                            <h4 className="about-value-title-enhanced">Authenticity</h4>
-                            <p className="about-value-description">True to self, honest work</p>
-                        </div>
-                        <div className="about-value-item-enhanced" onClick={() => handleValueClick('client-focus')}>
-                            <span className="about-value-icon-item">🤝</span>
-                            <h4 className="about-value-title-enhanced">Client Focus</h4>
-                            <p className="about-value-description">Your vision is my mission</p>
-                        </div>
-                        <div className="about-value-item-enhanced" onClick={() => handleValueClick('hygiene')}>
-                            <span className="about-value-icon-item">🧼</span>
-                            <h4 className="about-value-title-enhanced">Hygiene</h4>
-                            <p className="about-value-description">Professional standards always</p>
-                        </div>
-                        <div className="about-value-item-enhanced" onClick={() => handleValueClick('growth')}>
-                            <span className="about-value-icon-item">📈</span>
-                            <h4 className="about-value-title-enhanced">Growth</h4>
-                            <p className="about-value-description">Learning every single day</p>
-                        </div>
+                        {coreValuesData.map((value) => (
+                            <div
+                                key={value.key}
+                                className="about-value-item-enhanced"
+                                onClick={() => handleValueClick(value.key)}
+                            >
+                                <span className="about-value-icon-item">{value.icon}</span>
+                                <h4 className="about-value-title-enhanced">{value.title}</h4>
+                                <p className="about-value-description">{value.description}</p>
+                            </div>
+                        ))}
                     </div>
                 </RevealOnScroll>
 
@@ -958,60 +950,25 @@ const About = () => {
 
                         <div className="bottom-sheet-handle"></div>
 
-                        <div className="bottom-sheet-content">
-                            {/* TASK 4: Hardcoded content structure */}
-                            {valueSheetOpen === 'authenticity' && (
-                                <>
-                                    <h2 className="bottom-sheet-title">Authenticity</h2>
-                                    <p className="bottom-sheet-subtitle">Being true to myself allows me to bring genuine artistry to every client.</p>
-                                    <div className="bottom-sheet-section">
-                                        <ul style={{ paddingLeft: '1.5rem', margin: '0' }}>
-                                            <li style={{ marginBottom: '0.75rem' }}>I never compromise my creative integrity for trends</li>
-                                            <li style={{ marginBottom: '0.75rem' }}>Honest consultations create trust and lasting relationships</li>
-                                            <li style={{ marginBottom: '0' }}>My work reflects who I am, not what's expected</li>
-                                        </ul>
-                                    </div>
-                                </>
-                            )}
-                            {valueSheetOpen === 'client-focus' && (
-                                <>
-                                    <h2 className="bottom-sheet-title">Client Focus</h2>
-                                    <p className="bottom-sheet-subtitle">Your vision becomes my priority from consultation to final touch.</p>
-                                    <div className="bottom-sheet-section">
-                                        <ul style={{ paddingLeft: '1.5rem', margin: '0' }}>
-                                            <li style={{ marginBottom: '0.75rem' }}>Deep listening sessions before every event</li>
-                                            <li style={{ marginBottom: '0.75rem' }}>Personalized looks that match your personality and occasion</li>
-                                            <li style={{ marginBottom: '0' }}>Flexible adjustments until you feel completely confident</li>
-                                        </ul>
-                                    </div>
-                                </>
-                            )}
-                            {valueSheetOpen === 'hygiene' && (
-                                <>
-                                    <h2 className="bottom-sheet-title">Hygiene</h2>
-                                    <p className="bottom-sheet-subtitle">Professional-grade cleanliness protects your health and elevates your experience.</p>
-                                    <div className="bottom-sheet-section">
-                                        <ul style={{ paddingLeft: '1.5rem', margin: '0' }}>
-                                            <li style={{ marginBottom: '0.75rem' }}>All tools sanitized before and after every session</li>
-                                            <li style={{ marginBottom: '0.75rem' }}>Premium, skin-tested products with expiry tracking</li>
-                                            <li style={{ marginBottom: '0' }}>Clean workspace maintained throughout your appointment</li>
-                                        </ul>
-                                    </div>
-                                </>
-                            )}
-                            {valueSheetOpen === 'growth' && (
-                                <>
-                                    <h2 className="bottom-sheet-title">Growth</h2>
-                                    <p className="bottom-sheet-subtitle">Continuous learning keeps my skills sharp and services innovative.</p>
-                                    <div className="bottom-sheet-section">
-                                        <ul style={{ paddingLeft: '1.5rem', margin: '0' }}>
-                                            <li style={{ marginBottom: '0.75rem' }}>Regular workshops on emerging techniques and products</li>
-                                            <li style={{ marginBottom: '0.75rem' }}>Business strategy education to serve you better</li>
-                                            <li style={{ marginBottom: '0' }}>Feedback integration improves every future session</li>
-                                        </ul>
-                                    </div>
-                                </>
-                            )}
+                        <div className="bottom-sheet-content" style={{ padding: '0 1.25rem 2rem' }}>
+                            {/* Points 3, 4, 5: Data-driven content with improved structure */}
+                            {coreValuesData.map((value) => (
+                                valueSheetOpen === value.key && (
+                                    <React.Fragment key={value.key}>
+                                        <h2 className="bottom-sheet-title">{value.title}</h2>
+                                        <p className="bottom-sheet-subtitle">{value.expandedDescription}</p>
+                                        <div className="bottom-sheet-section">
+                                            <ul style={{ margin: '0' }}>
+                                                {value.bullets.map((bullet, idx) => (
+                                                    <li key={idx} style={{ marginBottom: idx === value.bullets.length - 1 ? '0' : '0.75rem' }}>
+                                                        {bullet}
+                                                    </li>
+                                                ))}
+                                            </ul>
+                                        </div>
+                                    </React.Fragment>
+                                )
+                            ))}
                         </div>
                     </div>
                 </>,

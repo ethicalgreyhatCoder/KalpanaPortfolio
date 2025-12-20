@@ -769,14 +769,17 @@
         }
     }
 
-    /* SECTION 2 & 4: Bottom Sheet - Slides over backdrop, highest z-index */
+    /* SECTION 2 & 4: Bottom Sheet - Point 3: Content-aware height */
     .bottom-sheet {
         position: fixed !important;
         bottom: 0;
         left: 0 !important;
         right: 0 !important;
         width: 100vw;
-        max-height: 80vh;
+        /*min-height: auto;*/
+        /* Point 3: Let content determine height */
+        max-height: 80%;
+        /* Point 3: Content-aware with safe area */
         margin: 0;
         /* No margin to ensure clean edges */
         padding: 0;
