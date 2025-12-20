@@ -1037,10 +1037,12 @@
     }
 }
 
-/* Prevent background scroll when modal is open */
+/* Prevent background scroll when modal is open - Complete scroll lock */
 body.modal-open {
     overflow: hidden !important;
     touch-action: none !important;
+    overscroll-behavior: none !important;
+    -webkit-overflow-scrolling: auto !important;
 }
 
 /* Prevent horizontal overflow on mobile */

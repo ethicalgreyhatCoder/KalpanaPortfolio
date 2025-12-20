@@ -452,6 +452,71 @@ const About = () => {
         handleBottomSheetClose();
     };
 
+    // Prevent parent scroll when bottom sheet is open - with boundary detection
+    useEffect(() => {
+        if (!bottomSheetCard) return;
+
+        const preventScroll = (e) => {
+            const target = e.target;
+            const sheet = target.closest('.bottom-sheet-content');
+
+            // If not scrolling inside sheet, always prevent (if cancelable)
+            if (!sheet) {
+                if (e.cancelable) { // Check before calling preventDefault
+                    e.preventDefault();
+                    e.stopPropagation();
+                }
+                return;
+            }
+
+            // If inside sheet, check for scroll chaining at boundaries
+            const { scrollTop, scrollHeight, clientHeight } = sheet;
+            const isAtTop = scrollTop === 0;
+            const isAtBottom = scrollTop + clientHeight >= scrollHeight;
+
+            // Prevent scroll chaining when at boundaries
+            if (e.type === 'touchmove') {
+                const touch = e.touches[0];
+                const deltaY = touch.clientY - (preventScroll.lastY || touch.clientY);
+                preventScroll.lastY = touch.clientY;
+
+                // Scrolling up at top or down at bottom = prevent parent scroll
+                if ((isAtTop && deltaY > 0) || (isAtBottom && deltaY < 0)) {
+                    if (e.cancelable) { // Check before calling preventDefault
+                        e.preventDefault();
+                        e.stopPropagation();
+                    }
+                }
+            } else if (e.type === 'wheel') {
+                // Scrolling up at top or down at bottom = prevent parent scroll
+                if ((isAtTop && e.deltaY < 0) || (isAtBottom && e.deltaY > 0)) {
+                    if (e.cancelable) { // Check before calling preventDefault
+                        e.preventDefault();
+                        e.stopPropagation();
+                    }
+                }
+            }
+        };
+
+        const resetTouch = () => {
+            delete preventScroll.lastY;
+        };
+
+        // Prevent touch scroll on mobile
+        document.addEventListener('touchmove', preventScroll, { passive: false });
+        document.addEventListener('touchend', resetTouch);
+        document.addEventListener('touchcancel', resetTouch);
+        // Prevent wheel scroll on desktop
+        document.addEventListener('wheel', preventScroll, { passive: false });
+
+        return () => {
+            document.removeEventListener('touchmove', preventScroll);
+            document.removeEventListener('touchend', resetTouch);
+            document.removeEventListener('touchcancel', resetTouch);
+            document.removeEventListener('wheel', preventScroll);
+        };
+    }, [bottomSheetCard]);
+
     // Track scroll position in bottom sheet
     useEffect(() => {
         const contentEl = sheetContentRef.current;

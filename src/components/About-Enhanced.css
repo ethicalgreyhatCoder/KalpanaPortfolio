@@ -384,48 +384,57 @@
     }
 }
 
-/* Card Title */
+/* Card Title - Left-aligned for readability on mobile, center on desktop */
 .about-card-title {
     font-size: 1.25rem;
     font-weight: bold;
     font-family: 'Libre Baskerville', serif;
-    text-align: center;
+    text-align: left;
+    /* Mobile: left-aligned for better readability */
     margin-bottom: 1rem;
     color: var(--theme-text);
+    white-space: nowrap;
+    /* Prevent wrapping on mobile */
 }
 
 @media (min-width: 768px) {
     .about-card-title {
-        font-size: 1.5rem;
+        text-align: center;
+        /* Desktop: revert to center */
+        white-space: normal;
+        /* Allow wrapping on desktop if needed */
     }
 }
 
-/* Card List */
+/* Card List - Left-aligned text */
 .about-card-list {
-    display: flex;
-    flex-direction: column;
-    gap: 0.75rem;
-    text-align: left;
     list-style: none;
     padding: 0;
     margin: 0;
+    text-align: left;
+    /* Consistent left alignment */
 }
 
 .about-card-list li {
-    font-size: 0.875rem;
-    color: rgba(74, 74, 74, 0.85);
-    font-family: 'Montserrat', sans-serif;
-    line-height: 1.5;
+    padding: 0.4rem 0;
+    /* Reduced from 0.5rem - tighter spacing */
+    padding-left: 1.5rem;
+    /* Indent for bullets */
+    position: relative;
+    font-size: 0.95rem;
+    line-height: 1.4;
+    /* Tighter line-height for compact look */
+    color: var(--theme-text);
+    opacity: 0.85;
 }
 
-@media (min-width: 768px) {
-    .about-card-list {
-        text-align: center;
-    }
-
-    .about-card-list li {
-        font-size: 1rem;
-    }
+/* Bullet styling - kept simple */
+.about-card-list li::before {
+    content: "•";
+    position: absolute;
+    left: 0.5rem;
+    color: var(--theme-highlight);
+    font-weight: bold;
 }
 
 /* Values Grid */
@@ -672,17 +681,23 @@
 
 @media (max-width: 768px) {
 
-    /* Backdrop Overlay - Global full-screen fixed */
+    /* SECTION 2 & 4: Backdrop - Full viewport coverage, sits above all page content */
     .bottom-sheet-backdrop {
         position: fixed;
-        top: 0;
-        left: 0;
-        right: 0;
-        bottom: 0;
+        top: 0 !important;
+        /* Ensure no gap at top */
+        left: 0 !important;
+        right: 0 !important;
+        bottom: 0 !important;
         width: 100vw;
         height: 100vh;
-        margin-left: calc(-50vw + 50%);
+        margin: 0;
+        /* Remove any margin that could create gaps */
+        background: rgba(0, 0, 0, 0.4);
         backdrop-filter: blur(8px);
+        -webkit-backdrop-filter: blur(8px);
+        z-index: 49;
+        /* CRITICAL: Must be below sheet (50) to stay behind */
         isolation: isolate;
         animation: backdropFadeIn 280ms ease-out forwards;
     }
@@ -694,12 +709,14 @@
     @keyframes backdropFadeIn {
         from {
             opacity: 0;
+            background: rgba(0, 0, 0, 0);
             backdrop-filter: blur(0px);
             -webkit-backdrop-filter: blur(0px);
         }
 
         to {
             opacity: 1;
+            background: rgba(0, 0, 0, 0.4);
             backdrop-filter: blur(8px);
             -webkit-backdrop-filter: blur(8px);
         }
@@ -708,36 +725,42 @@
     @keyframes backdropFadeOut {
         from {
             opacity: 1;
+            background: rgba(0, 0, 0, 0.4);
             backdrop-filter: blur(8px);
             -webkit-backdrop-filter: blur(8px);
         }
 
         to {
             opacity: 0;
+            background: rgba(0, 0, 0, 0);
             backdrop-filter: blur(0px);
             -webkit-backdrop-filter: blur(0px);
         }
     }
 
-    /* Bottom Sheet Container */
+    /* SECTION 2 & 4: Bottom Sheet - Slides over backdrop, highest z-index */
     .bottom-sheet {
         position: fixed !important;
         bottom: 0;
-        left: 0;
-        right: 0;
+        left: 0 !important;
+        right: 0 !important;
         width: 100vw;
         max-height: 80vh;
         margin: 0;
-        margin-left: calc(-50vw + 50%);
+        /* No margin to ensure clean edges */
         padding: 0;
         background: var(--theme-bg);
         border-radius: 1.5rem 1.5rem 0 0;
         box-shadow:
             0 -4px 24px rgba(0, 0, 0, 0.15),
             0 -2px 12px rgba(0, 0, 0, 0.1);
-        z-index: 99999;
+        z-index: 50;
+        /* CRITICAL: Fixed at 50, above backdrop (49) */
         isolation: isolate;
         overflow-y: auto;
+        overscroll-behavior: contain;
+        /* Prevent scroll chaining to parent */
+        -webkit-overflow-scrolling: touch;
         animation: sheetSlideUp 380ms cubic-bezier(0.22, 1, 0.36, 1) forwards;
         transition: transform 0.15s ease-out;
     }
@@ -766,12 +789,11 @@
         }
     }
 
-    /* Close Button - Sticky, always visible */
+    /* SECTION 2: Close Button - Integrated into modal header area */
     .bottom-sheet-close-button {
-        position: sticky;
-        top: 16px;
-        right: 16px;
-        float: right;
+        position: absolute;
+        top: 1rem;
+        right: 1rem;
         width: 36px;
         height: 36px;
         border-radius: 50%;
@@ -785,6 +807,7 @@
         justify-content: center;
         cursor: pointer;
         z-index: 10;
+        /* Above content, part of header */
         transition: all 0.2s ease;
         -webkit-tap-highlight-color: transparent;
     }
@@ -808,49 +831,59 @@
     .bottom-sheet-content {
         padding: 0 1.5rem 2rem;
         clear: both;
+        text-align: left;
+        overscroll-behavior: contain;
+        /* Prevent scroll chaining */
+        /* SECTION 3: Left-aligned text */
     }
 
-    /* Title */
+    /* SECTION 3: Title - Left-aligned */
     .bottom-sheet-title {
         font-size: 1.75rem;
         font-weight: bold;
         font-family: 'Libre Baskerville', serif;
         color: var(--theme-text);
         margin: 0 0 0.5rem 0;
-        text-align: center;
+        text-align: left;
+        /* Left-aligned for readability */
     }
 
-    /* Subtitle */
+    /* SECTION 3: Subtitle - Left-aligned */
     .bottom-sheet-subtitle {
         font-size: 1rem;
         font-style: italic;
         font-family: 'Libre Baskerville', serif;
         color: var(--theme-text);
         opacity: 0.75;
-        text-align: center;
         margin: 0 0 1.5rem 0;
-        line-height: 1.5;
+        line-height: 1.6;
+        text-align: left;
+        /* Consistent left alignment */
     }
 
-    /* Content Sections */
+    /* SECTION 3: Section headings - Left-aligned */
     .bottom-sheet-section {
         margin-bottom: 1.5rem;
+        text-align: left;
+        /* Editorial left-aligned content */
     }
 
     .bottom-sheet-section h3 {
-        font-size: 1.125rem;
+        font-size: 1.1rem;
         font-weight: 600;
-        font-family: 'Libre Baskerville', serif;
+        font-family: 'Montserrat', sans-serif;
         color: var(--theme-text);
-        margin: 0 0 0.5rem 0;
+        margin: 0 0 0.75rem 0;
+        text-align: left;
     }
 
     .bottom-sheet-section p {
-        font-size: 0.9375rem;
+        font-size: 0.95rem;
         line-height: 1.7;
-        color: rgba(74, 74, 74, 0.85);
-        font-family: 'Montserrat', sans-serif;
+        color: var(--theme-text);
+        opacity: 0.85;
         margin: 0;
+        text-align: left;
     }
 
     /* Micro CTA */
