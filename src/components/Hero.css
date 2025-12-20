@@ -10,12 +10,6 @@
     padding-top: 5.35rem;
 }
 
-@media (min-width: 768px) {
-    .hero-section {
-        /*padding-top: 20px;*/
-    }
-}
-
 /* Text Content Hierarchy */
 .hero-intro {
     font-size: 1.125rem;
@@ -173,7 +167,6 @@
     display: grid;
     grid-template-columns: repeat(2, 1fr);
     gap: 1.5rem;
-    /*margin-top: 2rem;*/
     text-align: center;
 }
 
@@ -243,7 +236,6 @@
 }
 
 .hero-cta-button:hover {
-    /*background-color: #b9737d;*/
     border-color: #ba757f;
     color: #b66d78;
     box-shadow: 0 0 10px rgba(255, 0, 38, 0.3);

@@ -3,9 +3,9 @@
 /* Main About Section */
 .about-section {
     padding: 6rem 0;
-    /*background-color: var(--theme-bg);*/
     position: relative;
-    z-index: 11; /* Increased from 1 to 11 - cherry blossoms at -2 */
+    z-index: 11;
+    /* Increased from 1 to 11 - cherry blossoms at -2 */
     transition: all 0.7s cubic-bezier(0.4, 0, 0.2, 1);
 }
 
@@ -18,7 +18,8 @@
     height: 100%;
     overflow: hidden;
     pointer-events: none;
-    z-index: -2; /* Behind all About content */
+    z-index: -2;
+    /* Behind all About content */
 }
 
 /* Intro Section - Text Hierarchy */
@@ -73,10 +74,10 @@
 /* About Me Label - Reduced */
 .about-label {
     font-size: 0.75rem;
-    letter-spacing: 0.2em;
+    letter-spacing: 0.25em;
     text-transform: uppercase;
     color: var(--theme-accent);
-    opacity: 0.5;
+    opacity: 0.65;
     font-weight: 500;
     margin-bottom: 0.25rem;
     font-family: 'Montserrat', sans-serif;
@@ -108,13 +109,13 @@
 /* Title/Role - Reduced & Separated */
 .about-role {
     font-size: 1rem;
-    font-weight: 300;
+    font-weight: 200;
     font-family: 'Libre Baskerville', serif;
     font-style: italic;
     color: var(--theme-text);
     opacity: 0.65;
     padding-top: 0.5rem;
-    line-height: 1.4;
+    line-height: 1.6;
     margin: 0;
 }
 
@@ -133,6 +134,9 @@
     background-color: var(--theme-highlight);
     opacity: 0.3;
     margin: 0.5rem auto;
+    box-shadow:
+        0 0 8px 1px rgba(183, 110, 121, 0.15),
+        0 0 4px 1px rgba(183, 110, 121, 0.1);
 }
 
 @media (min-width: 768px) {
@@ -150,10 +154,6 @@
     color: rgba(74, 74, 74, 0.8);
     font-family: 'Montserrat', sans-serif;
     max-width: 55ch;
-    display: -webkit-box;
-    -webkit-line-clamp: 3;
-    -webkit-box-orient: vertical;
-    overflow: hidden;
     margin: 0;
 }
 
@@ -169,10 +169,9 @@
 .about-quote-section {
     position: relative;
     max-width: 48rem;
-    margin: 0 auto;
     text-align: center;
-    padding: 3rem 1.5rem;
-    margin-bottom: 2rem;
+    padding: 1.5rem 1.5rem 3rem;
+    margin: 0 auto 2rem;
 }
 
 @media (min-width: 768px) {
@@ -186,7 +185,6 @@
     width: 4rem;
     height: 1px;
     background-color: var(--theme-border);
-    opacity: 0.4;
     margin: 0 auto 2rem;
 }
 
@@ -204,8 +202,8 @@
     left: 0.5rem;
     font-size: 3.5rem;
     font-family: 'Libre Baskerville', serif;
-    color: var(--theme-highlight);
-    opacity: 0.1;
+    color: #b8707b;
+    opacity: 0.67;
     line-height: 1;
     pointer-events: none;
     user-select: none;
@@ -229,7 +227,8 @@
     opacity: 1;
     line-height: 1.6;
     position: relative;
-    z-index: 20; /* Increased from 10 to 20 */
+    z-index: 20;
+    /* Increased from 10 to 20 */
     margin: 0;
 }
 
@@ -284,7 +283,6 @@
     width: 4rem;
     height: 1px;
     background-color: var(--theme-border);
-    opacity: 0.4;
     margin: 2rem auto 0;
 }
 
@@ -300,12 +298,21 @@
     display: grid;
     grid-template-columns: 1fr 1fr;
     gap: 2rem;
+    position: relative;
+    padding: 1.5rem 0;
+    border-radius: 1rem;
+    /*box-shadow:*/
+    /*    0 0 40px 8px rgba(183, 110, 121, 0.08),*/
+    /*    0 0 20px 4px rgba(183, 110, 121, 0.05);*/
 }
 
 @media (min-width: 768px) {
     .about-cards-container {
         grid-template-columns: 1fr 1fr;
         gap: 2rem;
+        padding: 0;
+        border-radius: 0;
+        box-shadow: none;
     }
 }
 
@@ -313,7 +320,7 @@
 .about-card {
     background: linear-gradient(135deg, rgba(245, 230, 211, 0.15) 0%, rgba(250, 249, 246, 0.1) 100%);
     backdrop-filter: blur(8px);
-    padding: 1.75rem;
+    padding: 1.5rem;
     border-radius: 0.75rem;
     border: 2px solid rgba(183, 110, 121, 0.2);
     transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
@@ -330,7 +337,9 @@
 
 .about-card:active {
     transform: scale(0.97);
-    box-shadow: 0 4px 12px rgba(183, 110, 121, 0.15);
+    box-shadow:
+        0 4px 12px rgba(183, 110, 121, 0.15),
+        0 0 20px 4px rgba(183, 110, 121, 0.12);
     border-color: rgba(183, 110, 121, 0.35);
 }
 
@@ -396,7 +405,7 @@
     display: flex;
     flex-direction: column;
     gap: 0.75rem;
-    text-align: center;
+    text-align: left;
     list-style: none;
     padding: 0;
     margin: 0;
@@ -410,6 +419,10 @@
 }
 
 @media (min-width: 768px) {
+    .about-card-list {
+        text-align: center;
+    }
+
     .about-card-list li {
         font-size: 1rem;
     }
@@ -649,5 +662,215 @@
     .about-section button:active,
     .about-section a:active {
         transform: scale(0.97);
+    }
+}
+
+/* ======================================================================
+   MOBILE-ONLY BOTTOM SHEET MODAL
+   Mobile card modal with smooth animations, blur backdrop, swipe gestures
+   ====================================================================== */
+
+@media (max-width: 768px) {
+
+    /* Backdrop Overlay - Global full-screen fixed */
+    .bottom-sheet-backdrop {
+        position: fixed;
+        top: 0;
+        left: 0;
+        right: 0;
+        bottom: 0;
+        width: 100vw;
+        height: 100vh;
+        margin-left: calc(-50vw + 50%);
+        backdrop-filter: blur(8px);
+        isolation: isolate;
+        animation: backdropFadeIn 280ms ease-out forwards;
+    }
+
+    .bottom-sheet-backdrop.closing {
+        animation: backdropFadeOut 280ms ease-in forwards;
+    }
+
+    @keyframes backdropFadeIn {
+        from {
+            opacity: 0;
+            backdrop-filter: blur(0px);
+            -webkit-backdrop-filter: blur(0px);
+        }
+
+        to {
+            opacity: 1;
+            backdrop-filter: blur(8px);
+            -webkit-backdrop-filter: blur(8px);
+        }
+    }
+
+    @keyframes backdropFadeOut {
+        from {
+            opacity: 1;
+            backdrop-filter: blur(8px);
+            -webkit-backdrop-filter: blur(8px);
+        }
+
+        to {
+            opacity: 0;
+            backdrop-filter: blur(0px);
+            -webkit-backdrop-filter: blur(0px);
+        }
+    }
+
+    /* Bottom Sheet Container */
+    .bottom-sheet {
+        position: fixed !important;
+        bottom: 0;
+        left: 0;
+        right: 0;
+        width: 100vw;
+        max-height: 80vh;
+        margin: 0;
+        margin-left: calc(-50vw + 50%);
+        padding: 0;
+        background: var(--theme-bg);
+        border-radius: 1.5rem 1.5rem 0 0;
+        box-shadow:
+            0 -4px 24px rgba(0, 0, 0, 0.15),
+            0 -2px 12px rgba(0, 0, 0, 0.1);
+        z-index: 99999;
+        isolation: isolate;
+        overflow-y: auto;
+        animation: sheetSlideUp 380ms cubic-bezier(0.22, 1, 0.36, 1) forwards;
+        transition: transform 0.15s ease-out;
+    }
+
+    .bottom-sheet.closing {
+        animation: sheetSlideDown 280ms ease-in forwards;
+    }
+
+    @keyframes sheetSlideUp {
+        from {
+            transform: translateY(100%);
+        }
+
+        to {
+            transform: translateY(0);
+        }
+    }
+
+    @keyframes sheetSlideDown {
+        from {
+            transform: translateY(0);
+        }
+
+        to {
+            transform: translateY(100%);
+        }
+    }
+
+    /* Close Button - Sticky, always visible */
+    .bottom-sheet-close-button {
+        position: sticky;
+        top: 16px;
+        right: 16px;
+        float: right;
+        width: 36px;
+        height: 36px;
+        border-radius: 50%;
+        border: none;
+        background: rgba(0, 0, 0, 0.08);
+        color: var(--theme-text);
+        font-size: 1.25rem;
+        line-height: 1;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        cursor: pointer;
+        z-index: 10;
+        transition: all 0.2s ease;
+        -webkit-tap-highlight-color: transparent;
+    }
+
+    .bottom-sheet-close-button:active {
+        background: rgba(0, 0, 0, 0.15);
+        transform: scale(0.95);
+    }
+
+    /* Swipe Handle */
+    .bottom-sheet-handle {
+        width: 40px;
+        height: 4px;
+        background: rgba(0, 0, 0, 0.2);
+        border-radius: 2px;
+        margin: 12px auto 20px;
+        clear: both;
+    }
+
+    /* Content Wrapper */
+    .bottom-sheet-content {
+        padding: 0 1.5rem 2rem;
+        clear: both;
+    }
+
+    /* Title */
+    .bottom-sheet-title {
+        font-size: 1.75rem;
+        font-weight: bold;
+        font-family: 'Libre Baskerville', serif;
+        color: var(--theme-text);
+        margin: 0 0 0.5rem 0;
+        text-align: center;
+    }
+
+    /* Subtitle */
+    .bottom-sheet-subtitle {
+        font-size: 1rem;
+        font-style: italic;
+        font-family: 'Libre Baskerville', serif;
+        color: var(--theme-text);
+        opacity: 0.75;
+        text-align: center;
+        margin: 0 0 1.5rem 0;
+        line-height: 1.5;
+    }
+
+    /* Content Sections */
+    .bottom-sheet-section {
+        margin-bottom: 1.5rem;
+    }
+
+    .bottom-sheet-section h3 {
+        font-size: 1.125rem;
+        font-weight: 600;
+        font-family: 'Libre Baskerville', serif;
+        color: var(--theme-text);
+        margin: 0 0 0.5rem 0;
+    }
+
+    .bottom-sheet-section p {
+        font-size: 0.9375rem;
+        line-height: 1.7;
+        color: rgba(74, 74, 74, 0.85);
+        font-family: 'Montserrat', sans-serif;
+        margin: 0;
+    }
+
+    /* Micro CTA */
+    .bottom-sheet-cta {
+        font-size: 0.875rem;
+        font-style: italic;
+        color: var(--theme-accent);
+        text-align: center;
+        margin: 1.5rem 0 0 0;
+        padding-top: 1rem;
+        border-top: 1px solid rgba(183, 110, 121, 0.15);
+        opacity: 0.8;
+    }
+}
+
+/* Desktop: Ensure bottom sheet never appears */
+@media (min-width: 769px) {
+
+    .bottom-sheet-backdrop,
+    .bottom-sheet {
+        display: none !important;
     }
 }

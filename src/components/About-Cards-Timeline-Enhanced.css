@@ -23,7 +23,7 @@
 .about-card {
     background: linear-gradient(135deg, rgba(245, 230, 211, 0.1) 0%, rgba(250, 249, 246, 0.08) 100%);
     backdrop-filter: blur(8px);
-    padding: 1.6rem 1.25rem;
+    padding: 1.6rem .5rem;
     border-radius: 0.75rem;
     border: 2px solid rgba(183, 110, 121, 0.12);
     transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
@@ -122,11 +122,12 @@
 }
 
 .about-card-list li {
+    text-align: left;
     font-size: 0.8125rem;
     color: rgba(74, 74, 74, 0.8);
     font-family: 'Montserrat', sans-serif;
     line-height: 1.4;
-    margin: 0;
+    margin: 0 0 0 2px;
 }
 
 @media (min-width: 768px) {

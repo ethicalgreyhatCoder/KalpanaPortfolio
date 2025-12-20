@@ -287,7 +287,7 @@
 
     color: #ffffff;
     cursor: pointer;
-    opacity: 0.9;
+    opacity: 0.75;
     transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
 
     /* TASK 3: High z-index for UI chrome layer (above 3D carousel) */
@@ -310,11 +310,11 @@
 }
 
 .carousel-arrow-left {
-    left: 16px;
+    left: -45px;
 }
 
 .carousel-arrow-right {
-    right: 16px;
+    right: -45px;
 }
 
 /* Hover state - enlarge and brighten */

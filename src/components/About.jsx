@@ -1,8 +1,11 @@
 import React, { useState, useRef, useEffect } from 'react';
+import ReactDOM from 'react-dom';
 import RevealOnScroll from './RevealOnScroll';
+import { modalContent } from './aboutModalContent';
 import './About.css';
 import './About-Enhanced.css';
 import './About-Cards-Timeline-Enhanced.css';
+import './BottomSheetScrollIndicator.css';
 
 const About = () => {
     const [activeTimelineDots, setActiveTimelineDots] = useState({});
@@ -22,6 +25,16 @@ const About = () => {
 
     // Cherry blossom petals state
     const [petals, setPetals] = useState([]);
+
+    // Bottom sheet modal state (mobile only)
+    const [bottomSheetCard, setBottomSheetCard] = useState(null); // 'artist', 'strategist', or null
+    const [bottomSheetClosing, setBottomSheetClosing] = useState(false);
+    const bottomSheetRef = useRef(null);
+
+    // Scroll direction indicators
+    const [showUpArrow, setShowUpArrow] = useState(false);
+    const [showDownArrow, setShowDownArrow] = useState(true);
+    const sheetContentRef = useRef(null);
 
     // CARD DATA - Dynamically load all available portrait photos
     // Add more Kalpana-About5.webp, About6.webp etc. and they'll auto-appear!
@@ -417,6 +430,49 @@ const About = () => {
         };
     }, [isMobile, desktopPhotos.length]);
 
+    // Bottom sheet handlers (mobile only)  
+    const handleCardClick = (cardType) => {
+        if (isMobile && window.innerWidth <= 768) {
+            setBottomSheetCard(cardType);
+            setBottomSheetClosing(false);
+            document.body.classList.add('modal-open');
+        }
+    };
+
+    const handleBottomSheetClose = () => {
+        setBottomSheetClosing(true);
+        setTimeout(() => {
+            setBottomSheetCard(null);
+            setBottomSheetClosing(false);
+            document.body.classList.remove('modal-open');
+        }, 280);
+    };
+
+    const handleBackdropClick = () => {
+        handleBottomSheetClose();
+    };
+
+    // Track scroll position in bottom sheet
+    useEffect(() => {
+        const contentEl = sheetContentRef.current;
+        if (!contentEl || !bottomSheetCard) return;
+
+        const handleScroll = () => {
+            const { scrollTop, scrollHeight, clientHeight } = contentEl;
+            const isAtTop = scrollTop < 50;
+            const isAtBottom = scrollTop + clientHeight >= scrollHeight - 50;
+
+            setShowUpArrow(!isAtTop);
+            setShowDownArrow(!isAtBottom);
+        };
+
+        // Initial check
+        handleScroll();
+
+        contentEl.addEventListener('scroll', handleScroll, { passive: true });
+        return () => contentEl.removeEventListener('scroll', handleScroll);
+    }, [bottomSheetCard]);
+
     return (
         <section id="about" className="about-section">
             {/* Cherry blossom effect - scoped to this section only */}
@@ -564,21 +620,22 @@ const About = () => {
                 <RevealOnScroll>
                     <div className="about-cards-container">
                         {/* Artist Card */}
-                        <div className="about-card">
+                        <div className="about-card" onClick={() => handleCardClick('artist')}>
                             <div className="about-card-icon" style={{ background: 'linear-gradient(135deg, var(--theme-accent) 0%, #f5b547 100%)' }}>
                                 🎨
                             </div>
                             <h3 className="about-card-title">The Artist</h3>
                             <ul className="about-card-list">
-                                <li>Red Fox Academy Certified</li>
-                                <li>Bridal & Editorial Makeup</li>
+                                <li>Red Fox Certified</li>
+                                <li>Bridal Makeup</li>
+                                <li>Editorial Makeup</li>
                                 <li>Skin Analysis & Prep</li>
                                 <li>Creative Vision</li>
                             </ul>
                         </div>
 
                         {/* Business Card */}
-                        <div className="about-card">
+                        <div className="about-card" onClick={() => handleCardClick('strategist')}>
                             <div className="about-card-icon" style={{ background: 'linear-gradient(135deg, var(--theme-highlight) 0%, #f5a8c8 100%)' }}>
                                 💼
                             </div>
@@ -588,6 +645,7 @@ const About = () => {
                                 <li>Brand Management</li>
                                 <li>Client Relations</li>
                                 <li>Business Strategy</li>
+                                <li>Market Analysis</li>
                             </ul>
                         </div>
                     </div>
@@ -685,6 +743,96 @@ const About = () => {
                 </RevealOnScroll>
 
             </div >
+
+            {/* Mobile-Only Bottom Sheet Modal - Rendered via Portal */}
+            {bottomSheetCard && ReactDOM.createPortal(
+                <>
+                    {/* Backdrop - Global overlay */}
+                    <div
+                        className={`bottom-sheet-backdrop ${bottomSheetClosing ? 'closing' : ''}`}
+                        onClick={handleBackdropClick}
+                    />
+
+                    {/* Bottom Sheet - Fixed positioning */}
+                    <div
+                        ref={bottomSheetRef}
+                        className={`bottom-sheet ${bottomSheetClosing ? 'closing' : ''}`}
+                    >
+                        {/* Close Button */}
+                        <button
+                            className="bottom-sheet-close-button"
+                            onClick={handleBottomSheetClose}
+                            aria-label="Close"
+                        >
+                            ✕
+                        </button>
+
+                        {/* Swipe Handle */}
+                        <div className="bottom-sheet-handle"></div>
+
+                        {/* Content */}
+                        <div className="bottom-sheet-content" ref={sheetContentRef}>
+                            {bottomSheetCard && modalContent[bottomSheetCard] && (
+                                <>
+                                    <h2 className="bottom-sheet-title">
+                                        {modalContent[bottomSheetCard].title}
+                                    </h2>
+                                    <p className="bottom-sheet-subtitle">
+                                        {modalContent[bottomSheetCard].subtitle}
+                                    </p>
+
+                                    {modalContent[bottomSheetCard].sections.map((section, index) => (
+                                        <div key={index} className="bottom-sheet-section">
+                                            <h3>{section.heading}</h3>
+                                            <p>{section.content}</p>
+                                        </div>
+                                    ))}
+
+                                    <p
+                                        className="bottom-sheet-cta"
+                                        onClick={() => {
+                                            handleBottomSheetClose();
+                                            setTimeout(() => {
+                                                const servicesSection = document.getElementById('services');
+                                                if (servicesSection) {
+                                                    servicesSection.scrollIntoView({ behavior: 'smooth' });
+                                                    // Trigger first service accordion to open
+                                                    setTimeout(() => {
+                                                        const firstServiceButton = servicesSection.querySelector('.service-item button, .service-header');
+                                                        if (firstServiceButton && !firstServiceButton.getAttribute('aria-expanded')) {
+                                                            firstServiceButton.click();
+                                                        }
+                                                    }, 600);
+                                                }
+                                            }, 300);
+                                        }}
+                                        style={{ cursor: 'pointer' }}
+                                    >
+                                        {modalContent[bottomSheetCard].cta}
+                                    </p>
+                                </>
+                            )}
+                        </div>
+
+                        {/* Scroll Direction Indicators - Fixed to Viewport */}
+                        {showDownArrow && (
+                            <div className="bottom-sheet-scroll-indicator down">
+                                <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round">
+                                    <polyline points="6 9 12 15 18 9"></polyline>
+                                </svg>
+                            </div>
+                        )}
+                        {showUpArrow && (
+                            <div className="bottom-sheet-scroll-indicator up">
+                                <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round">
+                                    <polyline points="18 15 12 9 6 15"></polyline>
+                                </svg>
+                            </div>
+                        )}
+                    </div>
+                </>,
+                document.body
+            )}
         </section >
     );
 };
