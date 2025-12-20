@@ -2,6 +2,7 @@ import React, { useState, useRef, useEffect } from 'react';
 import ReactDOM from 'react-dom';
 import RevealOnScroll from './RevealOnScroll';
 import { modalContent } from './aboutModalContent';
+import { aboutTimelineData } from '../data/aboutTimelineData';
 import './About.css';
 import './About-Enhanced.css';
 import './About-Cards-Timeline-Enhanced.css';
@@ -30,6 +31,11 @@ const About = () => {
     const [bottomSheetCard, setBottomSheetCard] = useState(null); // 'artist', 'strategist', or null
     const [bottomSheetClosing, setBottomSheetClosing] = useState(false);
     const bottomSheetRef = useRef(null);
+
+    // TASK 3: Core Values bottom sheet state
+    const [valueSheetOpen, setValueSheetOpen] = useState(null); // 'authenticity', 'client-focus', 'hygiene', 'growth', or null
+    const [valueSheetClosing, setValueSheetClosing] = useState(false);
+    const valueSheetRef = useRef(null);
 
     // Scroll direction indicators
     const [showUpArrow, setShowUpArrow] = useState(false);
@@ -452,6 +458,26 @@ const About = () => {
         handleBottomSheetClose();
     };
 
+    // TASK 3: Core Values bottom sheet handlers
+    const handleValueClick = (valueKey) => {
+        setValueSheetOpen(valueKey);
+        setValueSheetClosing(false);
+        document.body.classList.add('modal-open');
+    };
+
+    const handleValueSheetClose = () => {
+        setValueSheetClosing(true);
+        setTimeout(() => {
+            setValueSheetOpen(null);
+            setValueSheetClosing(false);
+            document.body.classList.remove('modal-open');
+        }, 280);
+    };
+
+    const handleValueBackdropClick = () => {
+        handleValueSheetClose();
+    };
+
     // Prevent parent scroll when bottom sheet is open - with boundary detection
     useEffect(() => {
         if (!bottomSheetCard) return;
@@ -718,48 +744,49 @@ const About = () => {
                     </div>
                 </RevealOnScroll>
 
-                {/* 4. Journey Timeline - ENHANCED */}
+                {/* 4. Journey Timeline - ENHANCED - Data-driven */}
                 <div className="timeline-container-enhanced">
                     <div className="timeline-line-enhanced"></div>
                     <div className="timeline-wrapper-enhanced">
-                        {[
-                            { year: '2021', title: 'Passion Ignited', quote: 'Found my calling in the art of transformation.' },
-                            { year: '2022', title: 'Professional Training', quote: 'Mastered techniques under Red Fox Academy expertise.' },
-                            { year: '2023', title: 'Freelance Career', quote: 'Built a diverse portfolio across bridal and editorial.' },
-                            { year: '2024', title: 'BBA & Brand Growth', quote: 'Blending artistry with strategic business vision.' }
-                        ].map((item, index) => (
-                            <RevealOnScroll key={index} className="timeline-item">
-                                {index % 2 === 0 ? (
-                                    // ODD items (0, 2) - Content LEFT, Dot CENTER, Quote RIGHT
-                                    <>
-                                        <div className="timeline-content">
-                                            <h4 className="timeline-year">{item.year}</h4>
-                                            <p className="timeline-subtitle">{item.title}</p>
-                                            <p className="timeline-quote timeline-quote-mobile">"{item.quote}"</p>
-                                        </div>
-                                        <div className={`timeline-dot-enhanced ${activeTimelineDots[index] ? 'scroll-active' : ''}`} data-timeline-id={index}></div>
-                                        <p className="timeline-quote">"{item.quote}"</p>
-                                    </>
-                                ) : (
-                                    // EVEN items (1, 3) - Quote LEFT, Dot CENTER, Content RIGHT
-                                    <>
-                                        <p className="timeline-quote">"{item.quote}"</p>
-                                        <div className={`timeline-dot-enhanced ${activeTimelineDots[index] ? 'scroll-active' : ''}`} data-timeline-id={index}></div>
-                                        <div className="timeline-content">
-                                            <h4 className="timeline-year">{item.year}</h4>
-                                            <p className="timeline-subtitle">{item.title}</p>
-                                            <p className="timeline-quote timeline-quote-mobile">"{item.quote}"</p>
-                                        </div>
-                                    </>
-                                )}
-                            </RevealOnScroll>
-                        ))}
+                        {aboutTimelineData.map((item, index) => {
+                            // TASK 1: Progressive opacity - older years fade, newer years prominent
+                            const totalItems = aboutTimelineData.length;
+                            const opacityValue = 0.3 + (index / (totalItems - 1)) * 0.7; // Range: 0.3 to 1.0
+
+                            return (
+                                <RevealOnScroll key={index} className="timeline-item" style={{ opacity: opacityValue }}>
+                                    {index % 2 === 0 ? (
+                                        // EVEN items (0, 2, 4) - Content LEFT, Dot CENTER, Quote RIGHT
+                                        <>
+                                            <div className="timeline-content">
+                                                <h4 className="timeline-year">{item.year}</h4>
+                                                <p className="timeline-subtitle">{item.title}</p>
+                                                <p className="timeline-quote timeline-quote-mobile">"{item.quote}"</p>
+                                            </div>
+                                            <div className={`timeline-dot-enhanced ${activeTimelineDots[index] ? 'scroll-active' : ''}`} data-timeline-id={index}></div>
+                                            <p className="timeline-quote">"{item.quote}"</p>
+                                        </>
+                                    ) : (
+                                        // ODD items (1, 3) - Quote LEFT, Dot CENTER, Content RIGHT
+                                        <>
+                                            <p className="timeline-quote">"{item.quote}"</p>
+                                            <div className={`timeline-dot-enhanced ${activeTimelineDots[index] ? 'scroll-active' : ''}`} data-timeline-id={index}></div>
+                                            <div className="timeline-content">
+                                                <h4 className="timeline-year">{item.year}</h4>
+                                                <p className="timeline-subtitle">{item.title}</p>
+                                                <p className="timeline-quote timeline-quote-mobile">"{item.quote}"</p>
+                                            </div>
+                                        </>
+                                    )}
+                                </RevealOnScroll>
+                            );
+                        })}
                     </div>
                 </div>
 
-                {/* Transition Divider to Values */}
+                {/* TASK 2: Transition Divider to Values - Enhanced visual pause */}
                 <RevealOnScroll>
-                    <div className="about-values-header">
+                    <div className="about-values-header" style={{ marginTop: '4rem' }}>
                         <div className="about-values-divider"></div>
                         <div className="about-values-icon-wrapper">
                             <div className="about-values-icon">💎</div>
@@ -769,21 +796,29 @@ const About = () => {
                     </div>
                 </RevealOnScroll>
 
-                {/* 5. Values & Philosophy - ENHANCED */}
+                {/* 5. Values & Philosophy - ENHANCED - TASK 3: Tap-to-expand */}
                 <RevealOnScroll>
                     <div className="about-values-grid-enhanced">
-                        {[
-                            { title: "Authenticity", icon: "✨", desc: "True to self, honest work" },
-                            { title: "Client Focus", icon: "🤝", desc: "Your vision is my mission" },
-                            { title: "Hygiene", icon: "🧼", desc: "Professional standards always" },
-                            { title: "Growth", icon: "📈", desc: "Learning every single day" }
-                        ].map((value, i) => (
-                            <div key={i} className="about-value-item-enhanced">
-                                <span className="about-value-icon-item">{value.icon}</span>
-                                <h4 className="about-value-title-enhanced">{value.title}</h4>
-                                <p className="about-value-description">{value.desc}</p>
-                            </div>
-                        ))}
+                        <div className="about-value-item-enhanced" onClick={() => handleValueClick('authenticity')}>
+                            <span className="about-value-icon-item">✨</span>
+                            <h4 className="about-value-title-enhanced">Authenticity</h4>
+                            <p className="about-value-description">True to self, honest work</p>
+                        </div>
+                        <div className="about-value-item-enhanced" onClick={() => handleValueClick('client-focus')}>
+                            <span className="about-value-icon-item">🤝</span>
+                            <h4 className="about-value-title-enhanced">Client Focus</h4>
+                            <p className="about-value-description">Your vision is my mission</p>
+                        </div>
+                        <div className="about-value-item-enhanced" onClick={() => handleValueClick('hygiene')}>
+                            <span className="about-value-icon-item">🧼</span>
+                            <h4 className="about-value-title-enhanced">Hygiene</h4>
+                            <p className="about-value-description">Professional standards always</p>
+                        </div>
+                        <div className="about-value-item-enhanced" onClick={() => handleValueClick('growth')}>
+                            <span className="about-value-icon-item">📈</span>
+                            <h4 className="about-value-title-enhanced">Growth</h4>
+                            <p className="about-value-description">Learning every single day</p>
+                        </div>
                     </div>
                 </RevealOnScroll>
 
@@ -896,6 +931,88 @@ const About = () => {
                                 </svg>
                             </div>
                         )}
+                    </div>
+                </>,
+                document.body
+            )}
+
+            {/* TASK 3 & 4: Core Values Bottom Sheet Modal */}
+            {valueSheetOpen && ReactDOM.createPortal(
+                <>
+                    <div
+                        className={`bottom-sheet-backdrop ${valueSheetClosing ? 'closing' : ''}`}
+                        onClick={handleValueBackdropClick}
+                    />
+
+                    <div
+                        ref={valueSheetRef}
+                        className={`bottom-sheet ${valueSheetClosing ? 'closing' : ''}`}
+                    >
+                        <button
+                            className="bottom-sheet-close-button"
+                            onClick={handleValueSheetClose}
+                            aria-label="Close"
+                        >
+                            ✕
+                        </button>
+
+                        <div className="bottom-sheet-handle"></div>
+
+                        <div className="bottom-sheet-content">
+                            {/* TASK 4: Hardcoded content structure */}
+                            {valueSheetOpen === 'authenticity' && (
+                                <>
+                                    <h2 className="bottom-sheet-title">Authenticity</h2>
+                                    <p className="bottom-sheet-subtitle">Being true to myself allows me to bring genuine artistry to every client.</p>
+                                    <div className="bottom-sheet-section">
+                                        <ul style={{ paddingLeft: '1.5rem', margin: '0' }}>
+                                            <li style={{ marginBottom: '0.75rem' }}>I never compromise my creative integrity for trends</li>
+                                            <li style={{ marginBottom: '0.75rem' }}>Honest consultations create trust and lasting relationships</li>
+                                            <li style={{ marginBottom: '0' }}>My work reflects who I am, not what's expected</li>
+                                        </ul>
+                                    </div>
+                                </>
+                            )}
+                            {valueSheetOpen === 'client-focus' && (
+                                <>
+                                    <h2 className="bottom-sheet-title">Client Focus</h2>
+                                    <p className="bottom-sheet-subtitle">Your vision becomes my priority from consultation to final touch.</p>
+                                    <div className="bottom-sheet-section">
+                                        <ul style={{ paddingLeft: '1.5rem', margin: '0' }}>
+                                            <li style={{ marginBottom: '0.75rem' }}>Deep listening sessions before every event</li>
+                                            <li style={{ marginBottom: '0.75rem' }}>Personalized looks that match your personality and occasion</li>
+                                            <li style={{ marginBottom: '0' }}>Flexible adjustments until you feel completely confident</li>
+                                        </ul>
+                                    </div>
+                                </>
+                            )}
+                            {valueSheetOpen === 'hygiene' && (
+                                <>
+                                    <h2 className="bottom-sheet-title">Hygiene</h2>
+                                    <p className="bottom-sheet-subtitle">Professional-grade cleanliness protects your health and elevates your experience.</p>
+                                    <div className="bottom-sheet-section">
+                                        <ul style={{ paddingLeft: '1.5rem', margin: '0' }}>
+                                            <li style={{ marginBottom: '0.75rem' }}>All tools sanitized before and after every session</li>
+                                            <li style={{ marginBottom: '0.75rem' }}>Premium, skin-tested products with expiry tracking</li>
+                                            <li style={{ marginBottom: '0' }}>Clean workspace maintained throughout your appointment</li>
+                                        </ul>
+                                    </div>
+                                </>
+                            )}
+                            {valueSheetOpen === 'growth' && (
+                                <>
+                                    <h2 className="bottom-sheet-title">Growth</h2>
+                                    <p className="bottom-sheet-subtitle">Continuous learning keeps my skills sharp and services innovative.</p>
+                                    <div className="bottom-sheet-section">
+                                        <ul style={{ paddingLeft: '1.5rem', margin: '0' }}>
+                                            <li style={{ marginBottom: '0.75rem' }}>Regular workshops on emerging techniques and products</li>
+                                            <li style={{ marginBottom: '0.75rem' }}>Business strategy education to serve you better</li>
+                                            <li style={{ marginBottom: '0' }}>Feedback integration improves every future session</li>
+                                        </ul>
+                                    </div>
+                                </>
+                            )}
+                        </div>
                     </div>
                 </>,
                 document.body

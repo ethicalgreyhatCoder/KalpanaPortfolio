@@ -39,6 +39,14 @@
     }
 }
 
+/* Timeline Container */
+.timeline-container-enhanced {
+    position: relative;
+    padding: 3rem 0;
+    margin-bottom: 3.5rem;
+    /* TASK 4: Enhanced separation before Core Values */
+}
+
 /* Portrait Container */
 .about-portrait-container {
     position: relative;
@@ -193,6 +201,18 @@
         width: 6rem;
         margin-bottom: 2.5rem;
     }
+}
+
+/* Timeline Item Spacing - TASK 3: Improved vertical rhythm for mobile scan */
+.timeline-item {
+    margin-bottom: 4rem;
+    /* TASK 1: Increased from 3rem for clearer separation */
+    position: relative;
+}
+
+/* Last item no extra margin */
+.timeline-item:last-child {
+    margin-bottom: 0;
 }
 
 /* Quote Mark Icon */
@@ -369,6 +389,17 @@
     font-size: 1.75rem;
     transition: all 0.3s ease-out;
     box-shadow: 0 2px 8px rgba(198, 168, 124, 0.15);
+}
+
+/* TASK 2: Extra breathing space before Core Values header */
+.about-values-header {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 1.5rem;
+    margin: 2.5rem 0 2rem 0;
+    /* Increased top margin for visual separation */
+    padding: 0 2rem;
 }
 
 .about-card:hover .about-card-icon {
