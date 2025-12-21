@@ -31,17 +31,17 @@ export const makeupLooks = [
         media: [
             {
                 type: 'image',
-                src: `${import.meta.env.BASE_URL}portfolio/Makeup/Portfoilo1/rajasthani.jpg`,
+                src: `${import.meta.env.BASE_URL}portfolio/Makeup/Portfoilo1/rajasthani.webp`,
                 alt: 'Front view - Gujarati bridal makeup'
             },
             {
                 type: 'image',
-                src: `${import.meta.env.BASE_URL}Kalpana-About2.webp`,
+                src: `${import.meta.env.BASE_URL}portfolio/Makeup/Portfoilo1/rajasthani-before.webp`,
                 alt: 'Side profile with jewelry'
             },
             {
                 type: 'image',
-                src: `${import.meta.env.BASE_URL}Kalpana-About4.webp`,
+                src: `${import.meta.env.BASE_URL}portfolio/Makeup/Portfoilo1/rajasthani-after.webp`,
                 alt: 'Eye makeup detail'
             },
             {
@@ -52,16 +52,16 @@ export const makeupLooks = [
                 loop: true
             }
         ],
-        thumbnail: 'https://images.unsplash.com/photo-1515886657613-9f3515b0c78f?w=300&h=375&fit=crop&q=80',
+        thumbnail: `${import.meta.env.BASE_URL}portfolio/Makeup/Portfoilo1/rajasthani.webp`,
         // Backward compatibility - deprecated but maintained
         image: 'https://images.unsplash.com/photo-1515886657613-9f3515b0c78f?w=500&h=625&fit=crop&q=80',
-        thumbnailImage: 'https://images.unsplash.com/photo-1515886657613-9f3515b0c78f?w=300&h=375&fit=crop&q=80',
+        thumbnailImage: `${import.meta.env.BASE_URL}portfolio/Makeup/Portfoilo1/rajasthani.webp`,
         skinType: 'Combination',
         occasion: 'Wedding',
         colorPalette: ['#D4A574', '#C08B7F', '#E8C4A0', '#8B4513'],
         colorNames: ['Warm Sand', 'Rose Blush', 'Champagne', 'Bronze'],
-        modelName: 'Aishwarya Patel',
-        modelInstagram: 'https://instagram.com/aishwarya.patel',
+        modelName: 'Ms. Disha',
+        modelInstagram: 'https://www.instagram.com/ms._dishuu/',
         productsUsed: [
             { name: 'HD Foundation', brand: 'MAC', shade: 'NC30' },
             { name: 'Contour Kit', brand: 'Anastasia Beverly Hills' },
@@ -69,13 +69,13 @@ export const makeupLooks = [
         ],
         testimonial: {
             text: 'The makeup was absolutely stunning! Kalpana really understood my vision and brought my dream bridal look to life.',
-            author: 'Aishwarya',
+            author: 'Ms. Disha',
             role: 'Bride',
             fadeOnScroll: true
         },
         caseStudy: {
-            title: 'Gujarati Bridal Look Case Study',
-            content: 'Client has combination skin with oily T-zone. Used airbrush foundation for longevity and matte finish. Chose warm-toned colors to complement traditional attire.'
+            title: 'Rajasthani Bridal Look Case Study',
+            content: 'Client has combination skin with oily T-zone and a lots of dark circle. Used airbrush foundation for longevity and matte finish. Chose warm-toned colors to complement traditional attire.'
         }
     },
     {
