@@ -24,9 +24,36 @@ export const makeupLooks = [
     {
         id: 'makeup-1',
         type: 'makeup',
-        title: 'Gujarati Bridal Elegance',
+        title: 'Rajasthani Bridal Elegance',
         category: 'Bridal',
-        region: 'gujarati',
+        region: 'Rajasthani',
+        // Multi-media support: images and videos
+        media: [
+            {
+                type: 'image',
+                src: `${import.meta.env.BASE_URL}portfolio/Makeup/Portfoilo1/rajasthani.jpg`,
+                alt: 'Front view - Gujarati bridal makeup'
+            },
+            {
+                type: 'image',
+                src: `${import.meta.env.BASE_URL}Kalpana-About2.webp`,
+                alt: 'Side profile with jewelry'
+            },
+            {
+                type: 'image',
+                src: `${import.meta.env.BASE_URL}Kalpana-About4.webp`,
+                alt: 'Eye makeup detail'
+            },
+            {
+                type: 'video',
+                src: 'https://commondatastorage.googleapis.com/gtv-videos-bucket/sample/ForBiggerBlazes.mp4',
+                autoplay: true,
+                muted: true,
+                loop: true
+            }
+        ],
+        thumbnail: 'https://images.unsplash.com/photo-1515886657613-9f3515b0c78f?w=300&h=375&fit=crop&q=80',
+        // Backward compatibility - deprecated but maintained
         image: 'https://images.unsplash.com/photo-1515886657613-9f3515b0c78f?w=500&h=625&fit=crop&q=80',
         thumbnailImage: 'https://images.unsplash.com/photo-1515886657613-9f3515b0c78f?w=300&h=375&fit=crop&q=80',
         skinType: 'Combination',
@@ -42,7 +69,7 @@ export const makeupLooks = [
         ],
         testimonial: {
             text: 'The makeup was absolutely stunning! Kalpana really understood my vision and brought my dream bridal look to life.',
-                   author: 'Aishwarya',
+            author: 'Aishwarya',
             role: 'Bride',
             fadeOnScroll: true
         },
@@ -87,6 +114,24 @@ export const makeupLooks = [
         title: 'Editorial High Fashion',
         category: 'Editorial',
         region: 'marathi',
+        media: [
+            {
+                type: 'image',
+                src: 'https://images.unsplash.com/photo-1494883334519-3a2ca2dccb17?w=800&h=1000&fit=crop&q=80',
+                alt: 'Editorial high fashion look'
+            },
+            {
+                type: 'image',
+                src: 'https://images.unsplash.com/photo-1532746622601-72c8c540206d?w=800&h=1000&fit=crop&q=80',
+                alt: 'Dramatic lighting shot'
+            },
+            {
+                type: 'image',
+                src: 'https://images.unsplash.com/photo-1522337360788-8b13dee7a37e?w=800&h=1000&fit=crop&q=80',
+                alt: 'Close-up details'
+            }
+        ],
+        thumbnail: 'https://images.unsplash.com/photo-1494883334519-3a2ca2dccb17?w=300&h=375&fit=crop&q=80',
         image: 'https://images.unsplash.com/photo-1494883334519-3a2ca2dccb17?w=500&h=625&fit=crop&q=80',
         thumbnailImage: 'https://images.unsplash.com/photo-1494883334519-3a2ca2dccb17?w=300&h=375&fit=crop&q=80',
         skinType: 'Normal',
@@ -208,6 +253,19 @@ export const hairStyles = [
         title: 'Bridal Updo with Florals',
         category: 'Bridal',
         region: 'gujarati',
+        media: [
+            {
+                type: 'image',
+                src: 'https://images.unsplash.com/photo-1522337360788-8b13dee7a37e?w=800&h=1000&fit=crop&q=80',
+                alt: 'Bridal updo front view'
+            },
+            {
+                type: 'image',
+                src: 'https://images.unsplash.com/photo-1519699047748-de8e457a634e?w=800&h=1000&fit=crop&q=80',
+                alt: 'Side profile with florals'
+            }
+        ],
+        thumbnail: 'https://images.unsplash.com/photo-1522337360788-8b13dee7a37e?w=300&h=375&fit=crop&q=80',
         image: 'https://images.unsplash.com/photo-1522337360788-8b13dee7a37e?w=500&h=625&fit=crop&q=80',
         thumbnailImage: 'https://images.unsplash.com/photo-1522337360788-8b13dee7a37e?w=300&h=375&fit=crop&q=80',
         hairType: 'Medium-thick, wavy',
@@ -476,7 +534,7 @@ export const categories = [
 // ===== HELPER FUNCTIONS =====
 
 /**
- * Get items filtered by category, filter, and region
+ * Get items filtered by category, filter, and region.
  * Region filter is independent - if selected, it overrides other filters
  */
 export const getFilteredItems = (categoryId, filterName, regionId) => {

@@ -179,7 +179,7 @@
 @media (min-width: 768px) {
     .timeline-line-enhanced {
         left: 50%;
-        width: 1.5px;
+        width: 2px;
     }
 }
 
@@ -287,17 +287,12 @@
         transform: translateX(-50%);
         width: 1rem;
         height: 1rem;
-        border: 2.5px solid #FAF9F6;
+        border: 3px solid #FAF9F6;
     }
 
     .timeline-dot-enhanced.scroll-active {
-        box-shadow: 0 0 16px rgba(183, 110, 121, 0.6), 0 0 0 2.5px #FAF9F6;
+        box-shadow: 0 0 16px rgba(183, 110, 121, 0.6), 0 0 0 3px #FAF9F6;
     }
-}
-
-/* Timeline Content */
-.timeline-content {
-    flex: 1;
 }
 
 @media (min-width: 768px) {
@@ -422,7 +417,7 @@
     height: 2.5rem;
     border-radius: 50%;
     background: linear-gradient(135deg, rgba(183, 110, 121, 0.15), rgba(198, 168, 124, 0.1));
-    border: 1.5px solid rgba(183, 110, 121, 0.25);
+    border: 2px solid rgba(183, 110, 121, 0.25);
     display: flex;
     align-items: center;
     justify-content: center;
@@ -475,11 +470,11 @@
 
 /* Value Item - TASKS 1, 2, 3: Editorial floating statement feel */
 .about-value-item-enhanced {
-    padding: 1.5rem 1rem;
+    padding: 1rem 1rem;
     /* TASK 1: Border-only with ultra-soft background */
     background: rgba(255, 255, 255, 0.04);
     /* Barely visible */
-    backdrop-filter: none;
+    backdrop-filter: blur(3px);
     /* Removed blur for subtlety */
     border-radius: 0.5rem;
     border: 1px solid rgba(183, 110, 121, 0.06);
@@ -710,7 +705,7 @@
     font-weight: 600;
     text-transform: uppercase;
     letter-spacing: 0.09em;
-    border: 1.5px solid var(--theme-highlight);
+    border: 2px solid var(--theme-highlight);
     border-radius: 9999px;
     font-size: 0.7rem;
     cursor: pointer;

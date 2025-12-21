@@ -33,7 +33,7 @@ const AudioController = () => {
      * Check for reduced motion preference
      */
     useEffect(() => {
-        const mediaQuery = window.matchMedia('(prefers-reduced-motion: reduce)');
+        const mediaQuery = globalThis.matchMedia('(prefers-reduced-motion: reduce)');
         setPrefersReducedMotion(mediaQuery.matches);
 
         const handleChange = (e) => setPrefersReducedMotion(e.matches);
@@ -58,7 +58,7 @@ const AudioController = () => {
                 // This gives user time to see content before button appears
                 setTimeout(() => {
                     setIsVisible(true);
-                }, 1500); // 1.5 second delay after first scroll
+                }, 1500); // 1.5-second delay after first scroll
 
                 // Remove listener after first trigger
                 window.removeEventListener('scroll', handleScroll);

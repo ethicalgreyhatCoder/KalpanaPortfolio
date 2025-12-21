@@ -1,7 +1,7 @@
 import React, { useState, useRef, useEffect } from 'react';
 import ReactDOM from 'react-dom';
 import RevealOnScroll from './RevealOnScroll';
-import { modalContent } from './aboutModalContent';
+import { modalContent } from '../data/aboutModalContent.js';
 import { aboutTimelineData } from '../data/aboutTimelineData';
 import { coreValuesData } from '../data/coreValuesData';
 import './About.css';
@@ -750,12 +750,8 @@ const About = () => {
                     <div className="timeline-line-enhanced"></div>
                     <div className="timeline-wrapper-enhanced">
                         {aboutTimelineData.map((item, index) => {
-                            // TASK 1: Progressive opacity - older years fade, newer years prominent
-                            const totalItems = aboutTimelineData.length;
-                            const opacityValue = 0.3 + (index / (totalItems - 1)) * 0.7; // Range: 0.3 to 1.0
-
                             return (
-                                <RevealOnScroll key={index} className="timeline-item" style={{ opacity: opacityValue }}>
+                                <RevealOnScroll key={index} className="timeline-item" style={{ opacity: item.opacity }}>
                                     {index % 2 === 0 ? (
                                         // EVEN items (0, 2, 4) - Content LEFT, Dot CENTER, Quote RIGHT
                                         <>

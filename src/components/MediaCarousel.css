@@ -1,0 +1,297 @@
+/* ===================================
+   MEDIA CAROUSEL - LUXURY AESTHETIC
+   Embla-powered swipeable gallery
+   ================================= */
+
+.media-carousel {
+    position: relative;
+    width: 100%;
+    height: 100%;
+}
+
+/* ===== EMBLA CORE ===== */
+.embla {
+    overflow: hidden;
+    width: 100%;
+    /* REQUIRED - without this, embla sizes to content */
+    height: 100%;
+    /* Allow vertical scroll, enable horizontal drag */
+    touch-action: pan-y;
+    /* Embla must receive all pointer events */
+    pointer-events: auto;
+    position: relative;
+    z-index: 1;
+    transition: filter 0.4s ease;
+}
+
+.media-carousel.blurred .embla {
+    filter: blur(8px) brightness(0.6);
+}
+
+.embla__container {
+    display: flex;
+    width: 100%;
+    /* REQUIRED - full width for Embla calculations */
+    height: 100%;
+    /* Let .embla handle touch-action, don't override here */
+}
+
+.embla__slide {
+    flex: 0 0 100%;
+    /* REQUIRED - each slide is exactly 100% of container */
+    min-width: 100%;
+    /* REQUIRED - ensures slide doesn't shrink */
+    position: relative;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background: var(--bg-primary, #0a0a0a);
+    /* Slides must not capture pointer events */
+    pointer-events: none;
+}
+
+/* ===== CAROUSEL MEDIA ===== */
+.carousel-image,
+.carousel-video {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    object-position: center top;
+    display: block;
+    /* CRITICAL: Disable pointer events so Embla can capture drag gestures */
+    pointer-events: none;
+    /* Prevent user interaction that blocks swiping */
+    user-select: none;
+    -webkit-user-select: none;
+    /* Prevent iOS context menu on long press */
+    -webkit-touch-callout: none;
+}
+
+.carousel-video {
+    background: #000;
+}
+
+/* Prevent layout shift */
+.carousel-image {
+    aspect-ratio: 4 / 5;
+}
+
+/* ===== FINAL POLISH - PAGINATION DOTS ===== */
+.embla__dots {
+    position: absolute;
+    bottom: 1rem;
+    left: 50%;
+    transform: translateX(-50%);
+    display: flex;
+    gap: 0.5rem;
+    z-index: 10;
+    padding: 0.5rem 1rem;
+    background: rgba(10, 10, 10, 0.32);
+    /* Further reduced */
+    backdrop-filter: blur(14px);
+    /* Slightly stronger */
+    -webkit-backdrop-filter: blur(14px);
+    border-radius: 20px;
+}
+
+/* Inactive dots - smaller, quieter */
+.embla__dot {
+    width: 5px;
+    /* Further reduced from 6px */
+    height: 5px;
+    border-radius: 50%;
+    border: none;
+    background: rgba(255, 255, 255, 0.25);
+    /* Further reduced from 0.3 */
+    cursor: pointer;
+    padding: 0;
+    transition: all 0.25s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.embla__dot:hover {
+    background: rgba(255, 255, 255, 0.45);
+    transform: scale(1.15);
+}
+
+/* Active dot - marginally brighter, slightly elongated */
+.embla__dot--selected {
+    background: rgba(255, 255, 255, 1);
+    /* Full brightness */
+    width: 22px;
+    /* Slightly more elongated from 20px */
+    height: 5px;
+    border-radius: 2.5px;
+}
+
+.embla__dot:focus-visible {
+    outline: 2px solid var(--theme-accent, #f5a572);
+    outline-offset: 2px;
+}
+
+/* ===== SWIPE HINT ===== */
+.swipe-hint {
+    position: absolute;
+    bottom: 5rem;
+    right: 1.5rem;
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    padding: 0.5rem 1rem;
+    background: rgba(10, 10, 10, 0.7);
+    backdrop-filter: blur(10px);
+    -webkit-backdrop-filter: blur(10px);
+    border-radius: 20px;
+    color: rgba(255, 255, 255, 0.8);
+    font-size: 0.875rem;
+    font-weight: 500;
+    z-index: 10;
+    pointer-events: none;
+    animation: swipeHint 2s ease-in-out infinite;
+}
+
+@keyframes swipeHint {
+
+    0%,
+    100% {
+        opacity: 1;
+        transform: translateX(0);
+    }
+
+    50% {
+        opacity: 0.6;
+        transform: translateX(4px);
+    }
+}
+
+.swipe-hint svg {
+    width: 20px;
+    height: 20px;
+}
+
+/* ===== EMPTY STATE ===== */
+.media-carousel-empty {
+    width: 100%;
+    height: 400px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background: rgba(255, 255, 255, 0.05);
+    border-radius: 8px;
+    color: rgba(255, 255, 255, 0.5);
+    font-size: 0.875rem;
+}
+
+/* ===== ACCESSIBILITY ===== */
+.sr-only {
+    position: absolute;
+    width: 1px;
+    height: 1px;
+    padding: 0;
+    margin: -1px;
+    overflow: hidden;
+    clip: rect(0, 0, 0, 0);
+    white-space: nowrap;
+    border-width: 0;
+}
+
+/* ===== RESPONSIVE ===== */
+@media (max-width: 768px) {
+    .embla__dots {
+        bottom: 1rem;
+        gap: 0.375rem;
+    }
+
+    .swipe-hint {
+        bottom: 4rem;
+        right: 1rem;
+        font-size: 0.75rem;
+        padding: 0.375rem 0.75rem;
+    }
+
+    .swipe-hint svg {
+        width: 16px;
+        height: 16px;
+    }
+}
+
+/* ===== PREFERS REDUCED MOTION ===== */
+@media (prefers-reduced-motion: reduce) {
+
+    .embla__dot,
+    .carousel-image,
+    .carousel-video {
+        transition: none;
+    }
+
+    .swipe-hint {
+        animation: none;
+    }
+
+    .embla__dot:hover {
+        transform: none;
+    }
+}/* ===== NAVIGATION ARROWS ===== */
+.embla__arrow {
+    position: absolute;
+    top: 0;
+    bottom: 0;
+    width: 60px;
+    /* Clickable area */
+    background: transparent;
+    border: none;
+    cursor: pointer;
+    z-index: 10;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: all 0.3s ease;
+    -webkit-tap-highlight-color: transparent;
+    /* Allow pointer events for clicking */
+    pointer-events: auto;
+}
+
+.embla__arrow--prev {
+    left: 0;
+    background: linear-gradient(to right, rgba(0, 0, 0, 0.3) 0%, transparent 100%);
+}
+
+.embla__arrow--next {
+    right: 0;
+    background: linear-gradient(to left, rgba(0, 0, 0, 0.3) 0%, transparent 100%);
+}
+
+.embla__arrow svg {
+    color: white;
+    filter: drop-shadow(0 2px 4px rgba(0, 0, 0, 0.5));
+    transition: transform 0.2s ease;
+}
+
+.embla__arrow:hover:not(:disabled) {
+    background: linear-gradient(to right, rgba(0, 0, 0, 0.5) 0%, transparent 100%);
+}
+
+.embla__arrow--next:hover:not(:disabled) {
+    background: linear-gradient(to left, rgba(0, 0, 0, 0.5) 0%, transparent 100%);
+}
+
+.embla__arrow:hover:not(:disabled) svg {
+    transform: scale(1.2);
+}
+
+.embla__arrow:active:not(:disabled) svg {
+    transform: scale(0.9);
+}
+
+.embla__arrow--disabled {
+    opacity: 0;
+    pointer-events: none;
+    cursor: default;
+}
+
+@media (prefers-reduced-motion: reduce) {
+
+    .embla__arrow,
+    .embla__arrow svg {
+        transition: none;
+    }
+}

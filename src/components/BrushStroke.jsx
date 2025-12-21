@@ -5,21 +5,29 @@ const BrushStroke = ({ color, colorName, index }) => {
     const [useAsset, setUseAsset] = useState(false);
     const [assetLoaded, setAssetLoaded] = useState(false);
 
-    // Check if brush stroke asset exists
+    // Check if brush stroke asset exists using color name
     useEffect(() => {
+        if (!colorName) {
+            setAssetLoaded(true);
+            return;
+        }
+
         const img = new Image();
-        img.src = `/assets/brush-stroke-${index + 1}.png`;
+        // Use color name for file path in brush-stroke subfolder
+        img.src = `/assets/brush-stroke/${colorName}.png`;
 
         img.onload = () => {
+            console.log(`✓ Brush stroke asset found: ${colorName}.png`);
             setUseAsset(true);
             setAssetLoaded(true);
         };
 
         img.onerror = () => {
+            console.log(`✗ Brush stroke asset not found: ${colorName}.png - using SVG fallback`);
             setUseAsset(false);
             setAssetLoaded(true);
         };
-    }, [index]);
+    }, [colorName]);
 
     // Render image-based brush stroke if available
     if (useAsset && assetLoaded) {
@@ -27,10 +35,9 @@ const BrushStroke = ({ color, colorName, index }) => {
             <div className="brush-stroke-wrapper" style={{ '--brush-color': color }}>
                 <div className="brush-stroke-image-container">
                     <img
-                        src={`/assets/brush-stroke-${index + 1}.png`}
+                        src={`/assets/brush-stroke/${colorName}.png`}
                         alt={colorName}
                         className="brush-stroke-asset"
-                        style={{ filter: `hue-rotate(${index * 30}deg)` }}
                     />
                     <span className="brush-color-name">{colorName}</span>
                 </div>

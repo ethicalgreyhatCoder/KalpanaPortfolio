@@ -350,7 +350,7 @@
 
 /* Prioritize "The Artist" card - first child */
 .about-card:first-child {
-    border: 2.5px solid rgba(183, 110, 121, 0.35);
+    border: 3px solid rgba(183, 110, 121, 0.35);
     background: linear-gradient(135deg, rgba(245, 230, 211, 0.25) 0%, rgba(250, 249, 246, 0.15) 100%);
     box-shadow: 0 8px 20px rgba(183, 110, 121, 0.1);
 }
@@ -447,9 +447,8 @@
 }
 
 .about-card-list li {
-    padding: 0.4rem 0;
     /* Reduced from 0.5rem - tighter spacing */
-    padding-left: 1.5rem;
+    padding: 0.4rem 0 0.4rem 1.5rem;
     /* Indent for bullets */
     position: relative;
     font-size: 0.95rem;
@@ -776,7 +775,6 @@
         left: 0 !important;
         right: 0 !important;
         width: 100vw;
-        /*min-height: auto;*/
         /* Point 3: Let content determine height */
         max-height: 80%;
         /* Point 3: Content-aware with safe area */

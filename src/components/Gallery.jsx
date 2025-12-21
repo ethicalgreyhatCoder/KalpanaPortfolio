@@ -7,6 +7,7 @@ import {
     getFiltersForCategory
 } from '../data/portfolioData';
 import BrushStroke from './BrushStroke';
+import MediaCarousel from './MediaCarousel';
 import './Portfolio.css';
 import './NetflixModal.css';
 
@@ -174,6 +175,9 @@ const Gallery = () => {
 
     // Handle item click
     const handleItemClick = (item) => {
+        // CRITICAL FIX: Save scroll position before opening modal
+        const scrollY = window.scrollY;
+
         setSelectedItem(item);
         setIsCaseStudyOpen(false);
         setScrollPhase({
@@ -183,6 +187,11 @@ const Gallery = () => {
             caseStudyOpacity: 0
         });
         document.body.classList.add('modal-open');
+
+        // Restore scroll position after brief delay to prevent page jump
+        requestAnimationFrame(() => {
+            window.scrollTo(0, scrollY);
+        });
     };
 
     // Handle case study close
@@ -455,50 +464,58 @@ const Gallery = () => {
                     </div>
                 </div>
 
-                {/* Portfolio Grid - 2 Columns Mobile */}
-                <div className="portfolio-grid">
-                    {displayData.length > 0 ? (
-                        displayData.map((item) => (
-                            <div
-                                key={item.id}
-                                className="portfolio-card"
-                                onClick={(e) => {
-                                    e.stopPropagation();
-                                    handleItemClick(item);
-                                }}
-                                role="button"
-                                tabIndex={0}
-                                onKeyDown={(e) => {
-                                    if (e.key === 'Enter' || e.key === ' ') {
+                {/* Portfolio Grid - Scrollable Container with Fixed Height */}
+                <div className="portfolio-grid-scroll-container">
+                    <div className="portfolio-grid">
+                        {displayData.length > 0 ? (
+                            displayData.map((item) => (
+                                <div
+                                    key={item.id}
+                                    className="portfolio-card"
+                                    onClick={(e) => {
                                         e.stopPropagation();
                                         handleItemClick(item);
-                                    }
-                                }}
-                            >
-                                {/* Card Image */}
-                                <div className="card-image-container">
-                                    <img
-                                        src={item.thumbnailImage || item.image}
-                                        alt={item.title}
-                                        className="card-image"
-                                        loading="eager"
-                                        fetchPriority="high"
-                                    />
-                                    <div className="card-overlay"></div>
+                                    }}
+                                    role="button"
+                                    tabIndex={0}
+                                    onKeyDown={(e) => {
+                                        if (e.key === 'Enter' || e.key === ' ') {
+                                            e.stopPropagation();
+                                            handleItemClick(item);
+                                        }
+                                    }}
+                                >
+                                    {/* Card Image */}
+                                    <div className="card-image-container">
+                                        <img
+                                            src={item.thumbnail || (item.media && item.media[0]?.src) || item.thumbnailImage || item.image}
+                                            alt={item.title}
+                                            className="card-image"
+                                            loading="eager"
+                                            fetchPriority="high"
+                                        />
+                                        {/* Multi-stop gradient overlay */}
+                                        <div className="card-gradient-overlay"></div>
+                                        {/* Blur overlay - only in text area */}
+                                        <div className="card-blur-overlay"></div>
+                                        {/* Card Content with Enhanced Typography */}
+                                        <div className="portfolio-card-content">
+                                            {/* Optional Category Badge */}
+                                            <span className="portfolio-category-badge">{item.category}</span>
+                                            <h3 className="portfolio-card-title">{item.title}</h3>
+                                            <p className="portfolio-card-meta">{renderMetadata(item)}</p>
+                                        </div>
+                                    </div>
                                 </div>
-
-                                {/* Card Content */}
-                                <div className="card-content">
-                                    <h3 className="card-title">{item.title}</h3>
-                                    <p className="card-meta">{renderMetadata(item)}</p>
-                                </div>
+                            ))
+                        ) : (
+                            <div className="no-results">
+                                <p>No items found for this selection.</p>
                             </div>
-                        ))
-                    ) : (
-                        <div className="no-results">
-                            <p>No items found for this selection.</p>
-                        </div>
-                    )}
+                        )}
+                    </div>
+                    {/* Bottom Fade Cue */}
+                    <div className="grid-bottom-fade" aria-hidden="true"></div>
                 </div>
             </div>
 
@@ -513,13 +530,22 @@ const Gallery = () => {
                         onClick={e => e.stopPropagation()}
                         ref={modalScrollRef}
                     >
-                        {/* Hero Image Section with Netflix Fade */}
+                        {/* Hero Media Section with MediaCarousel */}
                         <div className="modal-hero-image-container">
-                            <img
-                                src={selectedItem.image}
-                                alt={selectedItem.title}
-                                className={`modal-hero-image ${isCaseStudyOpen ? 'blurred' : ''}`}
-                            />
+                            {/* Multi-Media Carousel */}
+                            {selectedItem.media && selectedItem.media.length > 0 ? (
+                                <MediaCarousel
+                                    media={selectedItem.media}
+                                    className={isCaseStudyOpen ? 'blurred' : ''}
+                                />
+                            ) : (
+                                /* Fallback to legacy single image */
+                                <img
+                                    src={selectedItem.image}
+                                    alt={selectedItem.title}
+                                    className={`modal-hero-image ${isCaseStudyOpen ? 'blurred' : ''}`}
+                                />
+                            )}
 
                             {/* Netflix-style gradient fade to content */}
                             <div className="hero-gradient-fade"></div>
@@ -533,37 +559,27 @@ const Gallery = () => {
                                 ✕
                             </button>
 
-                            {/* Testimonial Caption Overlay - fades on scroll */}
+                            {/* LAYER 1: Gradient + Blur (Background Effect Only - NO TEXT) */}
+                            {!isCaseStudyOpen && selectedItem.testimonial && (
+                                <div className="testimonial-blur-layer" aria-hidden="true"></div>
+                            )}
+
+                            {/* LAYER 2: Text Content (Foreground - NO BLUR) */}
                             {!isCaseStudyOpen && selectedItem.testimonial && (
                                 <div
-                                    className="testimonial-quote-netflix"
+                                    className="testimonial-text-layer"
                                     style={{
                                         opacity: scrollPhase.testimonialOpacity,
                                         pointerEvents: scrollPhase.testimonialOpacity < 0.1 ? 'none' : 'auto'
                                     }}
                                 >
                                     <svg className="quote-mark" width="32" height="32" viewBox="0 0 24 24" fill="none">
-                                        <path d="M6 17h3l2-4V7H5v6h3zm8 0h3l2-4V7h-6v6h3z" fill="currentColor" opacity="0.5"/>
+                                        <path d="M6 17h3l2-4V7H5v6h3zm8 0h3l2-4V7h-6v6h3z" fill="currentColor" opacity="0.5" />
                                     </svg>
                                     <p className="quote-text">{selectedItem.testimonial.text}</p>
                                     <span className="quote-author">— {selectedItem.testimonial.author}</span>
                                 </div>
                             )}
-
-                            {/* Scroll Affordance Arrow */}
-                            <button
-                                className="scroll-affordance-arrow"
-                                onClick={handleScrollToBottom}
-                                aria-label="Scroll to bottom"
-                                style={{
-                                    opacity: scrollPhase.testimonialOpacity > 0.5 ? 1 : 0,
-                                    pointerEvents: scrollPhase.testimonialOpacity > 0.5 ? 'auto' : 'none'
-                                }}
-                            >
-                                <svg width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round">
-                                    <polyline points="6 9 12 15 18 9"></polyline>
-                                </svg>
-                            </button>
                         </div>
 
                         {/* Floating Instagram Icon at intersection */}
@@ -576,7 +592,7 @@ const Gallery = () => {
                                 aria-label={`Follow ${selectedItem.modelName} on Instagram`}
                             >
                                 <svg width="24" height="24" viewBox="0 0 24 24" fill="currentColor">
-                                    <path d="M12 2.163c3.204 0 3.584.012 4.85.07 3.252.148 4.771 1.691 4.919 4.919.058 1.265.069 1.645.069 4.849 0 3.205-.012 3.584-.069 4.849-.149 3.225-1.664 4.771-4.919 4.919-1.266.058-1.644.07-4.85.07-3.204 0-3.584-.012-4.849-.07-3.26-.149-4.771-1.699-4.919-4.92-.058-1.265-.07-1.644-.07-4.849 0-3.204.013-3.583.07-4.849.149-3.227 1.664-4.771 4.919-4.919 1.266-.057 1.645-.069 4.849-.069zm0-2.163c-3.259 0-3.667.014-4.947.072-4.358.2-6.78 2.618-6.98 6.98-.059 1.281-.073 1.689-.073 4.948 0 3.259.014 3.668.072 4.948.2 4.358 2.618 6.78 6.98 6.98 1.281.058 1.689.072 4.948.072 3.259 0 3.668-.014 4.948-.072 4.354-.2 6.782-2.618 6.979-6.98.059-1.28.073-1.689.073-4.948 0-3.259-.014-3.667-.072-4.947-.196-4.354-2.617-6.78-6.979-6.98-1.281-.059-1.69-.073-4.949-.073zm0 5.838c-3.403 0-6.162 2.759-6.162 6.162s2.759 6.163 6.162 6.163 6.162-2.759 6.162-6.163c0-3.403-2.759-6.162-6.162-6.162zm0 10.162c-2.209 0-4-1.79-4-4 0-2.209 1.791-4 4-4s4 1.791 4 4c0 2.21-1.791 4-4 4zm6.406-11.845c-.796 0-1.441.645-1.441 1.44s.645 1.44 1.441 1.44c.795 0 1.439-.645 1.439-1.44s-.644-1.44-1.439-1.44z"/>
+                                    <path d="M12 2.163c3.204 0 3.584.012 4.85.07 3.252.148 4.771 1.691 4.919 4.919.058 1.265.069 1.645.069 4.849 0 3.205-.012 3.584-.069 4.849-.149 3.225-1.664 4.771-4.919 4.919-1.266.058-1.644.07-4.85.07-3.204 0-3.584-.012-4.849-.07-3.26-.149-4.771-1.699-4.919-4.92-.058-1.265-.07-1.644-.07-4.849 0-3.204.013-3.583.07-4.849.149-3.227 1.664-4.771 4.919-4.919 1.266-.057 1.645-.069 4.849-.069zm0-2.163c-3.259 0-3.667.014-4.947.072-4.358.2-6.78 2.618-6.98 6.98-.059 1.281-.073 1.689-.073 4.948 0 3.259.014 3.668.072 4.948.2 4.358 2.618 6.78 6.98 6.98 1.281.058 1.689.072 4.948.072 3.259 0 3.668-.014 4.948-.072 4.354-.2 6.782-2.618 6.979-6.98.059-1.28.073-1.689.073-4.948 0-3.259-.014-3.667-.072-4.947-.196-4.354-2.617-6.78-6.979-6.98-1.281-.059-1.69-.073-4.949-.073zm0 5.838c-3.403 0-6.162 2.759-6.162 6.162s2.759 6.163 6.162 6.163 6.162-2.759 6.162-6.163c0-3.403-2.759-6.162-6.162-6.162zm0 10.162c-2.209 0-4-1.79-4-4 0-2.209 1.791-4 4-4s4 1.791 4 4c0 2.21-1.791 4-4 4zm6.406-11.845c-.796 0-1.441.645-1.441 1.44s.645 1.44 1.441 1.44c.795 0 1.439-.645 1.439-1.44s-.644-1.44-1.439-1.44z" />
                                 </svg>
                             </a>
                         )}
@@ -729,79 +745,86 @@ const Gallery = () => {
 
                     </div>
                 </div>
-            )}
+            )
+            }
 
             {/* Case Study Backdrop Overlay - Outside modal for proper z-index */}
-            {selectedItem && isCaseStudyOpen && (
-                <div
-                    className="case-study-backdrop"
-                    onClick={handleCloseCaseStudy}
-                />
-            )}
+            {
+                selectedItem && isCaseStudyOpen && (
+                    <div
+                        className="case-study-backdrop"
+                        onClick={handleCloseCaseStudy}
+                    />
+                )
+            }
 
             {/* Bottom Sheet Case Study Modal - Outside modal for proper position:fixed */}
-            {selectedItem && (
-                <div
-                    className={`case-study-bottom-sheet ${isCaseStudyOpen ? 'open' : ''}`}
-                    onClick={(e) => e.stopPropagation()}
-                >
-                    <div className="sheet-scrollable-content">
-                        {selectedItem.caseStudy && (
-                            <>
-                                <h3 className="case-study-heading">{selectedItem.caseStudy.title}</h3>
-                                <div className="case-study-body">
-                                    <p className="case-study-text-netflix">{selectedItem.caseStudy.content}</p>
-                                    {selectedItem.skinType && (
-                                        <div className="case-study-detail">
-                                            <strong>Skin Type:</strong> {selectedItem.skinType}
-                                        </div>
-                                    )}
-                                    {selectedItem.occasion && (
-                                        <div className="case-study-detail">
-                                            <strong>Occasion:</strong> {selectedItem.occasion}
-                                        </div>
-                                    )}
-                                </div>
-                            </>
-                        )}
-                        <button
-                            className="sheet-close-button"
-                            onClick={handleCloseCaseStudy}
-                        >
-                            Close
-                        </button>
+            {
+                selectedItem && (
+                    <div
+                        className={`case-study-bottom-sheet ${isCaseStudyOpen ? 'open' : ''}`}
+                        onClick={(e) => e.stopPropagation()}
+                    >
+                        <div className="sheet-scrollable-content">
+                            {selectedItem.caseStudy && (
+                                <>
+                                    <h3 className="case-study-heading">{selectedItem.caseStudy.title}</h3>
+                                    <div className="case-study-body">
+                                        <p className="case-study-text-netflix">{selectedItem.caseStudy.content}</p>
+                                        {selectedItem.skinType && (
+                                            <div className="case-study-detail">
+                                                <strong>Skin Type:</strong> {selectedItem.skinType}
+                                            </div>
+                                        )}
+                                        {selectedItem.occasion && (
+                                            <div className="case-study-detail">
+                                                <strong>Occasion:</strong> {selectedItem.occasion}
+                                            </div>
+                                        )}
+                                    </div>
+                                </>
+                            )}
+                            <button
+                                className="sheet-close-button"
+                                onClick={handleCloseCaseStudy}
+                            >
+                                Close
+                            </button>
+                        </div>
                     </div>
-                </div>
-            )}
+                )
+            }
 
             {/* Region Dropdown Portal - Renders outside scroll container */}
-            {isRegionDropdownOpen && activeCategory === 'makeup' && ReactDOM.createPortal(
-                <div
-                    className="region-dropdown-portal"
-                    style={{
-                        position: 'fixed',
-                        top: `${dropdownPosition.top}px`,
-                        left: `${dropdownPosition.left}px`,
-                        zIndex: 9999,
-                        maxWidth: 'calc(100vw - 2rem)',
-                        right: 'auto'
-                    }}
-                >
-                    <div className="region-dropdown-menu-inline">
-                        {regions.map(region => (
-                            <button
-                                key={region.id}
-                                className={`region-option ${activeRegion === region.id ? 'active' : ''}`}
-                                onClick={() => handleRegionChange(region.id)}
-                            >
-                                {region.label}
-                            </button>
-                        ))}
-                    </div>
-                </div>,
-                document.body
-            )}
-        </section>
+            {
+                isRegionDropdownOpen && activeCategory === 'makeup' && ReactDOM.createPortal(
+                    <div
+                        className="region-dropdown-portal"
+                        style={{
+                            position: 'fixed',
+                            top: `${dropdownPosition.top}px`,
+                            left: `${dropdownPosition.left}px`,
+                            zIndex: 9999,
+                            maxWidth: 'calc(100vw - 2rem)',
+                            right: 'auto'
+                        }}
+                    >
+                        <div className="region-dropdown-menu-inline">
+                            {regions.map(region => (
+                                <button
+                                    key={region.id}
+                                    className={`region-option ${activeRegion === region.id ? 'active' : ''}`}
+                                    onClick={() => handleRegionChange(region.id)}
+                                >
+                                    {region.label}
+                                </button>
+                            ))}
+                        </div>
+                    </div>,
+                    document.body
+                )
+            }
+        </section >
     );
 };
 
