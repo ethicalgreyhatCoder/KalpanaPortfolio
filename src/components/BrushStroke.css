@@ -39,6 +39,7 @@
         opacity: 0;
         transform: scale(0.8);
     }
+
     to {
         opacity: 1;
         transform: scale(1);
@@ -61,19 +62,22 @@
 
 /* Image-based brush stroke (if assets available) */
 .brush-stroke-image-container {
-    position: relative;
-    width: 120px;
-    height: 40px;
+    /* Container for image-based brush strokes */
     display: flex;
+    flex-direction: column;
+    /* Stack vertically */
     align-items: center;
-    justify-content: center;
+    gap: 0.5rem;
+    /* Space between image and text */
 }
 
 .brush-stroke-asset {
-    width: 100%;
-    height: 100%;
+    width: 80px;
+    /* Increased from 50px */
+    height: 80px;
+    /* Increased from 50px */
     object-fit: contain;
-    filter: saturate(1.2) brightness(1.1);
+    filter: drop-shadow(0 2px 4px rgba(0, 0, 0, 0.1));
     transition: all 0.3s ease;
 }
 
@@ -118,4 +122,3 @@
         font-size: 0.7rem;
     }
 }
-

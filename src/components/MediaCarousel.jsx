@@ -3,8 +3,6 @@ import useEmblaCarousel from 'embla-carousel-react';
 import './MediaCarousel.css';
 
 const MediaCarousel = ({ media = [], className = '' }) => {
-    console.log('🎬 MediaCarousel rendered with', media.length, 'media items');
-
     const [emblaRef, emblaApi] = useEmblaCarousel({
         loop: false,
         align: 'center',
@@ -14,8 +12,6 @@ const MediaCarousel = ({ media = [], className = '' }) => {
         watchSlides: true, // Watch for slide changes
         dragFree: false    // Snap to slides, don't free scroll
     });
-
-    console.log('📊 Embla API initialized:', emblaApi ? 'YES' : 'NO');
 
     const [selectedIndex, setSelectedIndex] = useState(0);
     const [scrollSnaps, setScrollSnaps] = useState([]);
@@ -31,10 +27,6 @@ const MediaCarousel = ({ media = [], className = '' }) => {
         if (!emblaApi) return;
         const snaps = emblaApi.scrollSnapList();
         setScrollSnaps(snaps);
-        console.log('📋 Scroll snaps initialized:', snaps.length, 'snaps');
-        console.log('🔍 Can scroll prev?', emblaApi.canScrollPrev());
-        console.log('🔍 Can scroll next?', emblaApi.canScrollNext());
-        console.log('📊 Slide nodes:', emblaApi.slideNodes().length);
 
         // Update arrow availability
         setCanScrollPrev(emblaApi.canScrollPrev());
@@ -45,7 +37,6 @@ const MediaCarousel = ({ media = [], className = '' }) => {
     const onSelect = useCallback(() => {
         if (!emblaApi) return;
         const newIndex = emblaApi.selectedScrollSnap();
-        console.log('🎯 Slide changed to index:', newIndex);
         setSelectedIndex(newIndex);
 
         // Hide swipe hint after first interaction
@@ -73,17 +64,7 @@ const MediaCarousel = ({ media = [], className = '' }) => {
 
     // Setup event listeners
     useEffect(() => {
-        if (!emblaApi) {
-            console.log('⚠️ Embla API not ready yet');
-            return;
-        }
-
-        console.log('✅ Embla API ready, setting up listeners');
-        console.log('🎬 Total media items:', media.length);
-        console.log('🎯 Initial selected index:', emblaApi.selectedScrollSnap());
-
-        // Check if dragging is enabled
-        console.log('🔍 Can Embla drag?', !emblaApi.internalEngine().options.watchDrag ? 'NO - watchDrag is false!' : 'YES');
+        if (!emblaApi) return;
 
         onInit();
         onSelect();
@@ -93,21 +74,20 @@ const MediaCarousel = ({ media = [], className = '' }) => {
 
         // Consolidated pointer event logging
         emblaApi.on('pointerDown', () => {
-            console.log('👇 Pointer down detected');
-            console.log('🟢 DRAG STARTED');
+            console.log('Drag started');
         });
 
         emblaApi.on('pointerUp', () => {
-            console.log('👆 Pointer up detected');
-            console.log('🔴 DRAG ENDED');
+            console.log('Drag ended');
         });
 
-        emblaApi.on('settle', () => console.log('🎯 Carousel settled'));
+        emblaApi.on('settle', () => console.log('Carousel settled'));
 
-        // Track scroll events to confirm drag is moving carousel
+        // Track scroll events
         emblaApi.on('scroll', () => {
             const progress = emblaApi.scrollProgress();
-            console.log('📜 Scroll event! Progress:', progress.toFixed(3));
+            // Optional: log scroll progress for debugging
+            // console.log('Scroll progress:', progress.toFixed(3));
         });
 
         return () => {

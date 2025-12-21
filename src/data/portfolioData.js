@@ -26,7 +26,7 @@ export const makeupLooks = [
         type: 'makeup',
         title: 'Rajasthani Bridal Elegance',
         category: 'Bridal',
-        region: 'Rajasthani',
+        region: 'rajasthani',
         // Multi-media support: images and videos
         media: [
             {

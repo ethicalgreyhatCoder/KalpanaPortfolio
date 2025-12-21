@@ -1,51 +1,7 @@
-import React, { useState, useEffect } from 'react';
+import React from 'react';
 import './BrushStroke.css';
 
 const BrushStroke = ({ color, colorName, index }) => {
-    const [useAsset, setUseAsset] = useState(false);
-    const [assetLoaded, setAssetLoaded] = useState(false);
-
-    // Check if brush stroke asset exists using color name
-    useEffect(() => {
-        if (!colorName) {
-            setAssetLoaded(true);
-            return;
-        }
-
-        const img = new Image();
-        // Use color name for file path in brush-stroke subfolder
-        img.src = `/assets/brush-stroke/${colorName}.png`;
-
-        img.onload = () => {
-            console.log(`✓ Brush stroke asset found: ${colorName}.png`);
-            setUseAsset(true);
-            setAssetLoaded(true);
-        };
-
-        img.onerror = () => {
-            console.log(`✗ Brush stroke asset not found: ${colorName}.png - using SVG fallback`);
-            setUseAsset(false);
-            setAssetLoaded(true);
-        };
-    }, [colorName]);
-
-    // Render image-based brush stroke if available
-    if (useAsset && assetLoaded) {
-        return (
-            <div className="brush-stroke-wrapper" style={{ '--brush-color': color }}>
-                <div className="brush-stroke-image-container">
-                    <img
-                        src={`/assets/brush-stroke/${colorName}.png`}
-                        alt={colorName}
-                        className="brush-stroke-asset"
-                    />
-                    <span className="brush-color-name">{colorName}</span>
-                </div>
-            </div>
-        );
-    }
-
-    // Fallback to organic circular SVG shape
     return (
         <div className="brush-stroke-wrapper" style={{ '--brush-color': color }}>
             <svg
@@ -54,11 +10,20 @@ const BrushStroke = ({ color, colorName, index }) => {
                 xmlns="http://www.w3.org/2000/svg"
             >
                 <defs>
+                    {/* Main radial gradient for base color */}
                     <radialGradient id={`radial-${index}`}>
                         <stop offset="0%" style={{ stopColor: color, stopOpacity: 1 }} />
                         <stop offset="70%" style={{ stopColor: color, stopOpacity: 0.95 }} />
                         <stop offset="100%" style={{ stopColor: color, stopOpacity: 0.85 }} />
                     </radialGradient>
+
+                    {/* Linear gradient for highlight - lower-right to upper-left */}
+                    <linearGradient id={`highlight-${index}`} x1="100%" y1="100%" x2="0%" y2="0%">
+                        <stop offset="0%" style={{ stopColor: color, stopOpacity: 0 }} />
+                        <stop offset="50%" style={{ stopColor: color, stopOpacity: 0.3 }} />
+                        <stop offset="100%" style={{ stopColor: color, stopOpacity: 0.6 }} />
+                    </linearGradient>
+
                     <filter id={`soft-shadow-${index}`}>
                         <feGaussianBlur in="SourceAlpha" stdDeviation="2" />
                         <feOffset dx="0" dy="1" result="offsetblur" />
@@ -71,7 +36,7 @@ const BrushStroke = ({ color, colorName, index }) => {
                     </filter>
                 </defs>
 
-                {/* Organic circular base - no borders */}
+                {/* Organic circular base */}
                 <ellipse
                     cx="30"
                     cy="30"
@@ -86,18 +51,18 @@ const BrushStroke = ({ color, colorName, index }) => {
                     }}
                 />
 
-                {/* Inner highlight for depth */}
+                {/* Gradient highlight instead of white patch - lower-right to upper-left */}
                 <ellipse
-                    cx="27"
-                    cy="26"
-                    rx="11"
-                    ry="13"
-                    fill="rgba(255, 255, 255, 0.3)"
+                    cx="30"
+                    cy="30"
+                    rx="14"
+                    ry="16"
+                    fill={`url(#highlight-${index})`}
                     className="inner-highlight"
                     style={{
-                        filter: 'blur(2px)',
+                        filter: 'blur(3px)',
                         transform: `rotate(${index * 15}deg)`,
-                        transformOrigin: '27px 26px'
+                        transformOrigin: '30px 30px'
                     }}
                 />
             </svg>
@@ -107,4 +72,5 @@ const BrushStroke = ({ color, colorName, index }) => {
 };
 
 export default BrushStroke;
+
 
