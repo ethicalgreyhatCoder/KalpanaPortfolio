@@ -46,7 +46,7 @@ export const makeupLooks = [
             },
             {
                 type: 'video',
-                src: 'https://commondatastorage.googleapis.com/gtv-videos-bucket/sample/ForBiggerBlazes.mp4',
+                src: `${import.meta.env.BASE_URL}portfolio/Makeup/Portfoilo1/rajasthani-video.mov`,
                 autoplay: true,
                 muted: true,
                 loop: true
