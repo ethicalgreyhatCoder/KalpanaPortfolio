@@ -9,9 +9,10 @@ export const regions = [
     { id: 'gujarati', name: 'Gujarati', label: 'Gujarati' },
     { id: 'marathi', name: 'Marathi', label: 'Marathi' },
     { id: 'rajasthani', name: 'Rajasthani', label: 'Rajasthani' },
-    // { id: 'punjabi', name: 'Punjabi', label: 'Punjabi' },
+    { id: 'punjabi', name: 'Punjabi', label: 'Punjabi' },
     // { id: 'south-indian', name: 'South Indian', label: 'South Indian' },
-    { id: 'bengali', name: 'Bengali', label: 'Bengali' }
+    { id: 'bengali', name: 'Bengali', label: 'Bengali' },
+    { id: 'international', name: 'International', label: 'International' }
 ];
 
 // ===== FILTERS =====
@@ -243,46 +244,96 @@ export const makeupLooks = [
     {
         id: 'makeup-4',
         type: 'makeup',
-        title: 'Party Glam Look',
-        category: 'Party',
-        region: 'rajasthani',
-        image: 'https://images.unsplash.com/photo-1532746622601-72c8c540206d?w=500&h=625&fit=crop&q=80',
-        thumbnailImage: 'https://images.unsplash.com/photo-1532746622601-72c8c540206d?w=300&h=375&fit=crop&q=80',
+        title: 'Bridal Glam Look',
+        category: 'Bridal',
+        region: 'punjabi',
+        media: [
+            {
+                type: 'image',
+                src: `${import.meta.env.BASE_URL}portfolio/Makeup/Portfolio5/punjabi.webp`,
+                alt: 'Editorial high fashion look'
+            },
+            {
+                type: 'image',
+                src: `${import.meta.env.BASE_URL}portfolio/Makeup/Portfolio5/punjabi1.webp`,
+                alt: 'Dramatic lighting shot'
+            },
+            {
+                type: 'image',
+                src: `${import.meta.env.BASE_URL}portfolio/Makeup/Portfolio5/punjabi2.webp`,
+                alt: 'Close-up details'
+            },
+            {
+                type: 'video',
+                src: `${import.meta.env.BASE_URL}portfolio/Makeup/Portfolio5/punjabi-video.mp4`,
+                autoplay: true,
+                muted: true,
+                loop: true
+            }
+
+        ],
+        image: `${import.meta.env.BASE_URL}portfolio/Makeup/Portfolio5/punjabi.webp`,
+        thumbnailImage: `${import.meta.env.BASE_URL}portfolio/Makeup/Portfolio5/punjabi.webp`,
         skinType: 'Oily',
         occasion: 'Evening Party',
         colorPalette: ['#B76E79', '#D4A574', '#F5E6D3'],
         colorNames: ['Dusty Rose', 'Sand', 'Nude'],
-        modelName: 'Kavya Sharma',
-        modelInstagram: 'https://instagram.com/kavya.sharma',
+        modelName: '𝑱𝒉𝒂𝒏𝒔𝒊 𝑹𝒂𝒏𝒊 𝑩𝒆𝒉𝒆𝒓𝒂',
+        modelInstagram: 'https://www.instagram.com/the_rani_touch/',
         productsUsed: [
             { name: 'Mattifying Primer', brand: 'Benefit' },
             { name: 'Matte Foundation', brand: 'Estée Lauder' }
         ],
         testimonial: {
             text: 'Fast, efficient, and still maintains that premium look!',
-            author: 'Kavya',
+            author: '𝑱𝒉𝒂𝒏𝒔𝒊 𝑹𝒂𝒏𝒊 𝑩𝒆𝒉𝒆𝒓𝒂',
             role: 'Client',
             fadeOnScroll: true
         },
         caseStudy: {
-            title: 'Party Glam Case Study',
+            title: 'Punjabi Glam Case Study',
             content: 'Oily skin requires oil-control products. Evening events need subtle glamour with controlled shimmer.'
         }
     },
     {
-        id: 'makeup-rajasthani-1',
+        id: 'makeup-punjabi-1',
         type: 'makeup',
-        title: 'Rajasthani Royal Bridal',
-        category: 'Bridal',
-        region: 'rajasthani',
-        image: 'https://images.unsplash.com/photo-1515886657613-9f3515b0c78f?w=500&h=625&fit=crop&q=80',
-        thumbnailImage: 'https://images.unsplash.com/photo-1515886657613-9f3515b0c78f?w=300&h=375&fit=crop&q=80',
+        title: 'Elegant soft editorial look',
+        category: 'Editorial',
+        region: 'punjabi',
+        media: [
+            {
+                type: 'image',
+                src: `${import.meta.env.BASE_URL}portfolio/Makeup/Portfolio6/editorial.webp`,
+                alt: 'Editorial high fashion look'
+            },
+            {
+                type: 'image',
+                src: `${import.meta.env.BASE_URL}portfolio/Makeup/Portfolio6/editorial1.webp`,
+                alt: 'Dramatic lighting shot'
+            },
+            {
+                type: 'image',
+                src: `${import.meta.env.BASE_URL}portfolio/Makeup/Portfolio6/editorial2.webp`,
+                alt: 'Close-up details'
+            },
+            {
+                type: 'video',
+                src: `${import.meta.env.BASE_URL}portfolio/Makeup/Portfolio6/editorial-vedio.mp4`,
+                autoplay: true,
+                muted: true,
+                loop: true
+            }
+
+        ],
+        image: `${import.meta.env.BASE_URL}portfolio/Makeup/Portfolio6/editorial.webp`,
+        thumbnailImage: `${import.meta.env.BASE_URL}portfolio/Makeup/Portfolio6/editorial.webp`,
         skinType: 'Fair',
-        occasion: 'Wedding',
+        occasion: 'Casual Photoshoot',
         colorPalette: ['#FFD700', '#DC143C', '#8B0000', '#D4A574'],
         colorNames: ['Royal Gold', 'Crimson', 'Burgundy', 'Sand'],
-        modelName: 'Neha Rathore',
-        modelInstagram: 'https://instagram.com/neha.rathore',
+        modelName: 'Mannat',
+        modelInstagram: 'https://www.instagram.com/_mannat_0608/',
         productsUsed: [
             { name: 'Luminous Foundation', brand: 'MAC', shade: 'NW20' },
             { name: 'Gold Kohl', brand: 'Lakme' },
@@ -290,13 +341,73 @@ export const makeupLooks = [
         ],
         testimonial: {
             text: 'Royal and majestic, exactly as I envisioned my wedding day.',
-            author: 'Neha',
-            role: 'Bride',
+            author: 'Mannat',
+            role: 'Model',
             fadeOnScroll: true
         },
         caseStudy: {
-            title: 'Rajasthani Royal Bridal Case Study',
-            content: 'Rajasthani weddings celebrate regal elegance with bold colors, rich golds, and dramatic eyes inspired by royal heritage.'
+            title: 'Punjabi Elegant Glam Look Case Study',
+            content: 'Punjabi Elegance celebrate regal elegance with bold colors, rich golds, and dramatic eyes inspired by soft natural elegance.'
+        }
+    },
+    {
+        id: 'makeup-5',
+        type: 'makeup',
+        title: 'International Party look',
+        category: 'Party',
+        region: 'international',
+        media: [
+            {
+                type: 'image',
+                src: `${import.meta.env.BASE_URL}portfolio/Makeup/Portfolio7/party.webp`,
+                alt: 'Editorial high fashion look'
+            },
+            {
+                type: 'image',
+                src: `${import.meta.env.BASE_URL}portfolio/Makeup/Portfolio7/party1.webp`,
+                alt: 'Dramatic lighting shot'
+            },
+            {
+                type: 'image',
+                src: `${import.meta.env.BASE_URL}portfolio/Makeup/Portfolio7/party2.webp`,
+                alt: 'Close-up details'
+            },
+            {
+                type: 'image',
+                src: `${import.meta.env.BASE_URL}portfolio/Makeup/Portfolio7/party3.webp`,
+                alt: 'Close-up details'
+            },
+            {
+                type: 'video',
+                src: `${import.meta.env.BASE_URL}portfolio/Makeup/Portfolio7/party-vedio.mp4`,
+                autoplay: true,
+                muted: true,
+                loop: true
+            }
+
+        ],
+        image: `${import.meta.env.BASE_URL}portfolio/Makeup/Portfolio7/party.webp`,
+        thumbnailImage: `${import.meta.env.BASE_URL}portfolio/Makeup/Portfolio7/party.webp`,
+        skinType: 'Fair',
+        occasion: 'Wedding',
+        colorPalette: ['#FFD700', '#DC143C', '#8B0000', '#D4A574'],
+        colorNames: ['Royal Gold', 'Crimson', 'Burgundy', 'Sand'],
+        modelName: 'Yash Aggarwal',
+        modelInstagram: 'https://instagram.com/_kalpan.aaaa',
+        productsUsed: [
+            { name: 'Luminous Foundation', brand: 'MAC', shade: 'NW20' },
+            { name: 'Gold Kohl', brand: 'Lakme' },
+            { name: 'Deep Red Lipstick', brand: 'Charlotte Tilbury', shade: 'Red Carpet Red' }
+        ],
+        testimonial: {
+            text: 'The Party look was absolutely stunning! Kalpana really exceeded my expectations.',
+            author: 'Mannat',
+            role: 'Model',
+            fadeOnScroll: true
+        },
+        caseStudy: {
+            title: 'International Party Look Case Study',
+            content: 'Bold and glamorous party makeup with rich jewel tones and shimmering highlights for a night to remember.'
         }
     }
 ];
@@ -306,29 +417,36 @@ export const hairStyles = [
     {
         id: 'hair-1',
         type: 'hair',
-        title: 'Bridal Updo with Florals',
-        category: 'Bridal',
+        title: 'Bridal Bun with Florals',
+        category: 'Casual',
         region: 'gujarati',
         media: [
             {
                 type: 'image',
-                src: 'https://images.unsplash.com/photo-1522337360788-8b13dee7a37e?w=800&h=1000&fit=crop&q=80',
+                src: `${import.meta.env.BASE_URL}portfolio/Hari/hair1/bun.webp`,
                 alt: 'Bridal updo front view'
             },
             {
                 type: 'image',
-                src: 'https://images.unsplash.com/photo-1519699047748-de8e457a634e?w=800&h=1000&fit=crop&q=80',
+                src: `${import.meta.env.BASE_URL}portfolio//Hari/hair1/bun1.webp`,
                 alt: 'Side profile with florals'
+            },
+            {
+                type: 'video',
+                src: `${import.meta.env.BASE_URL}portfolio//Hari/hair1/bun-video.mp4`,
+                autoplay: true,
+                muted: true,
+                loop: true
             }
         ],
-        thumbnail: 'https://images.unsplash.com/photo-1522337360788-8b13dee7a37e?w=300&h=375&fit=crop&q=80',
-        image: 'https://images.unsplash.com/photo-1522337360788-8b13dee7a37e?w=500&h=625&fit=crop&q=80',
-        thumbnailImage: 'https://images.unsplash.com/photo-1522337360788-8b13dee7a37e?w=300&h=375&fit=crop&q=80',
+        thumbnail: `${import.meta.env.BASE_URL}portfolio/Hari/hair1/bun.webp`,
+        image: `${import.meta.env.BASE_URL}portfolio/Hari/hair1/bun.webp`,
+        thumbnailImage: `${import.meta.env.BASE_URL}portfolio/Hari/hair1/bun.webp`,
         hairType: 'Medium-thick, wavy',
         length: 'Long',
         occasion: 'Wedding',
         modelName: 'Isha Mehta',
-        modelInstagram: 'https://instagram.com/isha.mehta',
+        modelInstagram: 'https://instagram.com/_kalpan.aaaa',
         productsUsed: [
             { name: 'Volumizing Mousse', brand: 'Tresemmé' },
             { name: 'Strong Hold Hairspray', brand: 'L\'Oréal' }
@@ -342,27 +460,51 @@ export const hairStyles = [
         testimonial: {
             text: 'My hair stayed perfect throughout the entire wedding day. The updo was elegant and comfortable!',
             author: 'Isha',
-            role: 'Bride',
+            role: 'Bride Mate',
             fadeOnScroll: true
         },
         caseStudy: {
             title: 'Bridal Updo Case Study',
-            content: 'Wavy hair holds styles well. Created structured updo that lasts all day while maintaining soft, romantic feel. Used strategic pinning and hairspray layers for maximum hold.'
+            content: 'Created structured updo that lasts all day while maintaining soft, romantic feel. Used strategic pinning and hairspray layers for maximum hold.'
         }
     },
     {
         id: 'hair-2',
         type: 'hair',
-        title: 'Loose Beach Waves',
-        category: 'Party',
+        title: 'Loose Breaded Crown',
+        category: 'Bridal',
         region: 'marathi',
-        image: 'https://images.unsplash.com/photo-1519699047748-de8e457a634e?w=500&h=625&fit=crop&q=80',
-        thumbnailImage: 'https://images.unsplash.com/photo-1519699047748-de8e457a634e?w=300&h=375&fit=crop&q=80',
+        media: [
+            {
+                type: 'image',
+                src: `${import.meta.env.BASE_URL}portfolio/Hari/hair2/bridal.webp`,
+                alt: 'Bridal updo front view'
+            },
+            {
+                type: 'image',
+                src: `${import.meta.env.BASE_URL}portfolio//Hari/hair2/bridal1.webp`,
+                alt: 'Side profile with florals'
+            },
+            {
+                type: 'image',
+                src: `${import.meta.env.BASE_URL}portfolio//Hari/hair2/bridal2.webp`,
+                alt: 'Side profile with florals'
+            },
+            {
+                type: 'video',
+                src: `${import.meta.env.BASE_URL}portfolio//Hari/hair2/bridal-video.mp4`,
+                autoplay: true,
+                muted: true,
+                loop: true
+            }
+        ],
+        image: `${import.meta.env.BASE_URL}portfolio/Hari/hair2/bridal.webp`,
+        thumbnailImage: `${import.meta.env.BASE_URL}portfolio/Hari/hair2/bridal.webp`,
         hairType: 'Fine, straight',
-        length: 'Medium',
-        occasion: 'Evening Party',
+        length: 'Long',
+        occasion: 'Wedding Party',
         modelName: 'Shreya Iyer',
-        modelInstagram: 'https://instagram.com/shreya.iyer',
+        modelInstagram: 'https://instagram.com/_kalpan.aaaa',
         productsUsed: [
             { name: 'Heat Protection Spray', brand: 'Tresemmé' },
             { name: 'Texturizing Spray', brand: 'Oribe' }
@@ -379,10 +521,129 @@ export const hairStyles = [
             fadeOnScroll: true
         },
         caseStudy: {
-            title: 'Beach Waves Case Study',
+            title: 'Loose Breaded Crown',
             content: 'Fine hair needs volume and texture. Used large barrel curling iron and texturizing products for effortless, beachy look. Key is alternating curl direction for natural movement.'
         }
-    }
+    },
+    {
+        id: 'hair-3',
+        type: 'hair',
+        title: 'Loose Open Hair',
+        category: 'Party',
+        media: [
+            {
+                type: 'image',
+                src: `${import.meta.env.BASE_URL}portfolio/Hari/hair3/party.webp`,
+                alt: 'Side profile with florals'
+            },
+            {
+                type: 'image',
+                src: `${import.meta.env.BASE_URL}portfolio/Hari/hair3/party1.webp`,
+                alt: 'Side profile with florals'
+            },
+            {
+                type: 'video',
+                src: `${import.meta.env.BASE_URL}portfolio/Hari/hair3/party-video.mp4`,
+                autoplay: true,
+                muted: true,
+                loop: true
+            }
+        ],
+        image: `${import.meta.env.BASE_URL}portfolio/Hari/hair3/party.webp`,
+        thumbnailImage: `${import.meta.env.BASE_URL}portfolio/Hari/hair3/party.webp`,
+        hairType: 'Fine, straight',
+        length: 'Long',
+        occasion: 'Wedding Party',
+        modelName: 'Shreya Iyer',
+        modelInstagram: 'https://instagram.com/_kalpan.aaaa',
+        productsUsed: [
+            { name: 'Heat Protection Spray', brand: 'Tresemmé' },
+            { name: 'Texturizing Spray', brand: 'Oribe' }
+        ],
+        toolsUsed: [
+            { name: 'Large Barrel Curler', icon: '/icons/curler.png', brand: 'GHD' },
+            { name: 'Paddle Brush', icon: '/icons/paddle-brush.png', brand: 'Wet Brush' },
+            { name: 'Diffuser', icon: '/icons/diffuser.png', brand: 'Dyson' }
+        ],
+        testimonial: {
+            text: 'Open Hair with Minimalist design is perfect for my taste. Perfect for a night out!',
+            author: 'Shreya',
+            role: 'Client',
+            fadeOnScroll: true
+        },
+        caseStudy: {
+            title: 'Loose Open Hair',
+            content: 'Fine hair needs volume and texture. Use the free flow of hair with texturizing products for effortless, beachy look. Key is alternating curl direction for natural movement.'
+        }
+    },
+    {
+        id: 'hair-4',
+        type: 'hair',
+        title: 'Casual Collage Styles',
+        category: 'Casual',
+        region: 'gujarati',
+        media: [
+            {
+                type: 'image',
+                src: `${import.meta.env.BASE_URL}portfolio/Hari/hair4/casual.webp`,
+                alt: 'Bridal updo front view'
+            },
+            {
+                type: 'image',
+                src: `${import.meta.env.BASE_URL}portfolio//Hari/hair4/casual1.webp`,
+                alt: 'Side profile with florals'
+            },
+            {
+                type: 'image',
+                src: `${import.meta.env.BASE_URL}portfolio//Hari/hair4/casual2.webp`,
+                alt: 'Side profile with florals'
+            },
+            {
+                type: 'image',
+                src: `${import.meta.env.BASE_URL}portfolio//Hari/hair4/casual3.webp`,
+                alt: 'Side profile with florals'
+            },
+            {
+                type: 'image',
+                src: `${import.meta.env.BASE_URL}portfolio//Hari/hair4/casual4.webp`,
+                alt: 'Side profile with florals'
+            },
+            {
+                type: 'image',
+                src: `${import.meta.env.BASE_URL}portfolio//Hari/hair4/casual5.webp`,
+                alt: 'Side profile with florals'
+            },
+
+        ],
+        thumbnail: `${import.meta.env.BASE_URL}portfolio/Hari/hair4/casual.webp`,
+        image: `${import.meta.env.BASE_URL}portfolio/Hari/hair4/casual.webp`,
+        thumbnailImage: `${import.meta.env.BASE_URL}portfolio/Hari/hair4/casual.webp`,
+        hairType: 'Medium-thick, wavy',
+        length: 'Long',
+        occasion: 'Casual Event',
+        modelName: 'Dummy Dolly',
+        modelInstagram: 'https://instagram.com/_kalpan.aaaa',
+        productsUsed: [
+            { name: 'Volumizing Mousse', brand: 'Tresemmé' },
+            { name: 'Strong Hold Hairspray', brand: 'L\'Oréal' }
+        ],
+        toolsUsed: [
+            { name: 'Hair Curler', icon: '/icons/curler.png', brand: 'Dyson' },
+            { name: 'Round Brush', icon: '/icons/round-brush.png', brand: 'Mason Pearson' },
+            { name: 'Hair Pins', icon: '/icons/pins.png', brand: 'Bobby Pin Co' },
+            { name: 'Teasing Comb', icon: '/icons/comb.png', brand: 'Tangle Teezer' }
+        ],
+        testimonial: {
+            text: 'These are all my works For casual events on dummy doll Head.',
+            author: 'Kalpana Verma',
+            role: 'Makeup Artist',
+            fadeOnScroll: true
+        },
+        caseStudy: {
+            title: 'Casual Collage Styles Case Study',
+            content: 'As the dummy dolls here are little bit rough Need to take care extensively with shampoo and conditioner for better smoothening and styling.'
+        }
+    },
 ];
 
 // ===== NAIL DESIGNS =====
@@ -573,18 +834,18 @@ export const categories = [
         data: hairStyles,
         filters: filterCategories.hair
     },
-    {
-        id: 'nails',
-        label: 'Nails',
-        data: nailDesigns,
-        filters: filterCategories.nails
-    },
-    {
-        id: 'eyes',
-        label: 'Eyes',
-        data: eyeLooks,
-        filters: filterCategories.eyes
-    }
+    // {
+    //     id: 'nails',
+    //     label: 'Nails',
+    //     data: nailDesigns,
+    //     filters: filterCategories.nails
+    // },
+    // {
+    //     id: 'eyes',
+    //     label: 'Eyes',
+    //     data: eyeLooks,
+    //     filters: filterCategories.eyes
+    // }
 ];
 
 // ===== HELPER FUNCTIONS =====
