@@ -8,7 +8,10 @@ export const regions = [
     { id: 'all', name: 'All Regions', label: 'All Regions' },
     { id: 'gujarati', name: 'Gujarati', label: 'Gujarati' },
     { id: 'marathi', name: 'Marathi', label: 'Marathi' },
-    { id: 'rajasthani', name: 'Rajasthani', label: 'Rajasthani' }
+    { id: 'rajasthani', name: 'Rajasthani', label: 'Rajasthani' },
+    // { id: 'punjabi', name: 'Punjabi', label: 'Punjabi' },
+    // { id: 'south-indian', name: 'South Indian', label: 'South Indian' },
+    { id: 'bengali', name: 'Bengali', label: 'Bengali' }
 ];
 
 // ===== FILTERS =====
@@ -81,31 +84,55 @@ export const makeupLooks = [
     {
         id: 'makeup-gujarati-1',
         type: 'makeup',
-        title: 'Gujarati Wedding Glam',
+        title: 'Marathi Wedding Glam',
         category: 'Bridal',
-        region: 'gujarati',
-        image: 'https://images.unsplash.com/photo-1515886657613-9f3515b0c78f?w=500&h=625&fit=crop&q=80',
-        thumbnailImage: 'https://images.unsplash.com/photo-1515886657613-9f3515b0c78f?w=300&h=375&fit=crop&q=80',
+        region: 'marathi',
+        media: [
+            {
+                type: 'image',
+                src: `${import.meta.env.BASE_URL}portfolio/Makeup/Portfolio2/marathi.webp`,
+                alt: 'Front view - Gujarati bridal makeup'
+            },
+            {
+                type: 'image',
+                src: `${import.meta.env.BASE_URL}portfolio/Makeup/Portfolio2/marathi2.webp`,
+                alt: 'Side profile with jewelry'
+            },
+            {
+                type: 'image',
+                src: `${import.meta.env.BASE_URL}portfolio/Makeup/Portfolio2/marathi3.webp`,
+                alt: 'Eye makeup detail'
+            },
+            {
+                type: 'video',
+                src: `${import.meta.env.BASE_URL}portfolio/Makeup/Portfolio2/marathi-video.mp4`,
+                autoplay: true,
+                muted: true,
+                loop: true
+            }
+        ],
+        image: `${import.meta.env.BASE_URL}portfolio/Makeup/Portfolio2/marathi2.webp`,
+        thumbnailImage: `${import.meta.env.BASE_URL}portfolio/Makeup/Portfolio2/marathi2.webp`,
         skinType: 'Normal',
         occasion: 'Wedding',
         colorPalette: ['#FFD700', '#D4A574', '#C08B7F'],
         colorNames: ['Royal Gold', 'Warm Sand', 'Rose Blush'],
-        modelName: 'Priya Shah',
-        modelInstagram: 'https://instagram.com/priya.shah',
+        modelName: 'Kalpana Verma',
+        modelInstagram: 'https://instagram.com/_kalpan.aaaa',
         productsUsed: [
             { name: 'Radiant Foundation', brand: 'Estée Lauder', shade: 'Silk' },
             { name: 'Gold Eyeshadow', brand: 'MAC', shade: 'Gold' },
             { name: 'Red Lipstick', brand: 'Charlotte Tilbury', shade: 'Red Carpet Red' }
         ],
         testimonial: {
-            text: 'Beautiful traditional look that made me feel like a queen on my special day.',
-            author: 'Priya',
-            role: 'Bride',
+            text: 'Though this is a self makeup for my friends weeding, The makeup lasted all day and night.',
+            author: 'Kalpana',
+            role: 'Model',
             fadeOnScroll: true
         },
         caseStudy: {
-            title: 'Gujarati Wedding Makeup Case Study',
-            content: 'Traditional Gujarati wedding makeup focusing on gold accents and warm tones.'
+            title: 'Marathi Wedding Makeup Case Study',
+            content: 'Traditional Marathi wedding makeup focusing on gold accents and warm tones.'
         }
     },
     {
@@ -113,75 +140,104 @@ export const makeupLooks = [
         type: 'makeup',
         title: 'Editorial High Fashion',
         category: 'Editorial',
-        region: 'marathi',
+        region: 'bengali',
         media: [
             {
                 type: 'image',
-                src: 'https://images.unsplash.com/photo-1494883334519-3a2ca2dccb17?w=800&h=1000&fit=crop&q=80',
+                src: `${import.meta.env.BASE_URL}portfolio/Makeup/Portfolio3/elegent.webp`,
                 alt: 'Editorial high fashion look'
             },
             {
                 type: 'image',
-                src: 'https://images.unsplash.com/photo-1532746622601-72c8c540206d?w=800&h=1000&fit=crop&q=80',
+                src: `${import.meta.env.BASE_URL}portfolio/Makeup/Portfolio3/elegent1.webp`,
                 alt: 'Dramatic lighting shot'
             },
             {
                 type: 'image',
-                src: 'https://images.unsplash.com/photo-1522337360788-8b13dee7a37e?w=800&h=1000&fit=crop&q=80',
+                src: `${import.meta.env.BASE_URL}portfolio/Makeup/Portfolio3/elegent2.webp`,
                 alt: 'Close-up details'
+            },
+            {
+                type: 'video',
+                src: `${import.meta.env.BASE_URL}portfolio/Makeup/Portfolio3/elegent-video.mp4`,
+                autoplay: true,
+                muted: true,
+                loop: true
             }
         ],
-        thumbnail: 'https://images.unsplash.com/photo-1494883334519-3a2ca2dccb17?w=300&h=375&fit=crop&q=80',
-        image: 'https://images.unsplash.com/photo-1494883334519-3a2ca2dccb17?w=500&h=625&fit=crop&q=80',
-        thumbnailImage: 'https://images.unsplash.com/photo-1494883334519-3a2ca2dccb17?w=300&h=375&fit=crop&q=80',
+        thumbnail: `${import.meta.env.BASE_URL}portfolio/Makeup/Portfolio3/elegent.webp`,
+        image: `${import.meta.env.BASE_URL}portfolio/Makeup/Portfolio3/elegent.webp`,
+        thumbnailImage: `${import.meta.env.BASE_URL}portfolio/Makeup/Portfolio3/elegent.webp`,
         skinType: 'Normal',
         occasion: 'Photoshoot',
         colorPalette: ['#4A4A4A', '#D4A574', '#8B0000'],
         colorNames: ['Charcoal', 'Warm Sand', 'Deep Red'],
-        modelName: 'Ananya Desai',
-        modelInstagram: 'https://instagram.com/ananya.desai',
+        modelName: 'Kashish Arora',
+        modelInstagram: 'https://www.instagram.com/__.kashisharora.__/',
         productsUsed: [
             { name: 'Face & Body Foundation', brand: 'MAC', shade: 'C3' },
             { name: 'Smokey Eye Palette', brand: 'Urban Decay', shade: 'Naked 3' }
         ],
         testimonial: {
-            text: 'A bold, editorial makeup that captured the essence of modern luxury.',
-            author: 'Ananya',
+            text: 'A soft, editorial makeup that captured the essence of modern luxury.',
+            author: 'Kashish Arora',
             role: 'Model',
             fadeOnScroll: true
         },
         caseStudy: {
             title: 'Editorial Makeup Case Study',
-            content: 'Editorial shoots require bold, high-contrast makeup that translates well in professional photography.'
+            content: 'Soft and shuttle make up for daytime party with dual shade glittery eye makeup'
         }
     },
     {
         id: 'makeup-marathi-1',
         type: 'makeup',
-        title: 'Marathi Bridal Tradition',
+        title: 'Gujarati Bridal Tradition',
         category: 'Bridal',
-        region: 'marathi',
-        image: 'https://images.unsplash.com/photo-1487412720507-e21cc028cb29?w=500&h=625&fit=crop&q=80',
-        thumbnailImage: 'https://images.unsplash.com/photo-1487412720507-e21cc028cb29?w=300&h=375&fit=crop&q=80',
+        region: 'gujarati',
+        media: [
+            {
+                type: 'image',
+                src: `${import.meta.env.BASE_URL}portfolio/Makeup/Portfolio4/gujrathi.webp`,
+                alt: 'Editorial high fashion look'
+            },
+            {
+                type: 'image',
+                src: `${import.meta.env.BASE_URL}portfolio/Makeup/Portfolio4/gujrathi1.webp`,
+                alt: 'Dramatic lighting shot'
+            },
+            {
+                type: 'image',
+                src: `${import.meta.env.BASE_URL}portfolio/Makeup/Portfolio4/gujrathi2.webp`,
+                alt: 'Close-up details'
+            },
+            {
+                type: 'image',
+                src: `${import.meta.env.BASE_URL}portfolio/Makeup/Portfolio4/gujrathi3.webp`,
+                alt: 'Close-up details'
+            }
+        ],
+        image: `${import.meta.env.BASE_URL}portfolio/Makeup/Portfolio4/gujrathi3.webp`,
+        thumbnailImage: `${import.meta.env.BASE_URL}portfolio/Makeup/Portfolio4/gujrathi3.webp`,
         skinType: 'Dry',
         occasion: 'Wedding',
         colorPalette: ['#FFD700', '#800000', '#DC143C'],
         colorNames: ['Gold', 'Maroon', 'Crimson'],
-        modelName: 'Anjali Kulkarni',
-        modelInstagram: 'https://instagram.com/anjali.kulkarni',
+        modelName: 'Mousami',
+        modelInstagram: 'https://www.instagram.com/mahima_ahuja_',
         productsUsed: [
-            { name: 'Hydrating Primer', brand: 'Smashbox' },
+            { name: 'Hydrating Primer', brand: 'Smash box' },
             { name: 'Dewy Foundation', brand: 'Estée Lauder', shade: 'Tawny' }
         ],
         testimonial: {
             text: 'Traditional elegance meets modern beauty. Absolutely mesmerizing!',
-            author: 'Anjali',
-            role: 'Bride',
+            author: 'Mousami',
+            role: 'Weeding Attendee',
             fadeOnScroll: true
         },
         caseStudy: {
-            title: 'Marathi Bridal Case Study',
-            content: 'Dry skin requires intense hydration. Traditional Marathi weddings call for bold red lips and gold accents.'
+            title: 'Gujarati Bridal Case Study',
+            content: 'Dry skin requires intense hydration. Traditional Gujarati weddings call for bold lips and pink accents.'
         }
     },
     {
