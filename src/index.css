@@ -121,20 +121,27 @@ h6 {
 }
 
 /* Global Tap Feedback - 120-150ms, scale 0.96-0.98 */
-button, a, input[type="button"], input[type="submit"] {
+button,
+a,
+input[type="button"],
+input[type="submit"] {
   -webkit-tap-highlight-color: transparent;
   touch-action: manipulation;
 }
 
 /* Consistent tap feedback for interactive elements */
 @media (hover: none) and (pointer: coarse) {
-  button:active, a:active {
+
+  button:active,
+  a:active {
     transform: scale(0.97);
   }
 }
 
 /* Active state for touch devices */
-button:active, a:active, input[type="button"]:active {
+button:active,
+a:active,
+input[type="button"]:active {
   opacity: 0.9;
 }
 
@@ -151,4 +158,38 @@ button:active, a:active, input[type="button"]:active {
   backdrop-filter: blur(12px);
   -webkit-backdrop-filter: blur(12px);
   border: 1px solid var(--theme-border);
+}
+
+/* ========================================
+   MOBILE SAFETY PATCH (320px–355px)
+   Graceful degradation only, not perfection
+   ======================================== */
+@media (max-width: 355px) {
+
+  /* Prevent horizontal overflow */
+  body {
+    overflow-x: hidden;
+  }
+
+  /* Safe word wrapping for text elements */
+  h1,
+  h2,
+  h3,
+  p,
+  button,
+  label {
+    word-wrap: break-word;
+    overflow-wrap: break-word;
+  }
+
+  /* Headline safety - reduce large hero headings slightly (5-8%) */
+  h1 {
+    font-size: 95%;
+  }
+
+  /* Button protection - ensure text wraps, maintain tap area */
+  button {
+    min-height: 44px;
+    white-space: normal;
+  }
 }
