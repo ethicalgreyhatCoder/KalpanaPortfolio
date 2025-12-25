@@ -359,7 +359,7 @@
     /* DESKTOP IMAGE SYSTEM: Cinematic fade-cycle animation
        - Container: Flexible width with 4:5 aspect ratio (maintains proportion)
        - All images in fixed position: fade-in/out cycling
-       - Cycle timing: 7000ms per image auto-cycling
+       - Cycle timing: 4000ms per image auto-cycling
        - Creates calm, editorial, magazine-style pacing
        - Images must be: PNG, 4:5 aspect ratio, transparent background
        - No scroll interaction - auto-cycling only */
@@ -385,7 +385,7 @@
     /* Keep face/center of image visible */
     /* Desktop fade animation timing: 2.5 second smooth fade
        Creates calm, editorial magazine-style pacing (not rushed) */
-    transition: opacity 2.5s ease-in-out;
+    transition: opacity 800ms ease-in-out;
     backface-visibility: hidden;
     /* Prevent GPU flicker */
 }

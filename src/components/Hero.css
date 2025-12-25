@@ -7,7 +7,7 @@
     display: flex;
     align-items: center;
     justify-content: center;
-    padding-top: 5.35rem;
+    padding-top: 6.35rem;
 }
 
 /* Text Content Hierarchy */
@@ -536,7 +536,7 @@
         grid-template-columns: repeat(2, 1fr);
         text-align: center;
         gap: 1.25rem;
-        margin-top: 1.5rem;
+        /*margin-top: 1.5rem;*/
         margin-bottom: 0.5rem;
     }
 
@@ -563,4 +563,425 @@
     .social-icons-group {
         display: none !important;
     }
+}/* =============================================================================
+   DESKTOP REFINEMENT & POLISH (1024px+)
+   Goal: Subtle alignment improvements and desktop-native spacing
+   - Improves visual relationship between text and image columns
+   - Enhances vertical alignment for intentional feel
+   - Optimizes stats row for desktop viewing
+   - Refines CTA presence with spacing adjustments
+   ============================================================================= */
+@media (min-width: 1024px) {
+
+    /* 1. HERO LAYOUT REFINEMENT - Better column relationship */
+    /* Slightly increase gap to reduce cramped feeling while maintaining connection */
+    .hero-content {
+        gap: 4rem; /* Increased from 3rem for desktop breathing room */
+        align-items: start; /* Align to start for better vertical relationship */
+        padding-top: 1rem; /* Subtle downward shift for centered feel */
+    }
+
+    /* Extra large screens - further refinement */
+    @media (min-width: 1280px) {
+        .hero-content {
+            gap: 5rem; /* Even more space on XL screens */
+        }
+    }
+
+    /* 2. TEXT SECTION VERTICAL ALIGNMENT - Connect with image */
+    /* Adjust top spacing to align name block with image center visually */
+    .hero-text-section {
+        padding-top: 2rem; /* Pull text down slightly to align with image */
+        gap: 2.25rem; /* Slightly increase internal spacing for desktop rhythm */
+    }
+
+    /* 3. IMAGE COLUMN POLISH - Refined positioning */
+    /* Subtle adjustment to feel more connected to text */
+    .hero-image-section {
+        padding-top: 0.5rem; /* Slight upward nudge for balance */
+    }
+
+    /* Image size refinement for larger screens */
+    .hero-image-wrapper {
+        max-width: 30rem; /* Slightly larger on desktop (was 28.125rem) */
+    }
+
+    /* Extra-large screens */
+    @media (min-width: 1440px) {
+        .hero-image-wrapper {
+            max-width: 32rem; /* Premium presence on very large screens */
+        }
+    }
+
+    /* 4. STATS ROW DESKTOP OPTIMIZATION - Native desktop spacing */
+    /* Improve horizontal distribution and make it feel less mobile-scaled */
+    .hero-achievements {
+        gap: 2.5rem; /* Increased from 2rem for desktop presence */
+        padding: 1rem 0; /* Add vertical padding for separation */
+        margin-top: 0.5rem; /* Slightly reduce top margin since gap increased */
+    }
+
+    /* Individual stat spacing refinement */
+    .achievement-item {
+        gap: 0.35rem; /* Tighter vertical gap between number and label */
+    }
+
+    /* Stat values - slightly larger on desktop */
+    .achievement-value {
+        font-size: 2.75rem; /* Increased from 2.5rem */
+    }
+
+    /* Stat labels - improved readability */
+    .achievement-label {
+        font-size: 0.8rem; /* Slightly larger from 0.75rem */
+        letter-spacing: 0.1em; /* Increased letter spacing for premium feel */
+    }
+
+    /* 5. CTA AREA DESKTOP INTENT - Enhanced presence */
+    /* Improve spacing and alignment for desktop-native feel */
+    .hero-cta-group {
+        padding-top: 1.5rem; /* Increased from 1rem for better separation */
+        gap: 2rem; /* Increased from 1.5rem for desktop spacing */
+        align-items: center; /* Vertical center alignment */
+    }
+
+    /* CTA button - subtle size and spacing refinement */
+    .hero-cta-button {
+        padding: 1.125rem 3rem; /* Slightly larger padding (was 1rem 2.5rem) */
+        font-size: 0.9rem; /* Slightly larger text (was 0.875rem) */
+    }
+
+    /* Refined hover effect for desktop - more subtle scale */
+    .hero-cta-button:hover {
+        transform: scale(1.05); /* Reduced from 1.1 for premium subtlety */
+        box-shadow: 0 0 15px rgba(255, 0, 38, 0.35); /* Slightly stronger glow */
+    }
+
+    /* 6. SOCIAL ICONS REFINEMENT - Desktop spacing */
+    /* Improve spacing between icons for desktop */
+    .social-icons-group {
+        gap: 1.75rem; /* Increased from 1.5rem */
+    }
+
+    /* Subtle hover refinement - reduce scale for premium feel */
+    .social-icon:hover {
+        transform: scale(1.08); /* Reduced from 1.1 */
+        box-shadow: 0 0 12px rgba(255, 0, 38, 0.4); /* Refined glow */
+    }
+
+    /* 7. TYPOGRAPHY REFINEMENTS - Desktop hierarchy */
+    /* Subtle adjustments for better desktop reading experience */
+    
+    /* Intro text - slightly larger on desktop */
+    .hero-intro {
+        font-size: 1.625rem; /* Slightly larger (was 1.5rem) */
+        margin-bottom: 0.375rem; /* Adjust spacing */
+    }
+
+    /* Main title - enhanced presence */
+    .hero-title {
+        font-size: 5.5rem; /* Slightly larger (was 5.3rem) */
+        letter-spacing: -0.025em; /* Tighter tracking for premium look */
+    }
+
+    /* Tagline - improved spacing */
+    .hero-tagline {
+        padding-top: 0.625rem; /* Slightly more breathing room */
+    }
+
+    /* Typewriter section - desktop height optimization */
+    .hero-typewriter {
+        min-height: 8.5rem; /* Slightly taller to prevent layout shift */
+    }
+
+    /* Description - optimized line height */
+    .hero-description {
+        line-height: 1.7; /* Increased from 1.6 for better readability */
+        letter-spacing: 0.01em; /* Subtle letter spacing */
+    }
+
+    /* 8. EXTRA LARGE SCREENS (1536px+) - Premium polish */
+    @media (min-width: 1536px) {
+        /* Further spacing refinement for very large displays */
+        .hero-text-section {
+            gap: 2.5rem;
+        }
+
+        .hero-title {
+            font-size: 6rem; /* Even larger on XXL screens */
+        }
+
+        .hero-achievements {
+            gap: 3rem; /* Maximum breathing room */
+        }
+    }
 }
+
+/* ===========================================================================
+   PRIMARY CTA BUTTON - Above the Fold (Desktop Only)
+   Conversion-focused: Ensures users see actionable CTA on first viewport
+   Placed between description and stats for optimal visibility
+   =========================================================================== */
+
+/* Primary CTA - Desktop Only (Hidden on mobile/tablet) */
+.hero-primary-cta {
+    display: none; /* Hidden on mobile - stats and existing CTA remain primary */
+}
+
+@media (min-width: 1024px) {
+    .hero-primary-cta {
+        display: inline-block;
+        padding: 0.875rem 2.25rem;
+        margin-top: 1.75rem; /* Breathing room after description */
+        margin-bottom: 0.5rem; /* Space before stats */
+        
+        /* Design System Match */
+        background: linear-gradient(135deg, var(--color-primary), var(--color-primary-hover));
+        color: var(--color-text-on-primary);
+        border: 2px solid transparent;
+        border-radius: 9999px; /* Full rounded pill shape */
+        
+        /* Typography - Elegant and minimal */
+        font-size: 0.9375rem; /* 15px - slightly smaller than hero CTA for hierarchy */
+        font-weight: 600;
+        font-family: 'Oxygen', sans-serif;
+        letter-spacing: 0.05em;
+        text-transform: uppercase;
+        
+        /* Interaction */
+        cursor: pointer;
+        transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+        box-shadow: 
+            0 4px 14px rgba(var(--color-primary-rgb, 99, 102, 241), 0.25),
+            0 2px 6px rgba(0, 0, 0, 0.1);
+    }
+
+    /* Hover state - Subtle lift and glow */
+    .hero-primary-cta:hover {
+        transform: translateY(-2px);
+        box-shadow: 
+            0 6px 20px rgba(var(--color-primary-rgb, 99, 102, 241), 0.35),
+            0 3px 10px rgba(0, 0, 0, 0.15);
+        border-color: rgba(255, 255, 255, 0.3);
+    }
+
+    /* Active state - Tactile feedback */
+    .hero-primary-cta:active {
+        transform: translateY(0);
+        box-shadow: 
+            0 2px 8px rgba(var(--color-primary-rgb, 99, 102, 241), 0.2),
+            0 1px 4px rgba(0, 0, 0, 0.1);
+    }
+
+    /* Focus state - Accessibility */
+    .hero-primary-cta:focus-visible {
+        outline: 2px solid var(--color-primary);
+        outline-offset: 3px;
+    }
+}
+
+/* Extra refinement for very large screens */
+@media (min-width: 1440px) {
+    .hero-primary-cta {
+        margin-top: 2rem; /* Slightly more breathing room on XL screens */
+        padding: 1rem 2.5rem; /* Slightly larger on XL screens */
+    }
+}
+
+
+/* ===========================================================================
+   HERO ALIGNMENT FIX - Desktop Layout Stability (1024px+)
+   Problem: Image drifts downward as left text column grows
+   Solution: Controlled height + anchored image positioning
+   =========================================================================== */
+
+@media (min-width: 1024px) {
+
+    /* CRITICAL FIX: Controlled hero section height */
+    /* Prevents content from pushing layout beyond intended bounds */
+    .hero-section {
+        min-height: 95vh; /* Controlled height for stability */
+        max-height: 100vh; /* Prevent excessive vertical growth */
+        display: flex;
+        align-items: center; /* Center content vertically within controlled space */
+    }
+
+    /* LAYOUT STABILITY: Override previous align-items: start */
+    /* Decouple image from text-driven height changes */
+    .hero-content {
+        gap: 4rem;
+        align-items: center; /* CHANGED from 'start' - both columns centered */
+        padding-top: 0; /* Remove extra padding - controlled by section height */
+        max-height: 85vh; /* Constrain content area to ensure CTA visibility */
+    }
+
+    /* TEXT SECTION: Max-width constraint for rhythm */
+    /* Prevents text from growing excessively wide or tall */
+    .hero-text-section {
+        max-width: 600px; /* Constrain text column width */
+        padding-top: 0; /* Remove - using centered alignment instead */
+        gap: 1.5rem; /* Slightly reduced from 2.25rem to compress vertical space */
+        align-self: center; /* Ensure vertical centering within grid */
+    }
+
+    /* IMAGE SECTION: Anchored positioning */
+    /* Image now stays visually centered, independent of text height */
+    .hero-image-section {
+        padding-top: 0; /* Remove - using centered alignment */
+        align-self: center; /* Anchor to grid center, not text height */
+        position: relative;
+    }
+
+    /* Image wrapper stability */
+    .hero-image-wrapper {
+        max-width: 28rem; /* Slightly reduced from 30rem for balance */
+    }
+
+    /* PRIMARY CTA: Reduced spacing to fit in viewport */
+    .hero-primary-cta {
+        margin-top: 1.25rem; /* Reduced from 1.75rem */
+        margin-bottom: 0.25rem; /* Reduced from 0.5rem */
+    }
+
+    /* ACHIEVEMENTS: Tighter spacing for viewport fit */
+    .hero-achievements {
+        gap: 2rem; /* Reduced from 2.5rem */
+        padding: 0.75rem 0; /* Reduced from 1rem */
+        margin-top: 0.25rem; /* Reduced from 0.5rem */
+    }
+
+    /* CTA GROUP: Reduced spacing */
+    .hero-cta-group {
+        padding-top: 1rem; /* Reduced from 1.5rem */
+        gap: 1.5rem; /* Reduced from 2rem */
+    }
+
+    /* Extra large screens - more breathing room available */
+    @media (min-width: 1280px) {
+        .hero-content {
+            gap: 5rem;
+            max-height: 90vh; /* Slightly more space on larger screens */
+        }
+
+        .hero-text-section {
+            max-width: 650px; /* Slightly wider on XL screens */
+            gap: 1.75rem;
+        }
+
+        .hero-image-wrapper {
+            max-width: 30rem; /* Restore larger size on XL */
+        }
+    }
+
+    /* Very large screens - premium spacing */
+    @media (min-width: 1440px) {
+        .hero-section {
+            min-height: 100vh;
+            max-height: none; /* Allow natural height on very large screens */
+        }
+
+        .hero-content {
+            max-height: none; /* Remove constraint on XXL screens */
+        }
+
+        .hero-text-section {
+            max-width: 700px;
+            gap: 2rem; /* Restore original spacing */
+        }
+
+        .hero-image-wrapper {
+            max-width: 32rem; /* Premium presence restored */
+        }
+
+        .hero-primary-cta {
+            margin-top: 1.75rem; /* Restore original spacing */
+        }
+
+        .hero-achievements {
+            gap: 2.5rem; /* Restore original spacing */
+            /*padding: 1rem 0;*/
+        }
+
+        .hero-cta-group {
+            padding-top: 1.5rem; /* Restore original spacing */
+            gap: 2rem;
+        }
+    }
+}
+
+
+/* ===========================================================================
+   HERO SECTION SPACING REFINEMENT - Premium Vertical Rhythm (Desktop 1024px+)
+   Goal: Improve breathing room and airy feel through micro spacing adjustments
+   Constraints: NO layout/content changes, spacing adjustments only
+   =========================================================================== */
+
+@media (min-width: 1024px) {
+
+    /* 1. BREATHING ROOM ABOVE HEADLINE - Add premium space at top */
+    /* Creates calm first impression with generous top space */
+    .hero-text-section > div:first-child {
+        margin-top: 1rem; /* Adds breathing room above "Hello, I am" */
+    }
+
+    /* 2. INTRO TEXT SPACING - Subtle separation from title */
+    .hero-intro {
+        margin-bottom: 0.5rem; /* Increased from 0.25rem for clarity */
+    }
+
+    /* 4. TYPEWRITER SECTION SPACING - Balanced visual pause */
+    /* CODE DELETED */
+
+    /* 5. DESCRIPTION PARAGRAPH - Enhanced readability */
+    .hero-description {
+        line-height: 1.7; /* Increased from 1.6 for comfort */
+        /* margin-bottom: 0.5rem;  Add explicit bottom spacing */
+    }
+
+    /* 6. PRIMARY CTA SPACING - Premium breathing room */
+    /* Critical for luxury feel - CTA should feel privileged, not cramped */
+    .hero-primary-cta {
+        /* margin-top: 1.5rem;  Increased from 1.25rem for premium space */
+        /* margin-bottom: 1rem; Increased from 0.25rem for separation from stats */
+    }
+
+    /* 7. ACHIEVEMENTS ROW SPACING - Elegant distribution */
+    .hero-achievements {
+        /* margin-top: 1.25rem;  Add top margin for breathing room */
+        /* padding-top: 1rem;  Keep vertical padding for internal space */
+        padding-bottom: 1rem; /* Balance bottom padding */
+    }
+
+    /* 8. TEXT SECTION INTERNAL RHYTHM - Overall vertical flow */
+    .hero-text-section {
+        gap: 0; /* Remove gap - using explicit margins for control */
+    }
+
+    /* 9. QUOTE SECTION SPACING - Elegant pause */
+    .hero-quote-section {
+        margin-top: 0.75rem; /* Add top spacing */
+        margin-bottom: 0.75rem; /* Add bottom spacing */
+    }
+
+    /* Extra large screens - restore generous spacing */
+    @media (min-width: 1440px) {
+        .hero-text-section > div:first-child {
+            margin-top: 1.5rem; /* More top breathing room on XL */
+        }
+
+        .hero-typewriter {
+            margin-top: 1.5rem;
+            /*margin-bottom: 1.5rem;*/
+        }
+
+        .hero-primary-cta {
+            margin-top: 1.75rem; /* Restore original generous spacing */
+            margin-bottom: 1.25rem;
+        }
+
+        .hero-achievements {
+            /* margin-top: 1.5rem;  More top space on XL screens */
+        }
+    }
+}
+

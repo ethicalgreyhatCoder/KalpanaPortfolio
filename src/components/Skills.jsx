@@ -86,15 +86,10 @@ const Skills = () => {
                                             >
                                                 <span className="skill-icon">
                                                     <svg width="8" height="8" viewBox="0 0 8 8" fill="none">
-                                                        <circle cx="4" cy="4" r="3" fill="currentColor" opacity="0.9"/>
+                                                        <circle cx="4" cy="4" r="3" fill="currentColor" opacity="0.9" />
                                                     </svg>
                                                 </span>
                                                 <span className="skill-text">{skill.title}</span>
-                                                {skill.clickable && (
-                                                    <svg className="skill-chevron" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
-                                                        <polyline points="9 18 15 12 9 6"></polyline>
-                                                    </svg>
-                                                )}
                                             </li>
                                         ))}
                                     </ul>
@@ -130,15 +125,10 @@ const Skills = () => {
                                             >
                                                 <span className="skill-icon">
                                                     <svg width="8" height="8" viewBox="0 0 8 8" fill="none">
-                                                        <circle cx="4" cy="4" r="3" fill="currentColor" opacity="0.9"/>
+                                                        <circle cx="4" cy="4" r="3" fill="currentColor" opacity="0.9" />
                                                     </svg>
                                                 </span>
                                                 <span className="skill-text">{skill.title}</span>
-                                                {skill.clickable && (
-                                                    <svg className="skill-chevron" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
-                                                        <polyline points="9 18 15 12 9 6"></polyline>
-                                                    </svg>
-                                                )}
                                             </li>
                                         ))}
                                     </ul>

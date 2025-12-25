@@ -37,6 +37,9 @@ const Gallery = () => {
     const modalBottomAnchorRef = useRef(null);
     const [dropdownPosition, setDropdownPosition] = useState({ top: 0, left: 0 });
 
+    // Desktop layout detection for conditional rendering
+    const [isDesktop, setIsDesktop] = useState(window.innerWidth >= 1024);
+
     // Get current category config
     categories.find(cat => cat.id === activeCategory);
     const currentFilters = getFiltersForCategory(activeCategory);
@@ -536,14 +539,14 @@ const Gallery = () => {
                             {selectedItem.media && selectedItem.media.length > 0 ? (
                                 <MediaCarousel
                                     media={selectedItem.media}
-                                    className={isCaseStudyOpen ? 'blurred' : ''}
+                                    className={isCaseStudyOpen && !isDesktop ? 'blurred' : ''}
                                 />
                             ) : (
                                 /* Fallback to legacy single image */
                                 <img
                                     src={selectedItem.image}
                                     alt={selectedItem.title}
-                                    className={`modal-hero-image ${isCaseStudyOpen ? 'blurred' : ''}`}
+                                    className={`modal-hero-image ${isCaseStudyOpen && !isDesktop ? 'blurred' : ''}`}
                                 />
                             )}
 
@@ -560,17 +563,19 @@ const Gallery = () => {
                             </button>
 
                             {/* LAYER 1: Gradient + Blur (Background Effect Only - NO TEXT) */}
-                            {!isCaseStudyOpen && selectedItem.testimonial && (
+                            {/* Desktop: Always show. Mobile: Hide when case study open */}
+                            {(!isCaseStudyOpen || isDesktop) && selectedItem.testimonial && (
                                 <div className="testimonial-blur-layer" aria-hidden="true"></div>
                             )}
 
                             {/* LAYER 2: Text Content (Foreground - NO BLUR) */}
-                            {!isCaseStudyOpen && selectedItem.testimonial && (
+                            {/* Desktop: Always show. Mobile: Hide when case study open */}
+                            {(!isCaseStudyOpen || isDesktop) && selectedItem.testimonial && (
                                 <div
                                     className="testimonial-text-layer"
                                     style={{
-                                        opacity: scrollPhase.testimonialOpacity,
-                                        pointerEvents: scrollPhase.testimonialOpacity < 0.1 ? 'none' : 'auto'
+                                        opacity: isDesktop ? 1 : scrollPhase.testimonialOpacity,
+                                        pointerEvents: isDesktop || scrollPhase.testimonialOpacity < 0.1 ? 'none' : 'auto'
                                     }}
                                 >
                                     <svg className="quote-mark" width="32" height="32" viewBox="0 0 24 24" fill="none">
@@ -711,22 +716,55 @@ const Gallery = () => {
 
                             {/* Footer Surface with CTA and End Marker */}
                             <div className="modal-footer-surface">
-                                {/* Tertiary Case Study CTA - fades in at deeper scroll */}
+                                {/* Tertiary Case Study CTA - Desktop: Toggle inline, Mobile: Open bottom sheet */}
                                 {selectedItem.caseStudy && (
                                     <button
                                         className="case-study-cta-tertiary"
-                                        onClick={() => setIsCaseStudyOpen(true)}
+                                        onClick={() => {
+                                            if (isDesktop) {
+                                                // Desktop: Toggle inline content
+                                                setIsCaseStudyOpen(!isCaseStudyOpen);
+                                            } else {
+                                                // Mobile: Open bottom sheet
+                                                setIsCaseStudyOpen(true);
+                                            }
+                                        }}
                                         style={{
-                                            opacity: scrollPhase.caseStudyOpacity,
-                                            transform: `translateY(${(1 - scrollPhase.caseStudyOpacity) * 20}px)`
+                                            opacity: isDesktop ? 1 : scrollPhase.caseStudyOpacity,
+                                            transform: isDesktop ? 'none' : `translateY(${(1 - scrollPhase.caseStudyOpacity) * 20}px)`
                                         }}
                                     >
-                                        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
+                                        <svg
+                                            width="16"
+                                            height="16"
+                                            viewBox="0 0 24 24"
+                                            fill="none"
+                                            stroke="currentColor"
+                                            strokeWidth="2"
+                                            style={{
+                                                transform: isDesktop && isCaseStudyOpen ? 'rotate(180deg)' : 'none',
+                                                transition: 'transform 0.25s ease'
+                                            }}
+                                        >
                                             <circle cx="12" cy="12" r="10"></circle>
                                             <path d="M12 16v-4M12 8h.01"></path>
                                         </svg>
-                                        View Case Study
+                                        {isDesktop && isCaseStudyOpen ? 'Close Case Study' : 'View Case Study'}
                                     </button>
+                                )}
+
+                                {/* Desktop Inline Case Study Content */}
+                                {isDesktop && isCaseStudyOpen && selectedItem.caseStudy && (
+                                    <div className="inline-case-study-content">
+                                        <h3>{selectedItem.caseStudy.title}</h3>
+                                        <p>{selectedItem.caseStudy.content}</p>
+                                        {selectedItem.skinType && (
+                                            <p><strong>Skin Type:</strong> {selectedItem.skinType}</p>
+                                        )}
+                                        {selectedItem.occasion && (
+                                            <p><strong>Occasion:</strong> {selectedItem.occasion}</p>
+                                        )}
+                                    </div>
                                 )}
 
                                 {/* Visual End Marker */}

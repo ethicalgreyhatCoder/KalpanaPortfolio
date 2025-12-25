@@ -20,6 +20,7 @@
     from {
         opacity: 0;
     }
+
     to {
         opacity: 1;
     }
@@ -48,6 +49,7 @@
     from {
         transform: translateY(100%);
     }
+
     to {
         transform: translateY(0);
     }
@@ -57,6 +59,44 @@
     .skill-modal-sheet {
         height: 70vh;
         max-height: 700px;
+    }
+}
+
+/* Desktop: Centered Modal (≥1024px) */
+@media (min-width: 1024px) {
+    .skill-modal-sheet {
+        /* Center the modal */
+        top: 50%;
+        left: 50%;
+        right: auto;
+        bottom: auto;
+        transform: translate(-50%, -50%);
+        /* Remove bottom-sheet styling */
+        border-radius: 1rem;
+        /* Rounded on all sides */
+        max-width: 700px;
+        width: 90%;
+        height: auto;
+        max-height: 80vh;
+        /* Disable slide-up animation, use fade-in instead */
+        animation: fadeInScale 0.3s cubic-bezier(0.32, 0.72, 0, 1);
+    }
+
+    @keyframes fadeInScale {
+        from {
+            opacity: 0;
+            transform: translate(-50%, -50%) scale(0.96);
+        }
+
+        to {
+            opacity: 1;
+            transform: translate(-50%, -50%) scale(1);
+        }
+    }
+
+    /* Hide mobile handle bar on desktop */
+    .skill-modal-handle {
+        display: none;
     }
 }
 
@@ -235,9 +275,9 @@
 
 /* Accessibility */
 @media (prefers-reduced-motion: reduce) {
+
     .skill-modal-backdrop,
     .skill-modal-sheet {
         animation: none;
     }
 }
-

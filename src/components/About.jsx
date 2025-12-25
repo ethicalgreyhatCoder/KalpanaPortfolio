@@ -33,15 +33,26 @@ const About = () => {
     const [bottomSheetClosing, setBottomSheetClosing] = useState(false);
     const bottomSheetRef = useRef(null);
 
-    // TASK 3: Core Values bottom sheet state
+    // TASK 3: Core Values bottom sheet state (mobile)
     const [valueSheetOpen, setValueSheetOpen] = useState(null); // 'authenticity', 'client-focus', 'hygiene', 'growth', or null
     const [valueSheetClosing, setValueSheetClosing] = useState(false);
     const valueSheetRef = useRef(null);
+
+    // Core Values desktop modal state
+    const [desktopValueModalOpen, setDesktopValueModalOpen] = useState(null); // value key or null
+    const [desktopValueModalClosing, setDesktopValueModalClosing] = useState(false);
+    const desktopValueModalRef = useRef(null);
 
     // Scroll direction indicators
     const [showUpArrow, setShowUpArrow] = useState(false);
     const [showDownArrow, setShowDownArrow] = useState(true);
     const sheetContentRef = useRef(null);
+
+    // Desktop modal state (desktop only - centered modal)
+    const [desktopModalCard, setDesktopModalCard] = useState(null); // 'artist', 'strategist', or null
+    const [desktopModalClosing, setDesktopModalClosing] = useState(false);
+    const desktopModalRef = useRef(null);
+
 
     // CARD DATA - Dynamically load all available portrait photos
     // Add more Kalpana-About5.webp, About6.webp etc. and they'll auto-appear!
@@ -428,7 +439,7 @@ const About = () => {
 
         desktopCycleIntervalRef.current = setInterval(() => {
             setDesktopPhotoIndex((prev) => (prev + 1) % desktopPhotos.length);
-        }, 7000);
+        }, 3500);
 
         return () => {
             if (desktopCycleIntervalRef.current) {
@@ -437,9 +448,21 @@ const About = () => {
         };
     }, [isMobile, desktopPhotos.length]);
 
-    // Bottom sheet handlers (mobile only)  
+    // Card click handlers - mobile shows bottom sheet, desktop shows centered modal
     const handleCardClick = (cardType) => {
-        if (isMobile && window.innerWidth <= 768) {
+        if (!isMobile && window.innerWidth >= 1024) {
+            // Desktop: Save scroll position before locking
+            const scrollY = window.scrollY;
+            document.body.style.top = `-${scrollY}px`;
+
+            setDesktopModalCard(cardType);
+            setDesktopModalClosing(false);
+            document.body.classList.add('modal-open');
+        } else if (isMobile && window.innerWidth <= 768) {
+            // Mobile: Save scroll position
+            const scrollY = window.scrollY;
+            document.body.style.top = `-${scrollY}px`;
+
             setBottomSheetCard(cardType);
             setBottomSheetClosing(false);
             document.body.classList.add('modal-open');
@@ -451,7 +474,15 @@ const About = () => {
         setTimeout(() => {
             setBottomSheetCard(null);
             setBottomSheetClosing(false);
+
+            // Restore scroll position
+            const scrollY = document.body.style.top;
+            const scrollPosition = parseInt(scrollY || '0') * -1;
             document.body.classList.remove('modal-open');
+            document.body.style.top = '';
+            requestAnimationFrame(() => {
+                window.scrollTo(0, scrollPosition);
+            });
         }, 280);
     };
 
@@ -459,11 +490,41 @@ const About = () => {
         handleBottomSheetClose();
     };
 
+    // Desktop modal handlers
+    const handleDesktopModalClose = () => {
+        setDesktopModalClosing(true);
+        setTimeout(() => {
+            setDesktopModalCard(null);
+            setDesktopModalClosing(false);
+
+            // Restore scroll position
+            const scrollY = document.body.style.top;
+            const scrollPosition = parseInt(scrollY || '0') * -1;
+            document.body.classList.remove('modal-open');
+            document.body.style.top = '';
+            requestAnimationFrame(() => {
+                window.scrollTo(0, scrollPosition);
+            });
+        }, 300);
+    };
+
+    const handleDesktopModalBackdropClick = () => {
+        handleDesktopModalClose();
+    };
+
     // TASK 3: Core Values bottom sheet handlers
     const handleValueClick = (valueKey) => {
-        setValueSheetOpen(valueKey);
-        setValueSheetClosing(false);
-        document.body.classList.add('modal-open');
+        if (window.innerWidth > 768) {
+            // Desktop/Tablet: Show centered modal (no scroll position manipulation)
+            setDesktopValueModalOpen(valueKey);
+            setDesktopValueModalClosing(false);
+            document.body.classList.add('modal-open');
+        } else {
+            // Mobile: Show bottom sheet
+            setValueSheetOpen(valueKey);
+            setValueSheetClosing(false);
+            document.body.classList.add('modal-open');
+        }
     };
 
     const handleValueSheetClose = () => {
@@ -477,6 +538,22 @@ const About = () => {
 
     const handleValueBackdropClick = () => {
         handleValueSheetClose();
+    };
+
+    // Desktop Value Modal handlers
+    const handleDesktopValueModalClose = () => {
+        setDesktopValueModalClosing(true);
+        setTimeout(() => {
+            setDesktopValueModalOpen(null);
+            setDesktopValueModalClosing(false);
+
+            // Simple cleanup - no scroll manipulation needed
+            document.body.classList.remove('modal-open');
+        }, 300);
+    };
+
+    const handleDesktopValueModalBackdropClick = () => {
+        handleDesktopValueModalClose();
     };
 
     // Prevent parent scroll when bottom sheet is open - with boundary detection
@@ -566,6 +643,34 @@ const About = () => {
         contentEl.addEventListener('scroll', handleScroll, { passive: true });
         return () => contentEl.removeEventListener('scroll', handleScroll);
     }, [bottomSheetCard]);
+
+    // Desktop modal: ESC key handler
+    useEffect(() => {
+        if (!desktopModalCard) return;
+
+        const handleEscKey = (e) => {
+            if (e.key === 'Escape') {
+                handleDesktopModalClose();
+            }
+        };
+
+        document.addEventListener('keydown', handleEscKey);
+        return () => document.removeEventListener('keydown', handleEscKey);
+    }, [desktopModalCard]);
+
+    // Desktop Value modal: ESC key handler
+    useEffect(() => {
+        if (!desktopValueModalOpen) return;
+
+        const handleEscKey = (e) => {
+            if (e.key === 'Escape') {
+                handleDesktopValueModalClose();
+            }
+        };
+
+        document.addEventListener('keydown', handleEscKey);
+        return () => document.removeEventListener('keydown', handleEscKey);
+    }, [desktopValueModalOpen]);
 
     return (
         <section id="about" className="about-section">
@@ -751,27 +856,27 @@ const About = () => {
                     <div className="timeline-wrapper-enhanced">
                         {aboutTimelineData.map((item, index) => {
                             return (
-                                <RevealOnScroll key={index} className="timeline-item" style={{ opacity: item.opacity }}>
+                                <RevealOnScroll key={index} className={`timeline-item ${item.isAnchor ? 'timeline-anchor' : 'timeline-supporting'}`} style={{ opacity: item.opacity }}>
                                     {index % 2 === 0 ? (
                                         // EVEN items (0, 2, 4) - Content LEFT, Dot CENTER, Quote RIGHT
                                         <>
                                             <div className="timeline-content">
                                                 <h4 className="timeline-year">{item.year}</h4>
                                                 <p className="timeline-subtitle">{item.title}</p>
-                                                <p className="timeline-quote timeline-quote-mobile">"{item.quote}"</p>
+                                                {item.isAnchor && <p className="timeline-quote timeline-quote-mobile">"{item.quote}"</p>}
                                             </div>
-                                            <div className={`timeline-dot-enhanced ${activeTimelineDots[index] ? 'scroll-active' : ''}`} data-timeline-id={index}></div>
-                                            <p className="timeline-quote">"{item.quote}"</p>
+                                            <div className={`timeline-dot-enhanced ${activeTimelineDots[index] ? 'scroll-active' : ''} ${item.isAnchor ? 'timeline-dot-anchor' : ''}`} data-timeline-id={index}></div>
+                                            {item.isAnchor && <p className="timeline-quote">"{item.quote}"</p>}
                                         </>
                                     ) : (
                                         // ODD items (1, 3) - Quote LEFT, Dot CENTER, Content RIGHT
                                         <>
-                                            <p className="timeline-quote">"{item.quote}"</p>
-                                            <div className={`timeline-dot-enhanced ${activeTimelineDots[index] ? 'scroll-active' : ''}`} data-timeline-id={index}></div>
+                                            {item.isAnchor && <p className="timeline-quote">"{item.quote}"</p>}
+                                            <div className={`timeline-dot-enhanced ${activeTimelineDots[index] ? 'scroll-active' : ''} ${item.isAnchor ? 'timeline-dot-anchor' : ''}`} data-timeline-id={index}></div>
                                             <div className="timeline-content">
                                                 <h4 className="timeline-year">{item.year}</h4>
                                                 <p className="timeline-subtitle">{item.title}</p>
-                                                <p className="timeline-quote timeline-quote-mobile">"{item.quote}"</p>
+                                                {item.isAnchor && <p className="timeline-quote timeline-quote-mobile">"{item.quote}"</p>}
                                             </div>
                                         </>
                                     )}
@@ -957,6 +1062,133 @@ const About = () => {
                                             <ul style={{ margin: '0' }}>
                                                 {value.bullets.map((bullet, idx) => (
                                                     <li key={idx} style={{ marginBottom: idx === value.bullets.length - 1 ? '0' : '0.75rem' }}>
+                                                        {bullet}
+                                                    </li>
+                                                ))}
+                                            </ul>
+                                        </div>
+                                    </React.Fragment>
+                                )
+                            ))}
+                        </div>
+                    </div>
+                </>,
+                document.body
+            )}
+
+            {/* Desktop-Only Centered Modal - Rendered via Portal */}
+            {desktopModalCard && ReactDOM.createPortal(
+                <>
+                    {/* Backdrop - Global overlay */}
+                    <div
+                        className={`desktop-modal-backdrop ${desktopModalClosing ? 'closing' : ''}`}
+                        onClick={handleDesktopModalBackdropClick}
+                    />
+
+                    {/* Centered Modal */}
+                    <div
+                        ref={desktopModalRef}
+                        className={`desktop-modal ${desktopModalClosing ? 'closing' : ''}`}
+                        role="dialog"
+                        aria-modal="true"
+                        aria-labelledby="desktop-modal-title"
+                    >
+                        {/* Close Button */}
+                        <button
+                            className="desktop-modal-close-button"
+                            onClick={handleDesktopModalClose}
+                            aria-label="Close"
+                        >
+                            ✕
+                        </button>
+
+                        {/* Content */}
+                        <div className="desktop-modal-content">
+                            {desktopModalCard && modalContent[desktopModalCard] && (
+                                <>
+                                    <h2 id="desktop-modal-title" className="desktop-modal-title">
+                                        {modalContent[desktopModalCard].title}
+                                    </h2>
+                                    <p className="desktop-modal-subtitle">
+                                        {modalContent[desktopModalCard].subtitle}
+                                    </p>
+
+                                    {modalContent[desktopModalCard].sections.map((section, index) => (
+                                        <div key={index} className="desktop-modal-section">
+                                            <h3>{section.heading}</h3>
+                                            <p>{section.content}</p>
+                                        </div>
+                                    ))}
+
+                                    {modalContent[desktopModalCard].skills && (
+                                        <div className="desktop-modal-skills">
+                                            <h3>Core Skills</h3>
+                                            <ul>
+                                                {modalContent[desktopModalCard].skills.map((skill, index) => (
+                                                    <li key={index}>{skill}</li>
+                                                ))}
+                                            </ul>
+                                        </div>
+                                    )}
+                                </>
+                            )}
+                        </div>
+                    </div>
+                </>,
+                document.body
+            )}
+
+            {/* Desktop-Only Core Values Modal - Rendered via Portal */}
+            {desktopValueModalOpen && ReactDOM.createPortal(
+                <>
+                    {/* Backdrop - Global overlay */}
+                    <div
+                        className={`desktop-modal-backdrop ${desktopValueModalClosing ? 'closing' : ''}`}
+                        onClick={handleDesktopValueModalBackdropClick}
+                    />
+
+                    {/* Centered Modal */}
+                    <div
+                        ref={desktopValueModalRef}
+                        className={`desktop-modal ${desktopValueModalClosing ? 'closing' : ''}`}
+                        role="dialog"
+                        aria-modal="true"
+                        aria-labelledby="desktop-value-modal-title"
+                    >
+                        {/* Close Button */}
+                        <button
+                            className="desktop-modal-close-button"
+                            onClick={handleDesktopValueModalClose}
+                            aria-label="Close"
+                        >
+                            ✕
+                        </button>
+
+                        {/* Content */}
+                        <div className="desktop-modal-content">
+                            {coreValuesData.map((value) => (
+                                desktopValueModalOpen === value.key && (
+                                    <React.Fragment key={value.key}>
+                                        <h2 id="desktop-value-modal-title" className="desktop-modal-title">
+                                            {value.title}
+                                        </h2>
+                                        <p className="desktop-modal-subtitle">
+                                            {value.expandedDescription}
+                                        </p>
+
+                                        <div className="desktop-modal-section">
+                                            <ul style={{
+                                                margin: '0',
+                                                padding: '0 0 0 1.25rem',
+                                                listStyleType: 'disc'
+                                            }}>
+                                                {value.bullets.map((bullet, idx) => (
+                                                    <li key={idx} style={{
+                                                        marginBottom: idx === value.bullets.length - 1 ? '0' : '0.75rem',
+                                                        fontSize: '0.9375rem',
+                                                        lineHeight: '1.6',
+                                                        color: 'rgba(74, 74, 74, 0.85)'
+                                                    }}>
                                                         {bullet}
                                                     </li>
                                                 ))}

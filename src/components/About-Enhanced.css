@@ -184,7 +184,7 @@
 
 @media (min-width: 768px) {
     .about-quote-section {
-        padding: 4rem 1.5rem;
+        /*padding: 4rem 1.5rem;*/
         margin-bottom: 2.5rem;
     }
 }
@@ -939,3 +939,841 @@
         display: none !important;
     }
 }
+
+/* ===========================================================================
+   DESKTOP MICRO-REFINEMENTS (1024px+ ONLY) - About Section Intro Polish
+   Goals: Subtle alignment improvements, readability optimization, spacing consistency
+   Constraints: NO changes to petal animation, colors, fonts, or structure
+   =========================================================================== */
+
+@media (min-width: 1024px) {
+
+    /* 1. VISUAL ALIGNMENT REFINEMENT - Image and text vertical rhythm */
+    /* Subtle adjustment to create intentional alignment between left image card and right text block */
+    .about-intro-wrapper {
+        gap: 5rem;
+        /* Increased from 4rem for better breathing room */
+        align-items: start;
+        /* Changed from center for more intentional top-alignment */
+        padding-top: 1.5rem;
+        /* Slight downward shift for centering within viewport */
+    }
+
+    /* Image container - subtle upward nudge to align with text baseline */
+    .about-portrait-container {
+        transform: translateY(-1rem);
+        /* Lift image slightly to connect with name visually */
+    }
+
+    /* 2. TEXT BLOCK READABILITY POLISH - Constrain paragraph width */
+    /* Improves reading comfort on large screens without changing visual structure */
+    .about-intro-paragraph {
+        max-width: 50ch;
+        /* Reduced from 55ch for optimal reading line length */
+        line-height: 1.8;
+        /* Slightly increased from 1.7 for comfort */
+        letter-spacing: 0.01em;
+        /* Subtle tracking for better flow */
+    }
+
+    /* 3. "ABOUT ME" LABEL ENHANCEMENT - Improved clarity */
+    /* Subtle letter-spacing and opacity adjustment for premium feel */
+    .about-label {
+        letter-spacing: 0.3em;
+        /* Increased from 0.25em for refined spacing */
+        opacity: 0.7;
+        /* Increased from 0.6 for better visibility */
+        font-size: 0.8125rem;
+        /* Slightly smaller than 0.875rem for subtlety */
+    }
+
+    /* 4. SPACING CONSISTENCY - Vertical rhythm refinement */
+    /* Ensures consistent visual breathing between elements */
+
+    /* Spacing between label and name */
+    .about-label {
+        margin-bottom: 0.5rem;
+        /* Increased from 0.25rem for clearer separation */
+    }
+
+    /* Spacing below name heading */
+    .about-name {
+        margin-bottom: 0.375rem;
+        /* Add explicit spacing control */
+    }
+
+    /* Spacing above role/subtitle */
+    .about-role {
+        padding-top: 0.625rem;
+        /* Slight increase from 0.5rem for rhythm */
+        margin-bottom: 0.125rem;
+        /* Add small bottom margin */
+    }
+
+    /* Divider spacing refinement */
+    .about-divider {
+        margin-top: 1.25rem;
+        /* Increased from implicit for better separation */
+        margin-bottom: 1.25rem;
+        /* Explicit bottom spacing */
+        width: 100%;
+    }
+
+    /* Bio section internal spacing */
+    .about-bio-section {
+        gap: 2.125rem;
+        /* Slightly increased from 2rem for desktop comfort */
+    }
+
+    /* 5. EXTRA LARGE SCREENS (1440px+) - Premium polish for very large displays */
+    @media (min-width: 1440px) {
+        .about-intro-wrapper {
+            gap: 6rem;
+            /* Maximum breathing room on XL screens */
+        }
+
+        .about-intro-paragraph {
+            font-size: 1.1875rem;
+            /* Slightly larger (was 1.125rem) */
+            line-height: 1.85;
+            /* Enhanced line-height for comfort */
+        }
+
+        .about-bio-section {
+            gap: 2.25rem;
+            /* Further refinement for XL displays */
+        }
+    }
+}
+
+
+/* ===========================================================================
+   ABOUT SECTION CARDS - Desktop Centered Wrapper & Premium Proportions
+   Goal: Make cards feel designed and intentional on desktop, not stretched
+   =========================================================================== */
+
+@media (min-width: 1024px) {
+
+    /* CENTERED WRAPPER - Contains both cards with max-width for editorial feel */
+    .about-cards-container {
+        max-width: 1000px;
+        /* Centered group - prevents cards from stretching */
+        margin-left: auto;
+        margin-right: auto;
+        justify-content: center;
+        /* Center cards within wrapper */
+        gap: 2.5rem;
+        /* Slightly more breathing room between cards */
+    }
+
+    /* INDIVIDUAL CARD PROPORTIONS - Controlled max-width for balance */
+    .about-card {
+        max-width: 470px;
+        /* Prevents oversized feel */
+        text-align: center;
+        /* Center-align for symmetry and premium feel */
+    }
+
+    /* CARD TITLE - Center aligned for desktop elegance */
+    .about-card-title {
+        text-align: center;
+        /* Override previous left alignment */
+    }
+
+    /* CARD LIST - Center-aligned bullets for symmetry */
+    .about-card-list {
+        text-align: center;
+        /* Center for desktop visual balance */
+        list-style-position: inside;
+        /* Bullets inline with text */
+    }
+
+    .about-card-list li {
+        padding-left: 0;
+        /* Remove left padding */
+        text-align: center;
+        /* Center each list item */
+    }
+
+    .about-card-list li::before {
+        position: static;
+        /* Remove absolute positioning */
+        display: inline;
+        /* Inline with text */
+        margin-right: 0.5rem;
+        /* Space after bullet */
+        margin-left: 0;
+        /* Reset left margin */
+    }
+
+    /* Extra large screens - slightly more generous spacing */
+    @media (min-width: 1280px) {
+        .about-cards-container {
+            max-width: 1040px;
+            /* Slightly wider on XL screens */
+            gap: 3rem;
+            /* More breathing room */
+        }
+
+        .about-card {
+            max-width: 480px;
+            /* Allow slightly larger cards on XL */
+        }
+    }
+}
+
+
+/* ===========================================================================
+   DESKTOP MODAL - Centered Alert-Style Modal (1024px+)
+   Used for identity cards on desktop (reuses mobile content)
+   Features: Fade + scale animation, backdrop, ESC key, focus management
+   =========================================================================== */
+
+@media (min-width: 1024px) {
+
+    /* DESKTOP MODAL BACKDROP - Full screen overlay */
+    .desktop-modal-backdrop {
+        position: fixed;
+        top: 0;
+        left: 0;
+        right: 0;
+        bottom: 0;
+        width: 100vw;
+        height: 100vh;
+        background: rgba(0, 0, 0, 0.5);
+        backdrop-filter: blur(8px);
+        -webkit-backdrop-filter: blur(8px);
+        z-index: 999;
+        /* Just below modal */
+        animation: desktopBackdropFadeIn 300ms ease-out forwards;
+    }
+
+    .desktop-modal-backdrop.closing {
+        animation: desktopBackdropFadeOut 300ms ease-in forwards;
+    }
+
+    @keyframes desktopBackdropFadeIn {
+        from {
+            opacity: 0;
+            backdrop-filter: blur(0px);
+            -webkit-backdrop-filter: blur(0px);
+        }
+
+        to {
+            opacity: 1;
+            backdrop-filter: blur(8px);
+            -webkit-backdrop-filter: blur(8px);
+        }
+    }
+
+    @keyframes desktopBackdropFadeOut {
+        from {
+            opacity: 1;
+            backdrop-filter: blur(8px);
+            -webkit-backdrop-filter: blur(8px);
+        }
+
+        to {
+            opacity: 0;
+            backdrop-filter: blur(0px);
+            -webkit-backdrop-filter: blur(0px);
+        }
+    }
+
+    /* DESKTOP MODAL - Centered container */
+    .desktop-modal {
+        position: fixed;
+        top: 50%;
+        left: 50%;
+        transform: translate(-50%, -50%);
+        z-index: 1000;
+        /* Above backdrop */
+
+        /* Sizing */
+        width: 90%;
+        max-width: 600px;
+        max-height: 85vh;
+
+        /* Styling */
+        background: var(--theme-bg);
+        border-radius: 1.25rem;
+        box-shadow:
+            0 20px 60px rgba(0, 0, 0, 0.3),
+            0 10px 30px rgba(0, 0, 0, 0.2);
+
+        /* Animation */
+        animation: desktopModalFadeIn 300ms cubic-bezier(0.22, 1, 0.36, 1) forwards;
+
+        /* Overflow */
+        overflow: hidden;
+        display: flex;
+        flex-direction: column;
+    }
+
+    .desktop-modal.closing {
+        animation: desktopModalFadeOut 300ms ease-in forwards;
+    }
+
+    @keyframes desktopModalFadeIn {
+        from {
+            opacity: 0;
+            transform: translate(-50%, -50%) scale(0.95);
+        }
+
+        to {
+            opacity: 1;
+            transform: translate(-50%, -50%) scale(1);
+        }
+    }
+
+    @keyframes desktopModalFadeOut {
+        from {
+            opacity: 1;
+            transform: translate(-50%, -50%) scale(1);
+        }
+
+        to {
+            opacity: 0;
+            transform: translate(-50%, -50%) scale(0.95);
+        }
+    }
+
+    /* CLOSE BUTTON - Top right */
+    .desktop-modal-close-button {
+        position: absolute;
+        top: 1.25rem;
+        right: 1.25rem;
+        width: 2.5rem;
+        height: 2.5rem;
+        border: none;
+        border-radius: 50%;
+        background: rgba(183, 110, 121, 0.1);
+        color: var(--theme-accent);
+        font-size: 1.5rem;
+        cursor: pointer;
+        transition: all 0.2s;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        z-index: 10;
+    }
+
+    .desktop-modal-close-button:hover {
+        background: rgba(183, 110, 121, 0.2);
+        transform: scale(1.1);
+    }
+
+    .desktop-modal-close-button:active {
+        transform: scale(0.95);
+    }
+
+    /* MODAL CONTENT - Scrollable area */
+    .desktop-modal-content {
+        padding: 2.5rem 2.5rem 2rem;
+        overflow-y: auto;
+        flex: 1;
+        -webkit-overflow-scrolling: touch;
+    }
+
+    /* Custom scrollbar for modal */
+    .desktop-modal-content::-webkit-scrollbar {
+        width: 8px;
+    }
+
+    .desktop-modal-content::-webkit-scrollbar-track {
+        background: rgba(183, 110, 121, 0.05);
+        border-radius: 4px;
+    }
+
+    .desktop-modal-content::-webkit-scrollbar-thumb {
+        background: rgba(183, 110, 121, 0.3);
+        border-radius: 4px;
+    }
+
+    .desktop-modal-content::-webkit-scrollbar-thumb:hover {
+        background: rgba(183, 110, 121, 0.5);
+    }
+
+    /* MODAL TITLE */
+    .desktop-modal-title {
+        font-size: 2rem;
+        font-weight: 700;
+        font-family: 'Libre Baskerville', serif;
+        color: var(--theme-text);
+        margin: 0 0 0.5rem 0;
+        padding-right: 3rem;
+        /* Space for close button */
+        line-height: 1.2;
+    }
+
+    /* MODAL SUBTITLE */
+    .desktop-modal-subtitle {
+        font-size: 1.125rem;
+        color: var(--theme-text);
+        opacity: 0.8;
+        font-family: 'Montserrat', sans-serif;
+        margin: 0 0 2rem 0;
+        line-height: 1.6;
+        font-style: italic;
+    }
+
+    /* MODAL SECTIONS */
+    .desktop-modal-section {
+        margin-bottom: 2rem;
+    }
+
+    .desktop-modal-section:last-of-type {
+        margin-bottom: 0;
+    }
+
+    .desktop-modal-section h3 {
+        font-size: 1.25rem;
+        font-weight: 600;
+        font-family: 'Libre Baskerville', serif;
+        color: var(--theme-text);
+        margin: 0 0 0.75rem 0;
+        padding-bottom: 0.5rem;
+        border-bottom: 1px solid rgba(183, 110, 121, 0.2);
+    }
+
+    .desktop-modal-section p {
+        font-size: 1rem;
+        line-height: 1.7;
+        color: rgba(74, 74, 74, 0.9);
+        font-family: 'Montserrat', sans-serif;
+        margin: 0;
+    }
+
+    /* MODAL SKILLS LIST */
+    .desktop-modal-skills {
+        margin-top: 2rem;
+        padding-top: 2rem;
+        border-top: 1px solid rgba(183, 110, 121, 0.2);
+    }
+
+    .desktop-modal-skills h3 {
+        font-size: 1.25rem;
+        font-weight: 600;
+        font-family: 'Libre Baskerville', serif;
+        color: var(--theme-text);
+        margin: 0 0 1rem 0;
+    }
+
+    .desktop-modal-skills ul {
+        list-style: none;
+        padding: 0;
+        margin: 0;
+        display: grid;
+        grid-template-columns: repeat(2, 1fr);
+        gap: 0.75rem;
+    }
+
+    .desktop-modal-skills li {
+        font-size: 0.95rem;
+        color: var(--theme-text);
+        opacity: 0.85;
+        font-family: 'Montserrat', sans-serif;
+        padding: 0.625rem 1rem;
+        background: rgba(183, 110, 121, 0.08);
+        border-radius: 0.5rem;
+        border: 1px solid rgba(183, 110, 121, 0.15);
+        transition: all 0.2s;
+    }
+
+    .desktop-modal-skills li:hover {
+        background: rgba(183, 110, 121, 0.12);
+        border-color: rgba(183, 110, 121, 0.25);
+    }
+}
+
+
+/* ===========================================================================
+   ABOUT CARDS - Final Desktop Polish (1024px+)
+   Card padding, internal spacing, bullet readability, hover effects
+   =========================================================================== */
+
+@media (min-width: 1024px) {
+
+    /* CARD PADDING REFINEMENT - Reduce vertical, maintain horizontal */
+    .about-card {
+        padding: 1.5rem 2rem;
+        /* Reduced from 2rem all sides - tighter top/bottom */
+    }
+
+    /* INTERNAL SPACING - Improved vertical rhythm */
+
+    /* Icon to Title spacing */
+    .about-card-icon {
+        margin-bottom: 1.25rem;
+        /* Increased from 1.5rem for better separation */
+    }
+
+    /* Title to List spacing */
+    .about-card-title {
+        margin-bottom: 1.25rem;
+        /* Increased from 1rem for breathing room */
+    }
+
+    /* BULLET LIST READABILITY */
+    .about-card-list {
+        max-width: 380px;
+        /* Constrain for scanability */
+        margin: 0 auto;
+        /* Center within card */
+    }
+
+    .about-card-list li {
+        line-height: 1.6;
+        /* Increased from 1.4 for readability */
+        padding: 0.5rem 0;
+        /* Adjusted for better vertical rhythm */
+        padding-left: 0;
+        /* Remove left padding for centering */
+        text-align: center;
+        /* Center text alignment */
+    }
+
+    /* HOVER FEEDBACK - Subtle and premium */
+    .about-card {
+        cursor: pointer;
+        transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
+    }
+
+    .about-card:hover {
+        transform: translateY(-2px);
+        /* Subtle 2px lift */
+        box-shadow:
+            0 12px 28px rgba(183, 110, 121, 0.18),
+            /* Softer than previous */
+            0 6px 12px rgba(183, 110, 121, 0.12);
+    }
+
+    /* Active state - tactile feedback */
+    .about-card:active {
+        transform: translateY(0);
+        /* Return to baseline */
+    }
+
+    /* Extra large screens - slightly more generous spacing */
+    @media (min-width: 1440px) {
+        .about-card {
+            padding: 1.75rem 2.25rem;
+            /* Slightly more padding on XL */
+        }
+
+        .about-card-icon {
+            margin-bottom: 1.5rem;
+            /* Restore original spacing */
+        }
+
+        .about-card-title {
+            margin-bottom: 1.5rem;
+        }
+
+        .about-card-list {
+            max-width: 400px;
+            /* Slightly wider on XL */
+        }
+    }
+}
+
+/* ===========================================================================
+   DESKTOP FIX - Force Center Alignment for Card Lists (1024px+)
+   Override mobile left-alignment with !important for desktop
+   =========================================================================== */
+
+@media (min-width: 1024px) {
+    .about-card-list {
+        text-align: center !important;
+        gap: 0 !important;
+    }
+
+    .about-card-list li {
+        text-align: center !important;
+        padding-left: 0 !important;
+    }
+
+    .about-card-list li::before {
+        position: static !important;
+        display: inline !important;
+        margin-right: 0.5rem !important;
+    }
+}
+
+
+/* ===========================================================================
+   DESKTOP MODAL REFINEMENT - Editorial Layout (1024px+)
+   Wider horizontal rectangle, reduced spacing, refined typography
+   Using !important to ensure overrides apply
+   =========================================================================== */
+
+@media (min-width: 1024px) {
+
+    /* MODAL DIMENSIONS - Wider horizontal rectangle */
+    .desktop-modal {
+        width: 90% !important;
+        max-width: 620px !important;
+        /* Wider (was 600px) */
+        max-height: 72vh !important;
+        /* Reduced from 85vh */
+    }
+
+    /* MODAL CONTENT PADDING - Refined vertical spacing for optical centering */
+    .desktop-modal-content {
+        padding: 2.875rem 2.5rem 3.375rem !important;
+        /* Increased top by 14px for title breathing, bottom by 18px for softer landing */
+    }
+
+    /* MODAL TITLE - Tighter spacing */
+    .desktop-modal-title {
+        font-size: 2rem !important;
+        margin: 0 0 0.3125rem 0 !important;
+        /* Reduced by 3px (from 0.375rem/6px) to strengthen hierarchy */
+        padding-right: 3rem !important;
+        line-height: 1.15 !important;
+        /* Tighter (was 1.2) */
+    }
+
+    /* MODAL SUBTITLE - Reduced spacing and opacity refinement */
+    .desktop-modal-subtitle {
+        font-size: 1.125rem !important;
+        margin: 0 0 1.5rem 0 !important;
+        /* Reduced from 2rem */
+        line-height: 1.5 !important;
+        /* Reduced from 1.6 */
+        opacity: 0.75 !important;
+        /* Slightly reduced from 0.8 */
+    }
+
+    /* MODAL SECTIONS - Tighter spacing between sections */
+    .desktop-modal-section {
+        margin-bottom: 1.5rem !important;
+        /* Reduced from 2rem */
+    }
+
+    .desktop-modal-section h3 {
+        font-size: 1.25rem !important;
+        margin: 0 0 0.5rem 0 !important;
+        /* Reduced from 0.75rem */
+        padding-bottom: 0.375rem !important;
+        /* Reduced from 0.5rem */
+    }
+
+    .desktop-modal-section p {
+        font-size: 1rem !important;
+        line-height: 1.6 !important;
+        /* Reduced from 1.7 (~6% reduction) */
+        margin: 0 !important;
+    }
+
+    /* MODAL SKILLS SECTION - Tighter spacing */
+    .desktop-modal-skills {
+        margin-top: 1.5rem !important;
+        /* Reduced from 2rem */
+        padding-top: 1.5rem !important;
+        /* Reduced from 2rem */
+    }
+
+    .desktop-modal-skills h3 {
+        margin: 0 0 0.75rem 0 !important;
+        /* Reduced from 1rem */
+    }
+
+    .desktop-modal-skills ul {
+        gap: 0.625rem !important;
+        /* Reduced from 0.75rem */
+    }
+
+    /* CLOSE BUTTON - Improved UX */
+    .desktop-modal-close-button {
+        width: 2.75rem !important;
+        /* Slightly larger hit area (was 2.5rem) */
+        height: 2.75rem !important;
+        padding: 0.5rem !important;
+        /* Better clickable area */
+        top: 1rem !important;
+        /* Adjusted position */
+        right: 1rem !important;
+    }
+
+    .desktop-modal-close-button:hover {
+        background: rgba(183, 110, 121, 0.15) !important;
+        /* Softer hover (was 0.2) */
+        opacity: 1 !important;
+    }
+
+    /* SCROLL INDICATOR - Subtle fade at top/bottom */
+    .desktop-modal-content {
+        position: relative !important;
+    }
+
+    /* Subtle gradient fade at top when scrolled */
+    .desktop-modal-content::before {
+        content: '';
+        position: sticky;
+        top: 0;
+        left: 0;
+        right: 0;
+        height: 20px;
+        background: linear-gradient(to bottom, var(--theme-bg), transparent);
+        pointer-events: none;
+        z-index: 1;
+        opacity: 0;
+        transition: opacity 0.2s;
+    }
+
+    /* Subtle gradient fade at bottom when scrollable */
+    .desktop-modal-content::after {
+        content: '';
+        position: sticky;
+        bottom: 0;
+        left: 0;
+        right: 0;
+        height: 20px;
+        background: linear-gradient(to top, var(--theme-bg), transparent);
+        pointer-events: none;
+        z-index: 1;
+    }
+
+    /* XL screens - slightly more width */
+    @media (min-width: 1440px) {
+        .desktop-modal {
+            max-width: 640px !important;
+            /* Max width on very large screens */
+        }
+    }
+}
+
+
+/* ===========================================================================
+   SCROLL LOCK - Prevent background scroll when modal is open
+   Applies when body has .modal-open class
+   =========================================================================== */
+
+body.modal-open {
+    overflow: hidden !important;
+}
+
+
+
+/* ===========================================================================
+   DESKTOP MODAL - FINAL EDITORIAL REFINEMENT (1024px+)
+   Wider proportions, refined section spacing, subtle dividers
+   Using !important for guaranteed override
+   =========================================================================== */
+
+@media (min-width: 1024px) {
+
+    /* WIDER HORIZONTAL RECTANGLE - 15-20% increase */
+    .desktop-modal {
+        width: 92% !important;
+        max-width: 720px !important;
+        /* Increased from 620px (~16% wider) */
+        max-height: 70vh !important;
+        /* Reduced from 72vh for less scrolling */
+    }
+
+    /* XL screens - maximum editorial width */
+    @media (min-width: 1440px) {
+        .desktop-modal {
+            max-width: 750px !important;
+            /* Premium width on very large screens */
+        }
+    }
+
+    /* SECTION SPACING - Increased between major sections */
+    .desktop-modal-section {
+        margin-bottom: 2rem !important;
+        /* Increased from 1.5rem */
+    }
+
+    .desktop-modal-section:last-of-type {
+        margin-bottom: 1.5rem !important;
+        /* Still tighter for last section */
+    }
+
+    /* SECTION HEADINGS - More breathing room */
+    .desktop-modal-section h3 {
+        margin: 0 0 0.75rem 0 !important;
+        /* Increased from 0.5rem */
+        padding-bottom: 0.5rem !important;
+        /* Increased from 0.375rem */
+        border-bottom-color: rgba(183, 110, 121, 0.15) !important;
+        /* Reduced opacity from 0.2 */
+        border-bottom-width: 1px !important;
+        border-bottom-style: solid !important;
+    }
+
+    /* PARAGRAPH SPACING - Tighter within sections for rhythm */
+    .desktop-modal-section p {
+        line-height: 1.65 !important;
+        /* Slightly reduced from 1.7 */
+        margin: 0 !important;
+    }
+
+    /* SUBTITLE DIVIDER - More subtle */
+    .desktop-modal-subtitle {
+        padding-bottom: 1.5rem !important;
+        border-bottom: 1px solid rgba(183, 110, 121, 0.12) !important;
+        /* Added subtle divider */
+        margin-bottom: 1.75rem !important;
+        /* Increased from 1.5rem */
+    }
+
+    /* SKILLS SECTION - Better separation */
+    .desktop-modal-skills {
+        margin-top: 2rem !important;
+        /* Increased from 1.5rem */
+        padding-top: 2rem !important;
+        border-top-color: rgba(183, 110, 121, 0.15) !important;
+        /* Reduced from 0.2 */
+    }
+
+    .desktop-modal-skills h3 {
+        margin: 0 0 1rem 0 !important;
+        /* Increased from 0.75rem */
+        border-bottom: none !important;
+        /* Remove divider from skills heading */
+    }
+
+    /* SKILLS GRID - Slightly tighter */
+    .desktop-modal-skills ul {
+        gap: 0.5rem !important;
+        /* Reduced from 0.625rem */
+    }
+}
+
+
+/* ===========================================================================
+   TIMELINE ANCHOR HIERARCHY - Anchor vs Supporting Years
+   Controlled via isAnchor property in data
+   =========================================================================== */
+
+/* ANCHOR YEARS - Emphasized styling (tells the story) */
+.timeline-anchor .timeline-year {
+    font-size: 1.625rem !important;
+    /* ~8% larger than base */
+    letter-spacing: 0.12em !important;
+    /* Increased tracking */
+    font-weight: 300 !important;
+    /* Slightly bolder */
+}
+
+@media (min-width: 768px) {
+    .timeline-anchor .timeline-year {
+        font-size: 2.375rem !important;
+        /* ~8% larger on desktop */
+    }
+}
+
+/* Anchor timeline dot - more prominent */
+.timeline-dot-anchor {
+    width: 14px !important;
+    /* Slightly larger (was 12px) */
+    height: 14px !important;
+    border-width: 3px !important;
+    /* Thicker border (was 2px) */
+}
+
+/* SUPPORTING YEARS - Subtle styling (provides context) */
+/* Uses default styles - no additional emphasis needed */

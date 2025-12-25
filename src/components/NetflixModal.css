@@ -137,6 +137,14 @@ body:has(.modal-overlay) {
     filter: blur(12px) brightness(0.5);
 }
 
+/* Desktop: Prevent image blur when case study opens */
+@media (min-width: 1024px) {
+    .modal-hero-image.blurred {
+        filter: none;
+        /* Disable blur on desktop */
+    }
+}
+
 /* REFINED Image-to-Content Transition - Smooth Fade */
 .hero-gradient-fade {
     position: absolute;
@@ -254,7 +262,8 @@ body:has(.modal-overlay) {
 /* LAYER 2: Text Content (Foreground - NO BLUR) - HORIZONTALLY CENTERED */
 .testimonial-text-layer {
     position: absolute;
-    bottom: 0;
+    bottom: 5%;
+    /* Moved up 5% for better composition */
     left: 0;
     right: 0;
     z-index: 3;
@@ -709,12 +718,16 @@ details[open] .accordion-icon {
 
 .modal-footer-surface {
     margin-top: auto;
-    padding: 2rem 0 2.5rem;
+    padding: 1.35rem 0 1.8rem;
+    /* Further reduced by 10% for more intentional CTA feel */
     background: linear-gradient(to bottom,
             rgba(245, 243, 240, 0) 0%,
-            rgba(245, 243, 240, 0.5) 15%,
-            rgba(245, 243, 240, 0.9) 40%,
-            rgba(245, 243, 240, 1) 100%);
+            rgba(245, 243, 240, 0.325) 15%,
+            /* Reduced opacity by 35% (0.5 → 0.325) */
+            rgba(245, 243, 240, 0.585) 40%,
+            /* Reduced opacity by 35% (0.9 → 0.585) */
+            rgba(245, 243, 240, 0.65) 100%);
+    /* Final opacity 0.65 for subtle panel */
     border-top: 1px solid rgba(183, 110, 121, 0.08);
     position: relative;
     display: flex;
@@ -798,25 +811,25 @@ details[open] .accordion-icon {
 }
 
 .tool-icon {
-    width: 32px;
-    height: 32px;
+    width: 100%;
+    height: 100%;
     object-fit: contain;
 }
 
 .tool-icon-placeholder {
-    width: 32px;
-    height: 32px;
-    color: var(--theme-highlight);
-    opacity: 0.6;
+    width: 24px;
+    height: 24px;
+    color: var(--theme-text);
+    opacity: 0.3;
 }
 
 .tool-name {
     font-family: 'Montserrat', sans-serif;
-    font-size: 0.8125rem;
-    font-weight: 500;
+    font-size: 0.75rem;
+    font-weight: 600;
     color: var(--theme-text);
+    opacity: 0.7;
     margin-bottom: 0.25rem;
-    line-height: 1.3;
 }
 
 .tool-brand {
@@ -825,7 +838,7 @@ details[open] .accordion-icon {
     font-weight: 400;
     font-style: italic;
     color: var(--theme-text);
-    opacity: 0.55;
+    opacity: 0.5;
 }
 
 /* ========================================
@@ -835,52 +848,51 @@ details[open] .accordion-icon {
 .case-study-cta-tertiary {
     display: inline-flex;
     align-items: center;
-    gap: 0.375rem;
-    padding: 0.5rem 0.875rem;
+    gap: 0.5rem;
+    padding: 0.875rem 1.5rem;
     background: transparent;
-    border: 1px solid rgba(183, 110, 121, 0.2);
-    border-radius: 0.375rem;
+    border: 1.5px solid rgba(183, 110, 121, 0.25);
+    border-radius: 2.5rem;
     color: var(--theme-text);
     font-family: 'Montserrat', sans-serif;
-    font-size: 0.6875rem;
-    font-weight: 400;
+    font-size: 0.8125rem;
+    font-weight: 600;
     text-transform: uppercase;
     letter-spacing: 0.08em;
     cursor: pointer;
-    transition: all 0.15s ease-out;
+    transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
     -webkit-tap-highlight-color: transparent;
-    will-change: opacity, transform;
-    opacity: 0.7;
+    opacity: 0.75;
 }
 
 .case-study-cta-tertiary svg {
-    width: 16px;
-    height: 16px;
     stroke: currentColor;
-    opacity: 0.7;
+    flex-shrink: 0;
 }
 
 .case-study-cta-tertiary:hover {
     background: rgba(183, 110, 121, 0.08);
-    border-color: var(--theme-highlight);
+    border-color: rgba(183, 110, 121, 0.4);
+    transform: translateY(-2px);
     opacity: 1;
 }
 
 .case-study-cta-tertiary:active {
-    transform: scale(0.98);
+    transform: translateY(0);
 }
 
 /* ========================================
-   VISUAL END MARKER
+   MODAL END MARKER
    ======================================== */
 
 .modal-end-marker {
     display: flex;
     align-items: center;
-    justify-content: center;
+    gap: 1rem;
     width: 100%;
-    padding: 0.5rem 0;
-    opacity: 0.25;
+    max-width: 300px;
+    margin: 0 auto;
+    opacity: 0.35;
 }
 
 .end-marker-line {
@@ -892,23 +904,15 @@ details[open] .accordion-icon {
             transparent 100%);
 }
 
-.end-marker-dot {
-    width: 4px;
-    height: 4px;
-    border-radius: 50%;
-    background: rgba(183, 110, 121, 0.3);
-    margin: 0 0.5rem;
-}
-
 .end-marker-icon {
-    width: 12px;
-    height: 12px;
-    color: rgba(183, 110, 121, 0.3);
-    margin: 0 0.75rem;
+    width: 16px;
+    height: 16px;
+    color: rgba(183, 110, 121, 0.4);
+    flex-shrink: 0;
 }
 
 /* ========================================
-   BOTTOM SHEET CASE STUDY
+   CASE STUDY BOTTOM SHEET
    ======================================== */
 
 .case-study-backdrop {
@@ -917,14 +921,18 @@ details[open] .accordion-icon {
     left: 0;
     right: 0;
     bottom: 0;
-    background: rgba(0, 0, 0, 0.5);
-    z-index: 2050;
-    opacity: 0;
-    animation: fadeIn 0.3s forwards;
-    cursor: pointer;
+    background: rgba(0, 0, 0, 0.6);
+    backdrop-filter: blur(4px);
+    -webkit-backdrop-filter: blur(4px);
+    z-index: 2100;
+    animation: fadeIn 0.3s ease-out;
 }
 
 @keyframes fadeIn {
+    from {
+        opacity: 0;
+    }
+
     to {
         opacity: 1;
     }
@@ -932,35 +940,33 @@ details[open] .accordion-icon {
 
 .case-study-bottom-sheet {
     position: fixed;
-    bottom: 0;
     left: 0;
     right: 0;
-    max-height: 75vh;
-    background: rgba(255, 255, 255, 0.98);
-    backdrop-filter: blur(20px);
-    -webkit-backdrop-filter: blur(20px);
-    border-top-left-radius: 1.5rem;
-    border-top-right-radius: 1.5rem;
-    box-shadow: 0 -10px 40px rgba(0, 0, 0, 0.2);
-    z-index: 2100;
+    bottom: 0;
+    max-height: 70vh;
+    background: #FAF9F6;
+    border-radius: 1.5rem 1.5rem 0 0;
+    box-shadow: 0 -10px 40px rgba(0, 0, 0, 0.3);
+    z-index: 2200;
     transform: translateY(100%);
     transition: transform 0.4s cubic-bezier(0.32, 0.72, 0, 1);
-    display: flex;
-    flex-direction: column;
-    pointer-events: none;
 }
 
 .case-study-bottom-sheet.open {
     transform: translateY(0);
-    pointer-events: auto;
 }
 
-
 .sheet-scrollable-content {
-    padding: 1.5rem;
+    padding: 2rem 1.5rem;
+    max-height: 70vh;
     overflow-y: auto;
     -webkit-overflow-scrolling: touch;
-    flex: 1;
+}
+
+@media (min-width: 768px) {
+    .sheet-scrollable-content {
+        padding: 2.5rem 2rem;
+    }
 }
 
 .case-study-heading {
@@ -978,25 +984,24 @@ details[open] .accordion-icon {
 
 .case-study-text-netflix {
     font-family: 'Montserrat', sans-serif;
-    font-size: 0.95rem;
+    font-size: 0.9375rem;
     line-height: 1.8;
     color: var(--theme-text);
-    opacity: 0.9;
-    margin: 0 0 1.25rem 0;
+    opacity: 0.85;
+    margin-bottom: 1.25rem;
 }
 
 .case-study-detail {
     font-family: 'Montserrat', sans-serif;
     font-size: 0.875rem;
-    line-height: 1.6;
     color: var(--theme-text);
-    opacity: 0.85;
+    opacity: 0.7;
     margin-bottom: 0.75rem;
 }
 
 .case-study-detail strong {
     font-weight: 600;
-    opacity: 1;
+    opacity: 0.85;
 }
 
 .sheet-close-button {
@@ -1049,4 +1054,183 @@ details[open] .accordion-icon {
 .modal-content-netflix::-webkit-scrollbar-thumb:hover,
 .sheet-scrollable-content::-webkit-scrollbar-thumb:hover {
     background: rgba(183, 110, 121, 0.35);
+}
+
+/* ========================================
+   DESKTOP TWO-COLUMN LAYOUT (≥1024px)
+   Professional Case Study Presentation
+   ======================================== */
+
+@media (min-width: 1024px) {
+
+    /* Two-Column Grid Layout - Reduced width for editorial elegance */
+    .portfolio-modal-netflix {
+        display: grid;
+        grid-template-columns: auto 1fr;
+        /* Left column auto-sizes to content, right takes remaining */
+        grid-template-rows: 1fr;
+        max-width: 1080px;
+        /* Reduced by 10% from 1400px for more refined feel */
+        max-height: 90vh;
+        height: 90vh;
+        overflow: hidden;
+        flex-direction: row;
+    }
+
+    /* Left Column - Image Only with 4:5 Aspect Ratio */
+    .modal-hero-image-container {
+        grid-column: 1;
+        grid-row: 1;
+        aspect-ratio: 4 / 5;
+        /* Enforce 4:5 ratio */
+        height: 100%;
+        /* Fill modal height */
+        width: auto;
+        /* Width auto-calculated from aspect ratio */
+        max-height: 90vh;
+        max-width: none;
+        margin: 0;
+        flex-shrink: 0;
+    }
+
+    /* Right Column - All Content with Inner Constraint */
+    .modal-content-netflix {
+        grid-column: 2;
+        grid-row: 1;
+        overflow-y: auto;
+        padding: 2.5rem 2rem 2rem;
+        /* Reduced top padding slightly */
+        min-height: auto;
+        height: 100%;
+        background: #FAF9F6;
+        display: flex;
+        flex-direction: column;
+        justify-content: flex-start;
+        backdrop-filter: none;
+        position: relative;
+    }
+
+    /* Inner content constraint for readability - Slightly reduced */
+    .modal-content-netflix>* {
+        max-width: 465px;
+        /* Further reduced by ~7% (from 500px) for better image-to-content proportion */
+    }
+
+    /* Inline Case Study Content - Renders below divider in right panel */
+    .inline-case-study-content {
+        padding: 1.5rem 0 0;
+        margin-top: 1.5rem;
+        border-top: 1px solid rgba(183, 110, 121, 0.12);
+        opacity: 0;
+        transform: translateY(12px);
+        animation: fadeSlideIn 0.35s cubic-bezier(0.4, 0, 0.2, 1) forwards;
+    }
+
+    @keyframes fadeSlideIn {
+        to {
+            opacity: 1;
+            transform: translateY(0);
+        }
+    }
+
+    .inline-case-study-content h3 {
+        font-family: 'Libre Baskerville', serif;
+        font-size: 1.25rem;
+        font-weight: 700;
+        color: var(--theme-text);
+        margin: 0 0 1rem 0;
+        opacity: 0.9;
+    }
+
+    .inline-case-study-content p {
+        font-family: 'Montserrat', sans-serif;
+        font-size: 0.9375rem;
+        line-height: 1.75;
+        color: var(--theme-text);
+        opacity: 0.85;
+        margin: 0 0 1rem 0;
+    }
+
+    /* Hide Mobile Elements */
+    /* Keep testimonial on LEFT image - DO NOT HIDE */
+    .floating-instagram-icon,
+    .scroll-affordance-arrow {
+        display: none !important;
+    }
+
+    /* Keep hero gradient for testimonial backdrop */
+    .hero-gradient-fade {
+        display: block;
+        /* Ensure gradient shows for testimonial */
+        height: 45%;
+        /* Slightly taller for better testimonial support */
+    }
+
+    /* Desktop Testimonial Quote Block - REMOVED (stays on image) */
+    /* Testimonial displays over left image, not in right panel */
+
+    /* Inline Case Study Display - REMOVED */
+    /* Case study now opens in slide-up panel */
+
+    /* Show Desktop Case Study CTA at bottom of right panel - Centered */
+    .case-study-cta-tertiary {
+        display: inline-flex !important;
+        /* Visible on desktop */
+        margin-top: auto;
+        /* Push to bottom */
+        align-self: center;
+        /* Center horizontally */
+        opacity: 1 !important;
+        /* Override scroll-driven opacity */
+        transform: none !important;
+        /* Override scroll-driven transform */
+    }
+
+    /* Hide Bottom Sheet on Desktop */
+    .case-study-bottom-sheet,
+    .case-study-backdrop {
+        display: none !important;
+    }
+
+    /* Remove Scroll-Driven Animations */
+    .products-accordion-netflix,
+    .color-palette-netflix,
+    .tools-used-netflix {
+        opacity: 1 !important;
+        transform: none !important;
+    }
+
+    /* Tighter Vertical Spacing - Reduce gaps by ~17% */
+    .metadata-header-netflix {
+        padding: 1.25rem 0 1.45rem;
+        /* Reduced from 1.5rem/1.75rem */
+        margin-bottom: 0;
+    }
+
+    .products-accordion-netflix,
+    .color-palette-netflix,
+    .tools-used-netflix {
+        margin-bottom: 1.65rem;
+        /* Reduced from 2rem (17.5% reduction) */
+    }
+
+    /* Desktop Close Button - Top Right of Modal Container */
+    .modal-close-btn-netflix {
+        position: fixed;
+        /* Fixed to viewport */
+        top: 1.25rem;
+        /* 3px closer to edge */
+        right: 1.25rem;
+        /* 3px closer to edge */
+        background: rgba(10, 10, 10, 0.6);
+        /* Slightly more opaque for visibility */
+        border: 1px solid rgba(255, 255, 255, 0.2);
+        width: 2.75rem;
+        /* 92% of original (3rem) for editorial precision */
+        height: 2.75rem;
+        font-size: 1.375rem;
+        /* Proportionally scaled */
+        z-index: 2100;
+        /* Above modal content */
+    }
 }

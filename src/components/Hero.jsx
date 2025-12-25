@@ -85,6 +85,11 @@ const Hero = () => {
                         I blend creativity, professionalism, and client-focused thinking.
                     </p>
 
+                    {/* Primary CTA - Above the fold (Desktop only) */}
+                    <button onClick={() => scrollTo('gallery')} className="hero-primary-cta">
+                        View Portfolio
+                    </button>
+
                     {/* Achievements Section */}
                     <div className="hero-achievements">
                         <div className="achievement-item">
@@ -102,34 +107,6 @@ const Hero = () => {
                         <div className="achievement-item">
                             <div className="achievement-value">100+</div>
                             <div className="achievement-label">LOOKS DELIVERED</div>
-                        </div>
-                    </div>
-
-                    <div className="hero-cta-group">
-                        <button onClick={() => scrollTo('gallery')} className="hero-cta-button">
-                            Explore My Portfolio
-                        </button>
-
-                        <div className="social-icons-group hidden-mobile">
-                            {/* Instagram */}
-                            <a href="https://www.instagram.com/_kalpan.aaaa/" target="_blank" rel="noopener noreferrer" className="social-icon">
-                                <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><rect x="2" y="2" width="20" height="20" rx="5" ry="5"></rect><path d="M16 11.37A4 4 0 1 1 12.63 8 4 4 0 0 1 16 11.37z"></path><line x1="17.5" y1="6.5" x2="17.51" y2="6.5"></line></svg>
-                            </a>
-
-                            {/* Snapchat */}
-                            <a href="https://www.instagram.com/_kalpan.aaaa/" className="social-icon">
-                                <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="M17.84 17.58a7 7 0 0 1-11.68 0" /><path d="M7 9a5 5 0 0 1 10 0v2.75a3 3 0 0 1-3 3h-4a3 3 0 0 1-3-3V9Z" /><circle cx="9.5" cy="11.5" r="0.5" fill="currentColor" stroke="none" /><circle cx="14.5" cy="11.5" r="0.5" fill="currentColor" stroke="none" /></svg>
-                            </a>
-
-                            {/* YouTube */}
-                            <a href="https://www.instagram.com/_kalpan.aaaa/" className="social-icon">
-                                <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="M2.5 17a24.12 24.12 0 0 1 0-10 2 2 0 0 1 1.4-1.4 49.56 49.56 0 0 1 16.2 0A2 2 0 0 1 21.5 7a24.12 24.12 0 0 1 0 10 2 2 0 0 1-1.4 1.4 49.55 49.55 0 0 1-16.2 0A2 2 0 0 1 2.5 17"></path><path d="m10 15 5-3-5-3z"></path></svg>
-                            </a>
-
-                            {/* WhatsApp */}
-                            <a href={`https://wa.me/919310807014?text=${encodeURIComponent("Hi kalpana I found you from your portfolio I really want to work with you please give me the details")}`} target="_blank" rel="noopener noreferrer" className="social-icon">
-                                <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="M21 11.5a8.38 8.38 0 0 1-.9 3.8 8.5 8.5 0 0 1-7.6 4.7 8.38 8.38 0 0 1-3.8-.9L3 21l1.9-5.7a8.38 8.38 0 0 1-.9-3.8 8.5 8.5 0 0 1 4.7-7.6 8.38 8.38 0 0 1 3.8-.9h.5a8.48 8.48 0 0 1 8 8v.5z"></path></svg>
-                            </a>
                         </div>
                     </div>
                 </div>
